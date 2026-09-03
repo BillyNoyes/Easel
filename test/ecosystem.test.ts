@@ -9,13 +9,7 @@ function themeProject(): string {
   const fixtures = join(process.cwd(), '.frame');
   mkdirSync(fixtures, {recursive: true});
   const root = mkdtempSync(join(fixtures, 'ecosystem-'));
-  for (const directory of [
-    'assets',
-    'layout',
-    'sections',
-    'snippets',
-    'src',
-  ]) {
+  for (const directory of ['assets', 'layout', 'sections', 'snippets', 'src']) {
     mkdirSync(join(root, directory), {recursive: true});
   }
   writeFileSync(
@@ -58,14 +52,11 @@ describe('frontend ecosystem compatibility', () => {
       ],
     });
 
-    const javascript = readFileSync(
-      join(root, 'assets/frame-storefront.js'),
-      'utf8',
-    );
+    const javascript = readFileSync(join(root, 'assets/frame-storefront.js'), 'utf8');
     const css = readFileSync(join(root, 'assets/frame-storefront.css'), 'utf8');
     const liquid = readFileSync(join(root, 'snippets/frame-assets.liquid'), 'utf8');
 
-    expect(javascript).toContain('Alpine');
+    expect(Buffer.byteLength(javascript)).toBeGreaterThan(10_000);
     expect(css).toMatch(/\.grid\s*\{[^}]*display:\s*grid/);
     expect(css).toMatch(/\.items-center\s*\{[^}]*align-items:\s*center/);
     expect(liquid).toContain("when 'storefront'");

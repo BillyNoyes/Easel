@@ -42,10 +42,7 @@ export function renderProductionLiquid(manifest: FrameManifest): string {
   return assertLiquidSize(lines.join('\n'));
 }
 
-export function renderDevelopmentLiquid(
-  names: string[],
-  origin: string,
-): string {
+export function renderDevelopmentLiquid(names: string[], origin: string): string {
   const defaultEntry = names[0];
   if (defaultEntry === undefined) {
     throw new Error('[frame] cannot render Liquid without an entry');

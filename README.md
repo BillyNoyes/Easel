@@ -1,36 +1,64 @@
 # Frame
 
-Frame is a Vite build adapter for Shopify Liquid themes.
+Frame is a Vite plugin for building frontend assets for Shopify Liquid themes.
 
-Vite builds frontend assets. Frame adapts them to Shopify’s theme structure. Shopify CLI remains independently responsible for theme development, synchronization, previews, and deployment.
+It keeps Vite and Shopify CLI independent: Vite builds and serves frontend code, while Shopify CLI continues to handle theme development, synchronization, previews, pushes, and packaging.
 
-## Status
+> Frame is an early prototype. Its API and generated output formats may change.
 
-Frame is an early prototype. Its API and generated output format are not stable.
+## Features
 
-## Default theme structure
+- Works with a Shopify theme at the project root or in a configured directory.
+- Supports JavaScript and TypeScript through Vite.
+- Supports CSS-only, script-only, and combined bundles.
+- Supports multiple explicitly named bundles.
+- Uses stable top-level entry filenames and content-hashed shared or dynamic assets.
+- Handles shared CSS, dynamic CSS, static assets, source maps, and module preloads.
+- Generates development and production Liquid asset loaders.
+- Integrates with Vite HMR.
+- Coordinates full-page reloads with Shopify CLI’s `--notify` option.
+- Safely removes only stale Frame-owned output.
+- Uses isolated staging, ownership ledgers, commit locking, and rollback journals.
+- Recovers generated Liquid and interrupted production commits.
+- Refuses to overwrite files it cannot identify as Frame-owned.
+- Detects conflicting Vite build configuration.
+- Works with standard Vite integrations such as Alpine.js, Tailwind CSS, React, Vue, Sass, and PostCSS.
+- Adds no required production browser runtime.
 
-Frame assumes the project root is already a Shopify theme. It does not require an additional `theme/` directory.
+## Installation
+
+```sh
+pnpm add --save-dev @blueprint/frame vite
+```
+
+Frame requires Node.js 22.12 or newer and supports Vite 7 and 8.
+
+## Example theme
+
+[`examples/Easel`](examples/Easel) is a small, complete Shopify Liquid theme configured to use Frame.
+
+## Default project structure
+
+Frame assumes the Shopify theme is at the project root:
 
 ```text
 .
 ├── assets/
-├── blocks/
 ├── config/
 ├── layout/
 ├── locales/
 ├── sections/
 ├── snippets/
+├── templates/
 ├── src/
 │   ├── main.ts
 │   └── style.css
-├── templates/
 └── vite.config.ts
 ```
 
-`src/main.js` can be used instead of `src/main.ts`. Vite transpiles JavaScript and TypeScript without additional Frame configuration. TypeScript transpilation does not perform type checking; projects should run `tsc --noEmit` separately when type checking is required.
+`src/main.js` can be used instead of `src/main.ts`.
 
-## Vite configuration
+## Configuration
 
 ```ts
 import {defineConfig} from 'vite';
@@ -41,50 +69,102 @@ export default defineConfig({
 });
 ```
 
-The default bundle combines `src/main.ts` or `src/main.js` with `src/style.css`. Production output is written into the root-level Shopify `assets/` directory.
+With no Frame options, the default `theme` bundle combines:
 
-Frame generates `snippets/frame-assets.liquid`. Add it to the consuming theme’s `.gitignore` and render it from the layout:
+- `src/main.ts` or `src/main.js`
+- `src/style.css`
+
+## Generated Liquid
+
+Frame generates `snippets/frame-assets.liquid`.
+
+Render it from the theme layout:
 
 ```liquid
 {% render 'frame-assets' %}
 ```
 
-## Commands
+The development form loads Vite and its HMR client. The production form loads built assets through Shopify’s `asset_url` filter.
 
-Run Vite and Shopify CLI independently. Pass Frame’s refresh signal to Shopify CLI so a Liquid change reloads only after Shopify finishes processing it:
+The generated snippet should normally be ignored by Git:
+
+```gitignore
+snippets/frame-assets.liquid
+.frame/
+```
+
+## Development
+
+Run Vite and Shopify CLI independently:
 
 ```sh
 npm run dev
 shopify theme dev --notify .frame/shopify-ready
 ```
 
-Vite handles JavaScript, TypeScript, and CSS HMR. Shopify CLI handles Liquid and other theme files. Frame watches the notification file and combines repeated notifications into one full-page refresh.
+Vite handles JavaScript and CSS updates. Shopify CLI handles Liquid and other theme files. Frame requests a full-page reload after Shopify CLI signals that its update is ready.
 
-Build before using Shopify CLI to deploy or package the theme:
+## Production
+
+Build assets before pushing or packaging the theme:
 
 ```sh
 npm run build
 shopify theme push
 ```
 
+Or:
+
+```sh
+npm run build
+shopify theme package
+```
+
 Frame does not launch or wrap Shopify CLI.
 
-## Custom source and bundles
-
-Frame deliberately uses option names that are independent of Volt’s plugin API.
+## Named bundles
 
 ```ts
 frame({
-  theme: '.',
-  source: 'resources',
   bundles: {
     theme: {
-      script: 'storefront.ts',
-      style: 'storefront.css',
+      script: 'main.ts',
+      style: 'style.css',
     },
     product: {
       script: 'product.ts',
       style: 'product.css',
+    },
+    account: {
+      script: 'account.ts',
+    },
+    typography: {
+      style: 'typography.css',
+    },
+  },
+});
+```
+
+Bundle paths resolve relative to the configured source directory.
+
+Render a specific bundle by name:
+
+```liquid
+{% render 'frame-assets', entry: 'product' %}
+```
+
+The first configured bundle is used when `entry` is omitted.
+
+## Options
+
+```ts
+frame({
+  theme: '.',
+  source: 'src',
+  bundles: {
+    theme: {
+      script: 'main.ts',
+      style: 'style.css',
     },
   },
   liquid: 'frame-assets.liquid',
@@ -96,39 +176,54 @@ frame({
 });
 ```
 
-The `theme` path and `source` path resolve relative to Vite’s root. Bundle files resolve relative to `source`. Frame allows source code outside the Shopify theme while constraining generated output to the validated theme path.
+| Option    | Purpose                                         | Default               |
+| --------- | ----------------------------------------------- | --------------------- |
+| `theme`   | Shopify theme directory relative to Vite’s root | `.`                   |
+| `source`  | Source directory relative to Vite’s root        | `src`                 |
+| `bundles` | Explicit named script and stylesheet entries    | `theme` bundle        |
+| `liquid`  | Generated snippet filename                      | `frame-assets.liquid` |
+| `prefix`  | Namespace for generated Shopify assets          | `frame-`              |
+| `refresh` | Shopify-aware reload signal and delay           | Enabled               |
 
-The script and stylesheet names are fully configurable. A bundle can include either file independently or combine both under one public entry name.
+Use `refresh: false` to disable Shopify-aware full-page reloads.
 
-Render a non-default bundle by name:
+## Output
 
-```liquid
-{% render 'frame-assets', entry: 'product' %}
-```
+Production assets are written to the Shopify theme’s `assets/` directory.
 
-## Generated output safety
+Frame provides:
 
-Frame builds into `.frame/build` before copying files into the Shopify theme. It stores an ownership ledger at `.frame/outputs.json` and removes only stale files recorded in the previous successful ledger.
+- Stable names for top-level JavaScript and CSS entries.
+- Content hashes for shared chunks, dynamic chunks, and dynamically loaded CSS.
+- Production stylesheet tags and module scripts.
+- Module preload tags for static JavaScript imports.
+- Complete copying of Vite-emitted assets and source maps.
+- No empty JavaScript file for CSS-only bundles.
 
-Frame refuses to overwrite an existing asset or Liquid snippet that it cannot identify as Frame-owned.
+Frame stores internal build state under `.frame/`, including:
 
-Cleanup is built into production builds. No separate clean plugin is required. Frame removes only stale files from the previous successful ownership ledger and never empties Shopify’s shared `assets/` directory.
+- Per-build staging directories.
+- Theme-specific ownership ledgers.
+- The latest internal Frame manifest.
+- The latest production Liquid backup.
+- Commit locks and temporary recovery journals.
 
-## Refresh configuration
+## Output safety
 
-Shopify-aware refresh is enabled by default with `.frame/shopify-ready` as its signal file. Disable it with `refresh: false`, or configure its signal and debounce delay through the `refresh` option.
+Frame never empties Shopify’s shared `assets/` directory.
 
-Frame does not directly watch Liquid files. Shopify CLI remains responsible for uploading them, and its notification tells Frame when a browser refresh is safe.
+It only replaces or removes files recorded in the theme-specific ownership ledger. Production publication uses isolated staging and transactional recovery so concurrent or interrupted builds cannot silently combine unrelated output.
 
-## Frontend ecosystem compatibility
+If an existing destination is not demonstrably Frame-owned or byte-identical to the generated file, the build stops without overwriting it.
 
-Frame uses Vite’s normal module graph and plugin system rather than providing framework-specific adapters.
+## Vite compatibility
 
-- JavaScript and TypeScript are transformed by Vite out of the box.
-- Alpine.js works as a normal npm import from a configured script entry.
-- Tailwind CSS v4 works through the official `@tailwindcss/vite` plugin.
-- React, Vue, Sass, PostCSS, and other integrations should use their normal Vite plugins.
+Frame uses Vite’s normal module graph and plugin system. Frameworks and preprocessors should use their standard Vite integrations.
 
-Tailwind must be told where to find any theme files that its automatic source detection does not include. Use Tailwind v4 `@source` directives relative to the stylesheet when explicit Liquid scanning is needed.
+Frame manages the Vite settings required for Shopify output, including the build input, output directory, manifest, flat asset layout, and output filenames. It reports an error when another configuration conflicts with those requirements.
 
-Frame’s test suite builds a custom TypeScript entry with Alpine.js 3.16 and Tailwind CSS 4.3, including utility classes discovered in a Shopify section.
+Native Vite server options such as `server.origin`, `server.cors`, and `server.allowedHosts` remain available for LAN, tunnel, or custom-domain development.
+
+## License
+
+MIT

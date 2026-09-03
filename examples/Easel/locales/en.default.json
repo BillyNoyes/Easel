@@ -1,0 +1,79 @@
+{
+  "accessibility": {
+    "skip_to_content": "Skip to content"
+  },
+  "actions": {
+    "add_to_cart": "Add to cart",
+    "continue_shopping": "Continue shopping",
+    "search": "Search"
+  },
+  "blocks": {
+    "text": {
+      "alignment": "Alignment",
+      "name": "Text",
+      "text": "Text"
+    }
+  },
+  "cart": {
+    "checkout": "Checkout",
+    "empty": "Your cart is empty",
+    "title": "Cart",
+    "total": "Total",
+    "update": "Update cart"
+  },
+  "collection": {
+    "empty": "No products found",
+    "name": "Collection"
+  },
+  "footer": {
+    "copyright": "© {{ year }} {{ shop }}"
+  },
+  "general": {
+    "cart": "Cart",
+    "not_found": "Page not found",
+    "not_found_name": "404 page",
+    "not_found_text": "The page you requested does not exist",
+    "page": "Page",
+    "product": "Product"
+  },
+  "product": {
+    "unavailable": "Unavailable"
+  },
+  "search": {
+    "name": "Search",
+    "placeholder": "Search products and pages",
+    "results": "Search results",
+    "title": "Search"
+  },
+  "sections": {
+    "footer": {
+      "name": "Footer"
+    },
+    "header": {
+      "menu": "Menu",
+      "name": "Header"
+    },
+    "hero": {
+      "button_label": "Button label",
+      "button_link": "Button link",
+      "default_button": "Shop collection",
+      "default_heading": "A clear space for considered products",
+      "default_text": "<p>Easel is a simple Shopify theme built with Frame.</p>",
+      "heading": "Heading",
+      "name": "Hero",
+      "text": "Text"
+    }
+  },
+  "settings": {
+    "colors": {
+      "accent": "Accent",
+      "background": "Background",
+      "foreground": "Text",
+      "name": "Colors"
+    },
+    "layout": {
+      "name": "Layout",
+      "page_width": "Page width"
+    }
+  }
+}

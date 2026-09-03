@@ -1,0 +1,6 @@
+dist/
+.frame/
+node_modules/
+**/node_modules/
+**/assets/frame-*
+**/snippets/frame-assets.liquid

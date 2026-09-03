@@ -1,23 +1,24 @@
 import type {Manifest, ManifestChunk} from 'vite';
-import type {
-  FrameManifest,
-  FrameManifestEntry,
-  ResolvedFrameBundle,
-} from './types.js';
+import type {FrameManifest, FrameManifestEntry, ResolvedFrameBundle} from './types.js';
 
 export function createFrameManifest(
   viteManifest: Manifest,
   bundles: ResolvedFrameBundle[],
+  emittedFiles: string[] = [],
 ): FrameManifest {
   const entries: Record<string, FrameManifestEntry> = {};
-  const generated = new Set<string>();
+  const generated = new Set(emittedFiles);
 
   for (const bundle of bundles) {
     const chunk = findEntry(viteManifest, bundle.name);
     const styles = collectStaticStyles(viteManifest, chunk);
     const imports = collectStaticImports(viteManifest, chunk);
 
-    generated.add(chunk.file);
+    if (bundle.script === undefined) {
+      generated.delete(chunk.file);
+    } else {
+      generated.add(chunk.file);
+    }
     for (const style of styles) generated.add(style);
     for (const imported of imports) generated.add(imported);
     collectGeneratedFiles(viteManifest, chunk, generated);
@@ -46,10 +47,7 @@ function findEntry(manifest: Manifest, name: string): ManifestChunk {
   return chunk;
 }
 
-function collectStaticStyles(
-  manifest: Manifest,
-  entry: ManifestChunk,
-): string[] {
+function collectStaticStyles(manifest: Manifest, entry: ManifestChunk): string[] {
   const files = new Set<string>();
   const visited = new Set<string>();
 
@@ -70,10 +68,7 @@ function collectStaticStyles(
   return [...files];
 }
 
-function collectStaticImports(
-  manifest: Manifest,
-  entry: ManifestChunk,
-): string[] {
+function collectStaticImports(manifest: Manifest, entry: ManifestChunk): string[] {
   const files = new Set<string>();
   const visited = new Set<string>();
 

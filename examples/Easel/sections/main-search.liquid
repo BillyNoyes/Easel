@@ -1,0 +1,33 @@
+<section class="page-width search-page">
+  <h1>{{ 'search.title' | t }}</h1>
+  <form action="{{ routes.search_url }}" method="get" role="search">
+    <label for="SearchInput">{{ 'actions.search' | t }}</label>
+    <input id="SearchInput" type="search" name="q" value="{{ search.terms | escape }}" placeholder="{{ 'search.placeholder' | t }}">
+    <button class="button" type="submit">{{ 'actions.search' | t }}</button>
+  </form>
+
+  {% if search.performed %}
+    <h2>{{ 'search.results' | t }}</h2>
+    {% paginate search.results by 12 %}
+      <ul role="list">
+        {% for result in search.results %}
+          <li><a href="{{ result.url }}">{{ result.title }}</a></li>
+        {% endfor %}
+      </ul>
+      {{ paginate | default_pagination }}
+    {% endpaginate %}
+  {% endif %}
+</section>
+
+{% stylesheet %}
+  .search-page {
+    padding-block: 3rem;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:search.name",
+  "settings": []
+}
+{% endschema %}

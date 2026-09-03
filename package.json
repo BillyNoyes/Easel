@@ -4,6 +4,19 @@
   "description": "A Vite build adapter for Shopify Liquid themes",
   "type": "module",
   "private": true,
+  "sideEffects": false,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BillyNoyes/Frame.git"
+  },
+  "homepage": "https://github.com/BillyNoyes/Frame#readme",
+  "bugs": "https://github.com/BillyNoyes/Frame/issues",
+  "keywords": [
+    "shopify",
+    "liquid",
+    "theme",
+    "vite"
+  ],
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -15,8 +28,13 @@
   ],
   "scripts": {
     "build": "tsup src/index.ts --format esm --dts --sourcemap --clean",
-    "check": "pnpm typecheck && pnpm test && pnpm build",
+    "check": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test && pnpm test:example && pnpm build",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lint": "eslint .",
+    "prepublishOnly": "pnpm check",
     "test": "vitest run",
+    "test:example": "vite build --config examples/Easel/vite.config.ts",
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit"
   },
@@ -30,9 +48,12 @@
     "@tailwindcss/vite": "4.3.3",
     "@types/node": "^24.0.0",
     "alpinejs": "3.16.3",
+    "eslint": "^10.9.1",
+    "prettier": "^3.9.6",
     "tailwindcss": "4.3.3",
     "tsup": "^8.5.0",
     "typescript": "^5.9.0",
+    "typescript-eslint": "^8.68.0",
     "vite": "^8.0.0",
     "vitest": "^4.0.0"
   },

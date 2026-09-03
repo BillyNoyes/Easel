@@ -37,6 +37,10 @@ export interface ResolvedFrameOptions {
   sourcePath: string;
   stagingPath: string;
   ledgerPath: string;
+  commitLockPath: string;
+  manifestPath: string;
+  productionLiquidPath: string;
+  transactionPath: string;
   liquidPath: string;
   liquidFilename: string;
   prefix: string;
@@ -61,7 +65,9 @@ export interface FrameManifest {
 }
 
 export interface FrameOwnershipLedger {
-  schemaVersion: 1;
+  schemaVersion: 2;
   themePath: string;
+  prefix: string;
+  liquidFilename: string;
   generated: string[];
 }

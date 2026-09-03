@@ -1,0 +1,13 @@
+{% doc %}
+Renders a product price.
+
+@param {product} product - Product whose price should be displayed.
+{% enddoc %}
+
+<span class="price">
+  {% if product.price_varies %}
+    {{ product.price_min | money }}–{{ product.price_max | money }}
+  {% else %}
+    {{ product.price | money }}
+  {% endif %}
+</span>

@@ -1,4 +1,4 @@
-import {mkdirSync, mkdtempSync, writeFileSync} from 'node:fs';
+import {mkdirSync, mkdtempSync, realpathSync, symlinkSync, writeFileSync} from 'node:fs';
 import {tmpdir} from 'node:os';
 import {join} from 'node:path';
 import {describe, expect, it} from 'vitest';
@@ -26,13 +26,13 @@ describe('resolveFrameOptions', () => {
 
     const options = resolveFrameOptions({}, root);
 
-    expect(options.themePath).toBe(root);
-    expect(options.sourcePath).toBe(join(root, 'src'));
+    expect(options.themePath).toBe(realpathSync(root));
+    expect(options.sourcePath).toBe(realpathSync(join(root, 'src')));
     expect(options.bundles).toEqual([
       {
         name: 'theme',
-        script: join(root, 'src/main.ts'),
-        style: join(root, 'src/style.css'),
+        script: realpathSync(join(root, 'src/main.ts')),
+        style: realpathSync(join(root, 'src/style.css')),
       },
     ]);
   });
@@ -45,7 +45,7 @@ describe('resolveFrameOptions', () => {
 
     const options = resolveFrameOptions({}, root);
 
-    expect(options.bundles[0]?.script).toBe(join(root, 'src/main.js'));
+    expect(options.bundles[0]?.script).toBe(realpathSync(join(root, 'src/main.js')));
   });
 
   it('supports custom source locations and named bundles', () => {
@@ -72,6 +72,22 @@ describe('resolveFrameOptions', () => {
     ]);
   });
 
+  it('rejects named bundles that share a script entry', () => {
+    const root = project({'src/shared.ts': 'export const shared = true;'});
+
+    expect(() =>
+      resolveFrameOptions(
+        {
+          bundles: {
+            first: {script: 'shared.ts'},
+            second: {script: 'shared.ts'},
+          },
+        },
+        root,
+      ),
+    ).toThrow('each named bundle needs a distinct script entry');
+  });
+
   it('rejects an ambiguous default script', () => {
     const root = project({
       'src/main.js': 'export const javascript = true;',
@@ -79,22 +95,35 @@ describe('resolveFrameOptions', () => {
       'src/style.css': ':root {}',
     });
 
+    expect(() => resolveFrameOptions({}, root)).toThrow('both main.ts and main.js exist');
+  });
+
+  it('rejects a symlinked Frame staging directory', () => {
+    const root = project({
+      'src/main.ts': 'export const theme = true;',
+      'src/style.css': ':root {}',
+    });
+    const external = mkdtempSync(join(tmpdir(), 'frame-external-state-'));
+    mkdirSync(join(root, '.frame'), {recursive: true});
+    symlinkSync(
+      external,
+      join(root, '.frame/build'),
+      process.platform === 'win32' ? 'junction' : 'dir',
+    );
+
     expect(() => resolveFrameOptions({}, root)).toThrow(
-      'both src/main.ts and src/main.js exist',
+      'state directory must be a real directory',
     );
   });
 
   it('allows a script-only bundle when configured explicitly', () => {
     const root = project({'src/main.ts': 'export const theme = true;'});
 
-    const options = resolveFrameOptions(
-      {bundles: {theme: {script: 'main.ts'}}},
-      root,
-    );
+    const options = resolveFrameOptions({bundles: {theme: {script: 'main.ts'}}}, root);
 
     expect(options.bundles[0]).toEqual({
       name: 'theme',
-      script: join(root, 'src/main.ts'),
+      script: realpathSync(join(root, 'src/main.ts')),
     });
   });
 });

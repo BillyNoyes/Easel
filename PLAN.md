@@ -168,14 +168,14 @@ A theme built with Frame should not require a Frame browser runtime in productio
 
 The products commonly compared in this space actually belong to different categories.
 
-| Category | Examples | What they provide |
-| --- | --- | --- |
-| Focused Vite adapters | Barrel Shopify Vite, `woodawn/vite-plugin-shopify-theme` | Translate Vite output and development behavior into Shopify theme conventions |
-| Theme-aware compilers and synchronizers | Syncify, Melter | Transform, watch, map, and sometimes upload broad portions of a theme |
-| Development environments and starters | Theme Lab, Adastra, Slayed, Shopify Theme Tailwind | A complete source layout, framework stack, scripts, and example theme |
-| Older all-in-one pipelines | Slatest, Slate, Theme Kit wrappers | Webpack, Gulp, BrowserSync, Sass, and legacy upload workflows |
-| Focused extensions | Import-map, islands, cleanup, Ajax cart packages | Add one specialized capability around the core workflow |
-| Official foundation | Shopify CLI, Theme Check, Liquid language tooling | Preview, sync, deploy, validation, formatting, and editor intelligence |
+| Category                                | Examples                                                 | What they provide                                                             |
+| --------------------------------------- | -------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| Focused Vite adapters                   | Barrel Shopify Vite, `woodawn/vite-plugin-shopify-theme` | Translate Vite output and development behavior into Shopify theme conventions |
+| Theme-aware compilers and synchronizers | Syncify, Melter                                          | Transform, watch, map, and sometimes upload broad portions of a theme         |
+| Development environments and starters   | Theme Lab, Adastra, Slayed, Shopify Theme Tailwind       | A complete source layout, framework stack, scripts, and example theme         |
+| Older all-in-one pipelines              | Slatest, Slate, Theme Kit wrappers                       | Webpack, Gulp, BrowserSync, Sass, and legacy upload workflows                 |
+| Focused extensions                      | Import-map, islands, cleanup, Ajax cart packages         | Add one specialized capability around the core workflow                       |
+| Official foundation                     | Shopify CLI, Theme Check, Liquid language tooling        | Preview, sync, deploy, validation, formatting, and editor intelligence        |
 
 Frame should compete with focused Vite adapters. It should use starters as fixtures and leave specialized behavior to extensions.
 
@@ -773,7 +773,7 @@ Avoid silently selecting a Git policy.
 
 ## Proposed package design
 
-Start with one package, tentatively named `@blueprint/frame`, that exports the Vite plugin and installs a `frame` executable.
+Start with one package, tentatively named `@blueprint/frame`, that exports the Vite plugin. Frame does not replace the native `vite` and `vite build` commands. A future `frame` executable is reserved for diagnostics and recovery tasks that Vite does not provide.
 
 Possible later packages:
 
@@ -788,15 +788,14 @@ Do not create these packages before the core manifest contract is stable and a r
 
 Keep the initial Frame-specific configuration small:
 
-- `themeRoot`: Shopify theme path, resolved relative to Vite’s root; defaults to the Vite root.
-- `sourceDir`: source-code path, resolved relative to Vite’s root; defaults to `src`.
-- `entries`: required explicit map of public entry names to source files; relative entry paths resolve from `sourceDir`.
-- `snippet`: generated Liquid snippet filename under the theme’s `snippets/` directory; defaults to `frame-assets.liquid`.
-- `outputPrefix`: reserved namespace for Frame-generated assets; defaults to `frame-`.
-- `devOrigin`: local, network, or explicit external origin.
-- `cleanup`: enabled, disabled, or dry-run.
-- `generatedMode`: pipeline or repository workflow.
-- `debug`: detailed diagnostics.
+- `theme`: Shopify theme path, resolved relative to Vite’s root; defaults to the Vite root.
+- `source`: source-code path, resolved relative to Vite’s root; defaults to `src`.
+- `bundles`: explicit map of public bundle names to optional script and stylesheet entries. When omitted, Frame uses `src/main.ts` or `src/main.js` together with `src/style.css`.
+- `liquid`: generated Liquid snippet filename under the theme’s `snippets/` directory; defaults to `frame-assets.liquid`.
+- `prefix`: reserved namespace for Frame-generated assets; defaults to `frame-`.
+- `refresh`: Shopify CLI notification-file watching and debounce configuration; enabled by default.
+
+Development origins and other server behavior remain native Vite configuration through options such as `server.origin`, `server.cors`, and `server.allowedHosts`. Safe stale-output cleanup is an invariant rather than an option.
 
 Everything else should remain native Vite configuration.
 
@@ -818,11 +817,11 @@ Do not include Frame options for:
 
 ### Named entries
 
-Users define a small, explicit map such as global theme, product, collection, cart, or account entries. Frame validates that names are unique, filesystem-safe, resolve to files, and do not collide with existing user-owned theme assets.
+Users can define a small, explicit map such as global theme, product, collection, cart, or account bundles. Frame validates that names are unique, filesystem-safe, resolve to files, and do not collide with existing user-owned theme assets.
 
 JavaScript, TypeScript, JSX, TSX, CSS, and any other format supported by the user’s configured Vite plugins can be an entry. Frame does not infer application frameworks from file extensions.
 
-`sourceDir` is a path-resolution convenience, not a required project architecture. It may be renamed or point to a nested workspace location. Frame should allow source inputs outside the theme directory while strictly constraining every generated output to the validated theme and staging roots.
+`source` is a path-resolution convenience, not a required project architecture. It may point to a nested workspace location. Frame should allow source inputs outside the theme directory while strictly constraining every generated output to the validated theme and staging roots.
 
 ### Stable top-level entries
 
@@ -849,22 +848,9 @@ Frame should emit module-preload tags for static imports and avoid preloading dy
 
 ### Internal manifest
 
-Frame should generate a versioned machine-readable manifest containing:
+Frame generates a versioned machine-readable internal manifest containing the public bundle names, entry JavaScript, entry CSS, static imports, and complete generated-file set. It stores this manifest in the theme-specific Frame state directory and does not upload it to Shopify.
 
-- Manifest schema version.
-- Frame version.
-- Entry source and public name.
-- Entry JavaScript.
-- Entry CSS.
-- Static imports.
-- Dynamic imports.
-- Emitted static assets.
-- File hashes and sizes.
-- Output ownership.
-
-Frame may use Vite’s official manifest internally, but the Frame manifest should be its stable public contract.
-
-Do not upload the internal manifest to Shopify by default.
+The initial internal schema supports Frame's generated Liquid and ownership workflow. Before exposing it as a stable extension API, add the Frame package version, source entries, dynamic imports, per-entry static assets, hashes, and sizes, then document a compatibility policy.
 
 ### Generated Liquid
 

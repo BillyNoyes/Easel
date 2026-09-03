@@ -1,5 +1,5 @@
-import {createHash} from 'node:crypto';
-import {existsSync, statSync} from 'node:fs';
+import {createHash, randomUUID} from 'node:crypto';
+import {existsSync, lstatSync, realpathSync, statSync} from 'node:fs';
 import {isAbsolute, join, relative, resolve, sep} from 'node:path';
 import type {
   FrameBundle,
@@ -20,14 +20,16 @@ export function resolveFrameOptions(
   options: FrameOptions,
   projectRoot: string,
 ): ResolvedFrameOptions {
-  const root = resolve(projectRoot);
-  const themePath = resolveFrom(root, options.theme ?? '.');
-  const sourcePath = resolveFrom(root, options.source ?? DEFAULT_SOURCE);
+  const root = realpathSync(resolve(projectRoot));
+  const configuredThemePath = resolveFrom(root, options.theme ?? '.');
+  assertTheme(configuredThemePath);
+  const themePath = realpathSync(configuredThemePath);
+  const configuredSourcePath = resolveFrom(root, options.source ?? DEFAULT_SOURCE);
   const liquidFilename = options.liquid ?? DEFAULT_LIQUID;
   const prefix = options.prefix ?? DEFAULT_PREFIX;
 
-  assertTheme(themePath);
-  assertSource(sourcePath);
+  assertSource(configuredSourcePath);
+  const sourcePath = realpathSync(configuredSourcePath);
   assertLiquidFilename(liquidFilename);
   assertPrefix(prefix);
   const refresh = resolveRefresh(options.refresh, root);
@@ -35,13 +37,28 @@ export function resolveFrameOptions(
   const bundles = resolveBundles(options.bundles, sourcePath);
   const framePath = join(root, '.frame');
   const themeId = createHash('sha256').update(themePath).digest('hex').slice(0, 16);
+  const stagingParent = join(framePath, 'build', themeId);
+  const stagingPath = join(stagingParent, randomUUID());
+  const themeStatePath = join(framePath, 'themes', themeId);
+  const ledgerPath = join(themeStatePath, 'outputs.json');
+  assertFrameStatePaths([
+    framePath,
+    join(framePath, 'build'),
+    stagingParent,
+    join(framePath, 'themes'),
+    themeStatePath,
+  ]);
 
   return {
     projectRoot: root,
     themePath,
     sourcePath,
-    stagingPath: join(framePath, 'build', themeId),
-    ledgerPath: join(framePath, 'themes', themeId, 'outputs.json'),
+    stagingPath,
+    ledgerPath,
+    commitLockPath: join(themeStatePath, 'commit.lock'),
+    manifestPath: join(themeStatePath, 'manifest.json'),
+    productionLiquidPath: join(themeStatePath, 'production.liquid'),
+    transactionPath: join(themeStatePath, 'transaction'),
     liquidPath: join(themePath, 'snippets', liquidFilename),
     liquidFilename,
     prefix,
@@ -65,7 +82,9 @@ function resolveRefresh(
   const options = configured === true || configured === undefined ? {} : configured;
   const delay = options.delay ?? DEFAULT_REFRESH_DELAY;
   if (!Number.isInteger(delay) || delay < 0 || delay > 10_000) {
-    throw new Error('[frame] refresh.delay must be an integer from 0 to 10000 milliseconds');
+    throw new Error(
+      '[frame] refresh.delay must be an integer from 0 to 10000 milliseconds',
+    );
   }
 
   return {
@@ -86,7 +105,7 @@ function resolveBundles(
     throw new Error('[frame] bundles must contain at least one named bundle');
   }
 
-  return entries.map(([name, bundle]) => {
+  const resolved = entries.map(([name, bundle]) => {
     if (!ENTRY_NAME.test(name)) {
       throw new Error(
         `[frame] invalid bundle name "${name}"; use lowercase letters, numbers, and hyphens`,
@@ -101,6 +120,20 @@ function resolveBundles(
       ...resolveBundleFiles(name, bundle, sourcePath),
     };
   });
+
+  const scriptOwners = new Map<string, string>();
+  for (const bundle of resolved) {
+    if (bundle.script === undefined) continue;
+    const owner = scriptOwners.get(bundle.script);
+    if (owner !== undefined) {
+      throw new Error(
+        `[frame] bundles "${owner}" and "${bundle.name}" use the same script; each named bundle needs a distinct script entry`,
+      );
+    }
+    scriptOwners.set(bundle.script, bundle.name);
+  }
+
+  return resolved;
 }
 
 function resolveDefaultBundle(sourcePath: string): FrameBundle {
@@ -112,17 +145,17 @@ function resolveDefaultBundle(sourcePath: string): FrameBundle {
 
   if (hasTypescript && hasJavascript) {
     throw new Error(
-      '[frame] both src/main.ts and src/main.js exist; configure bundles to choose one explicitly',
+      `[frame] both main.ts and main.js exist in ${sourcePath}; configure bundles to choose one explicitly`,
     );
   }
   if (!hasTypescript && !hasJavascript) {
     throw new Error(
-      '[frame] expected src/main.ts or src/main.js; configure source or bundles for a different layout',
+      `[frame] expected main.ts or main.js in ${sourcePath}; configure source or bundles for a different layout`,
     );
   }
   if (!isFile(styleEntry)) {
     throw new Error(
-      '[frame] expected src/style.css; configure bundles explicitly to build without a stylesheet',
+      `[frame] expected style.css in ${sourcePath}; configure bundles explicitly to build without a stylesheet`,
     );
   }
 
@@ -159,14 +192,31 @@ function resolveInput(
   if (!isFile(path)) {
     throw new Error(`[frame] ${kind} for bundle "${bundleName}" does not exist: ${path}`);
   }
-  return path;
+  return realpathSync(path);
 }
 
 function assertTheme(themePath: string): void {
   for (const directory of ['assets', 'layout', 'snippets']) {
     const path = join(themePath, directory);
     if (!existsSync(path) || !statSync(path).isDirectory()) {
-      throw new Error(`[frame] invalid Shopify theme at ${themePath}: missing ${directory}/`);
+      throw new Error(
+        `[frame] invalid Shopify theme at ${themePath}: missing ${directory}/`,
+      );
+    }
+    if (lstatSync(path).isSymbolicLink()) {
+      throw new Error(
+        `[frame] Shopify theme output directory cannot be a symbolic link: ${path}`,
+      );
+    }
+  }
+}
+
+function assertFrameStatePaths(paths: string[]): void {
+  for (const path of paths) {
+    if (!existsSync(path)) continue;
+    const metadata = lstatSync(path);
+    if (metadata.isSymbolicLink() || !metadata.isDirectory()) {
+      throw new Error(`[frame] state directory must be a real directory: ${path}`);
     }
   }
 }

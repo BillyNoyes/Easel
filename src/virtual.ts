@@ -8,11 +8,9 @@ export function virtualBundleId(name: string): string {
   return `${INTERNAL_PREFIX}${name}`;
 }
 
-export function frameVirtualBundles(
-  getBundles: () => ResolvedFrameBundle[],
-): Plugin {
+export function frameBundleModules(getBundles: () => ResolvedFrameBundle[]): Plugin {
   return {
-    name: 'frame:virtual-bundles',
+    name: 'frame:bundle-modules',
     enforce: 'pre',
     resolveId(id) {
       if (id.startsWith(PUBLIC_PREFIX)) {
@@ -22,7 +20,17 @@ export function frameVirtualBundles(
         }
       }
       if (id.startsWith(INTERNAL_PREFIX)) return id;
-      return undefined;
+
+      const normalizedId = normalizeModulePath(id);
+      const input = getBundles()
+        .flatMap((bundle) => [bundle.script, bundle.style])
+        .find(
+          (path): path is string =>
+            path !== undefined && normalizeModulePath(path) === normalizedId,
+        );
+      return input === undefined
+        ? undefined
+        : {id: normalizeModulePath(input), moduleSideEffects: true};
     },
     load(id) {
       if (!id.startsWith(INTERNAL_PREFIX)) return undefined;
@@ -32,11 +40,14 @@ export function frameVirtualBundles(
         throw new Error(`[frame] unknown virtual bundle "${name}"`);
       }
 
-      const imports = [bundle.style, bundle.script]
+      return `${[bundle.script, bundle.style]
         .filter((path): path is string => path !== undefined)
-        .map((path) => `import ${JSON.stringify(path)};`);
-
-      return `${imports.join('\n')}\n`;
+        .map((path) => `import ${JSON.stringify(path)};`)
+        .join('\n')}\n`;
     },
   };
+}
+
+function normalizeModulePath(path: string): string {
+  return path.replaceAll('\\', '/');
 }

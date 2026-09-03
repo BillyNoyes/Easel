@@ -1,0 +1,15 @@
+{% doc %}
+Renders a product card.
+
+@param {product} product - Product to display.
+{% enddoc %}
+
+<article class="product-card">
+  <a href="{{ product.url }}">
+    {% if product.featured_image %}
+      {{ product.featured_image | image_url: width: 800 | image_tag: loading: 'lazy', widths: '320, 480, 640, 800' }}
+    {% endif %}
+    <h2>{{ product.title }}</h2>
+  </a>
+  {% render 'price', product: product %}
+</article>

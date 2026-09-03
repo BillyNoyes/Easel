@@ -1,0 +1,41 @@
+<div class="easel-text easel-text--{{ block.settings.alignment }}" {{ block.shopify_attributes }}>
+  {{ block.settings.text }}
+</div>
+
+{% stylesheet %}
+  .easel-text--left {
+    text-align: left;
+  }
+
+  .easel-text--center {
+    text-align: center;
+  }
+
+  .easel-text--right {
+    text-align: right;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:blocks.text.name",
+  "settings": [
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "t:blocks.text.text"
+    },
+    {
+      "type": "text_alignment",
+      "id": "alignment",
+      "label": "t:blocks.text.alignment",
+      "default": "left"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:blocks.text.name"
+    }
+  ]
+}
+{% endschema %}

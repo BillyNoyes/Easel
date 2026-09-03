@@ -1,0 +1,49 @@
+<section class="page-width cart">
+  <h1>{{ 'cart.title' | t }}</h1>
+  {% if cart.item_count == 0 %}
+    <p>{{ 'cart.empty' | t }}</p>
+    <a class="button" href="{{ routes.all_products_collection_url }}">{{ 'actions.continue_shopping' | t }}</a>
+  {% else %}
+    {% form 'cart', cart %}
+      <ul class="cart__items" role="list">
+        {% for item in cart.items %}
+          <li>
+            <a href="{{ item.url }}">{{ item.product.title }}</a>
+            <input type="number" name="updates[]" value="{{ item.quantity }}" min="0" aria-label="{{ item.product.title | escape }}">
+            <span>{{ item.final_line_price | money }}</span>
+          </li>
+        {% endfor %}
+      </ul>
+      <p>{{ 'cart.total' | t }}: {{ cart.total_price | money }}</p>
+      <button class="button" type="submit" name="update">{{ 'cart.update' | t }}</button>
+      <button class="button" type="submit" name="checkout">{{ 'cart.checkout' | t }}</button>
+    {% endform %}
+  {% endif %}
+</section>
+
+{% stylesheet %}
+  .cart {
+    padding-block: 3rem;
+  }
+
+  .cart__items {
+    display: grid;
+    gap: 1rem;
+    padding: 0;
+    list-style: none;
+  }
+
+  .cart__items li {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    align-items: center;
+    gap: 1rem;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.cart",
+  "settings": []
+}
+{% endschema %}

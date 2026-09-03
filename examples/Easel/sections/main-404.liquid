@@ -1,0 +1,20 @@
+<section class="page-width not-found">
+  <p>404</p>
+  <h1>{{ 'general.not_found' | t }}</h1>
+  <p>{{ 'general.not_found_text' | t }}</p>
+  <a class="button" href="{{ routes.root_url }}">{{ 'actions.continue_shopping' | t }}</a>
+</section>
+
+{% stylesheet %}
+  .not-found {
+    padding-block: 6rem;
+    text-align: center;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.not_found_name",
+  "settings": []
+}
+{% endschema %}
