@@ -36,6 +36,12 @@
     "page": "Page",
     "product": "Product"
   },
+  "gift_card": {
+    "continue_shopping": "Continue shopping",
+    "expired": "This gift card has expired",
+    "heading": "Your gift card",
+    "title": "Gift card for {{ shop }}"
+  },
   "product": {
     "unavailable": "Unavailable"
   },

@@ -1,4 +1,5 @@
 node_modules/
 .frame/
+*.zip
 assets/frame-*
 snippets/frame-assets.liquid
