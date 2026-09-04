@@ -350,7 +350,7 @@ Each example is a small, independently runnable Shopify Liquid theme:
 
 The framework examples handle Shopify Theme Editor section load and unload events. Every example is type-checked, built through Frame, and validated with Shopify Theme Check in CI.
 
-All four examples have also been exercised against a real Shopify development store: local previews, Vite development assets, `--notify` reloads, operation without `--notify`, production builds, strict unpublished pushes, remote asset pulls, and cleanup. React Fast Refresh and the React/Vue client mounts were verified in a browser.
+All four examples have also been exercised against a real Shopify development store: local previews, Vite development assets, `--notify` reloads, operation without `--notify`, production builds, strict unpublished pushes, remote asset pulls, and cleanup. The React Fast Refresh preamble and the React/Vue client mounts were verified in a browser.
 
 ## Tested behavior
 
