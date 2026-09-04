@@ -33,7 +33,7 @@
     "format:check": "prettier --check .",
     "lint": "eslint .",
     "prepublishOnly": "pnpm check",
-    "test": "vitest run --no-file-parallelism",
+    "test": "vitest run",
     "test:example:alpine-tailwind": "pnpm --dir examples/alpine-tailwind check",
     "test:example:react": "pnpm --dir examples/react check",
     "test:example:vanilla": "pnpm --dir examples/vanilla check",
