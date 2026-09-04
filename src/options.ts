@@ -7,12 +7,22 @@ import type {
   ResolvedFrameBundle,
   ResolvedFrameOptions,
 } from './types.js';
+import {SAFE_OUTPUT_NAME} from './validation.js';
 
 const DEFAULT_SOURCE = 'src';
 const DEFAULT_NAMESPACE = 'frame';
 const DEFAULT_REFRESH_SIGNAL = '.frame/shopify-ready';
 const DEFAULT_REFRESH_DELAY = 100;
-const ENTRY_NAME = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+
+type FrameStatePaths = Pick<
+  ResolvedFrameOptions,
+  | 'stagingPath'
+  | 'ledgerPath'
+  | 'commitLockPath'
+  | 'manifestPath'
+  | 'productionLiquidPath'
+  | 'transactionPath'
+>;
 
 export function resolveFrameOptions(
   options: FrameOptions,
@@ -33,30 +43,13 @@ export function resolveFrameOptions(
   const refresh = resolveRefresh(options.refresh, root);
 
   const bundles = resolveBundles(options.bundles, sourcePath);
-  const framePath = join(root, '.frame');
-  const themeId = createHash('sha256').update(themePath).digest('hex').slice(0, 16);
-  const stagingParent = join(framePath, 'build', themeId);
-  const stagingPath = join(stagingParent, randomUUID());
-  const themeStatePath = join(framePath, 'themes', themeId);
-  const ledgerPath = join(themeStatePath, 'outputs.json');
-  assertFrameStatePaths([
-    framePath,
-    join(framePath, 'build'),
-    stagingParent,
-    join(framePath, 'themes'),
-    themeStatePath,
-  ]);
+  const statePaths = resolveFrameStatePaths(root, themePath);
 
   return {
     projectRoot: root,
     themePath,
     sourcePath,
-    stagingPath,
-    ledgerPath,
-    commitLockPath: join(themeStatePath, 'commit.lock'),
-    manifestPath: join(themeStatePath, 'manifest.json'),
-    productionLiquidPath: join(themeStatePath, 'production.txt'),
-    transactionPath: join(themeStatePath, 'transaction'),
+    ...statePaths,
     liquidPath: join(themePath, 'snippets', liquidFilename),
     liquidFilename,
     namespace,
@@ -105,7 +98,7 @@ function resolveBundles(
   }
 
   const resolved = entries.map(([name, bundle]) => {
-    if (!ENTRY_NAME.test(name)) {
+    if (!SAFE_OUTPUT_NAME.test(name)) {
       throw new Error(
         `[frame] invalid bundle name "${name}"; use lowercase letters, numbers, and hyphens`,
       );
@@ -194,17 +187,41 @@ function resolveInput(
   return realpathSync(path);
 }
 
+function resolveFrameStatePaths(projectRoot: string, themePath: string): FrameStatePaths {
+  const framePath = join(projectRoot, '.frame');
+  const themeId = createHash('sha256').update(themePath).digest('hex').slice(0, 16);
+  const stagingParent = join(framePath, 'build', themeId);
+  const themeStatePath = join(framePath, 'themes', themeId);
+  assertFrameStatePaths([
+    framePath,
+    join(framePath, 'build'),
+    stagingParent,
+    join(framePath, 'themes'),
+    themeStatePath,
+  ]);
+
+  return {
+    stagingPath: join(stagingParent, randomUUID()),
+    ledgerPath: join(themeStatePath, 'outputs.json'),
+    commitLockPath: join(themeStatePath, 'commit.lock'),
+    manifestPath: join(themeStatePath, 'manifest.json'),
+    productionLiquidPath: join(themeStatePath, 'production.txt'),
+    transactionPath: join(themeStatePath, 'transaction'),
+  };
+}
+
 function assertTheme(themePath: string): void {
   for (const directory of ['assets', 'layout', 'snippets']) {
     const path = join(themePath, directory);
-    if (!existsSync(path) || !statSync(path).isDirectory()) {
-      throw new Error(
-        `[frame] invalid Shopify theme at ${themePath}: missing ${directory}/`,
-      );
-    }
-    if (lstatSync(path).isSymbolicLink()) {
+    const metadata = lstatSync(path, {throwIfNoEntry: false});
+    if (metadata?.isSymbolicLink()) {
       throw new Error(
         `[frame] Shopify theme output directory cannot be a symbolic link: ${path}`,
+      );
+    }
+    if (metadata === undefined || !metadata.isDirectory()) {
+      throw new Error(
+        `[frame] invalid Shopify theme at ${themePath}: missing ${directory}/`,
       );
     }
   }
@@ -212,8 +229,8 @@ function assertTheme(themePath: string): void {
 
 function assertFrameStatePaths(paths: string[]): void {
   for (const path of paths) {
-    if (!existsSync(path)) continue;
-    const metadata = lstatSync(path);
+    const metadata = lstatSync(path, {throwIfNoEntry: false});
+    if (metadata === undefined) continue;
     if (metadata.isSymbolicLink() || !metadata.isDirectory()) {
       throw new Error(`[frame] state directory must be a real directory: ${path}`);
     }
@@ -227,7 +244,7 @@ function assertSource(sourcePath: string): void {
 }
 
 function assertNamespace(namespace: string): void {
-  if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(namespace)) {
+  if (!SAFE_OUTPUT_NAME.test(namespace)) {
     throw new Error(
       '[frame] namespace must use lowercase letters, numbers, and single hyphens',
     );

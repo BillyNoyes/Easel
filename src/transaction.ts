@@ -6,11 +6,11 @@ import {
   readFileSync,
   renameSync,
   rmSync,
-  statSync,
   writeFileSync,
 } from 'node:fs';
 import {dirname, join, relative, resolve, sep} from 'node:path';
 import type {ResolvedFrameOptions} from './types.js';
+import {SAFE_ASSET_FILENAME, SAFE_LIQUID_FILENAME} from './validation.js';
 
 interface TransactionEntry {
   scope: 'theme' | 'state';
@@ -25,41 +25,9 @@ interface TransactionJournal {
   entries: TransactionEntry[];
 }
 
-export type FileSnapshots = Map<string, Buffer | undefined>;
+type FileSnapshots = Map<string, Buffer | undefined>;
 
-export function acquireCommitLock(lockPath: string): () => void {
-  mkdirSync(dirname(lockPath), {recursive: true});
-  const token = randomUUID();
-
-  for (let attempt = 0; attempt < 2; attempt += 1) {
-    try {
-      mkdirSync(lockPath);
-      try {
-        writeFileSync(
-          join(lockPath, 'owner.json'),
-          `${JSON.stringify({pid: process.pid, token})}\n`,
-        );
-      } catch (error) {
-        rmSync(lockPath, {recursive: true});
-        throw error;
-      }
-      return () => {
-        const owner = readLockOwner(lockPath);
-        if (owner?.token === token) rmSync(lockPath, {recursive: true});
-      };
-    } catch (error) {
-      if (!isAlreadyExistsError(error)) throw error;
-      if (!isStaleLock(lockPath)) {
-        throw new Error(`[frame] another build is publishing this theme: ${lockPath}`);
-      }
-      rmSync(lockPath, {recursive: true});
-    }
-  }
-
-  throw new Error(`[frame] could not acquire the theme commit lock: ${lockPath}`);
-}
-
-export function snapshotFiles(paths: string[]): FileSnapshots {
+function snapshotFiles(paths: string[]): FileSnapshots {
   return new Map(
     [...new Set(paths)].map((path) => [
       path,
@@ -68,7 +36,7 @@ export function snapshotFiles(paths: string[]): FileSnapshots {
   );
 }
 
-export function restoreSnapshots(snapshots: FileSnapshots): void {
+function restoreSnapshots(snapshots: FileSnapshots): void {
   for (const [path, content] of snapshots) {
     if (content === undefined) {
       if (existsSync(path)) rmSync(path);
@@ -78,7 +46,7 @@ export function restoreSnapshots(snapshots: FileSnapshots): void {
   }
 }
 
-export function writeTransactionJournal(
+function writeTransactionJournal(
   options: ResolvedFrameOptions,
   snapshots: FileSnapshots,
 ): void {
@@ -110,6 +78,31 @@ export function writeTransactionJournal(
     renameSync(temporary, options.transactionPath);
   } finally {
     if (existsSync(temporary)) rmSync(temporary, {recursive: true});
+  }
+}
+
+export function runFileTransaction(
+  options: ResolvedFrameOptions,
+  paths: string[],
+  action: () => void,
+): void {
+  const snapshots = snapshotFiles(paths);
+  writeTransactionJournal(options, snapshots);
+
+  try {
+    action();
+    rmSync(options.transactionPath, {recursive: true});
+  } catch (error) {
+    try {
+      restoreSnapshots(snapshots);
+      rmSync(options.transactionPath, {recursive: true, force: true});
+    } catch (rollbackError) {
+      throw new AggregateError(
+        [error, rollbackError],
+        '[frame] output commit failed and could not be rolled back completely',
+      );
+    }
+    throw error;
   }
 }
 
@@ -192,10 +185,14 @@ function journalLocation(
   options: ResolvedFrameOptions,
   path: string,
 ): Pick<TransactionEntry, 'scope' | 'path'> {
-  const themePath = relativeWithin(options.themePath, path);
-  if (themePath !== undefined) return {scope: 'theme', path: themePath};
   const statePath = relativeWithin(dirname(options.ledgerPath), path);
-  if (statePath !== undefined) return {scope: 'state', path: statePath};
+  if (statePath !== undefined) {
+    return assertJournalLocation({scope: 'state', path: statePath});
+  }
+  const themePath = relativeWithin(options.themePath, path);
+  if (themePath !== undefined) {
+    return assertJournalLocation({scope: 'theme', path: themePath});
+  }
   throw new Error(`[frame] cannot journal output outside Frame's roots: ${path}`);
 }
 
@@ -203,17 +200,7 @@ function resolveJournalLocation(
   options: ResolvedFrameOptions,
   entry: TransactionEntry,
 ): string {
-  if (
-    (entry.scope === 'theme' && !isJournalThemePath(entry.path)) ||
-    (entry.scope === 'state' &&
-      !['outputs.json', 'production.txt', 'production.liquid', 'manifest.json'].includes(
-        entry.path,
-      ))
-  ) {
-    throw new Error(
-      `[frame] interrupted transaction journal contains an invalid path: ${entry.path}`,
-    );
-  }
+  assertJournalLocation(entry);
   const root = entry.scope === 'theme' ? options.themePath : dirname(options.ledgerPath);
   const path = safeResolve(root, entry.path);
   if (relativeWithin(root, path) !== entry.path) {
@@ -224,11 +211,28 @@ function resolveJournalLocation(
   return path;
 }
 
+function assertJournalLocation<T extends Pick<TransactionEntry, 'scope' | 'path'>>(
+  location: T,
+): T {
+  const valid =
+    location.scope === 'theme'
+      ? isJournalThemePath(location.path)
+      : ['outputs.json', 'production.txt', 'production.liquid', 'manifest.json'].includes(
+          location.path,
+        );
+  if (!valid) {
+    throw new Error(
+      `[frame] transaction journal contains an invalid path: ${location.path}`,
+    );
+  }
+  return location;
+}
+
 function isJournalThemePath(path: string): boolean {
-  return (
-    /^assets\/[a-z0-9][a-z0-9._-]*$/.test(path) ||
-    /^snippets\/[a-z0-9][a-z0-9_-]*\.liquid$/.test(path)
-  );
+  const [directory, filename, extra] = path.split('/');
+  if (filename === undefined || extra !== undefined) return false;
+  if (directory === 'assets') return SAFE_ASSET_FILENAME.test(filename);
+  return directory === 'snippets' && SAFE_LIQUID_FILENAME.test(filename);
 }
 
 function relativeWithin(root: string, path: string): string | undefined {
@@ -267,59 +271,6 @@ function isTransactionEntry(entry: unknown): entry is TransactionEntry {
     typeof entry.existed === 'boolean' &&
     (!('blob' in entry) || entry.blob === undefined || typeof entry.blob === 'string')
   );
-}
-
-function isStaleLock(lockPath: string): boolean {
-  const metadata = lstatSync(lockPath);
-  if (!metadata.isDirectory() || metadata.isSymbolicLink()) {
-    throw new Error(`[frame] commit lock must be a real directory: ${lockPath}`);
-  }
-  const owner = readLockOwner(lockPath);
-  if (owner === undefined) {
-    return Date.now() - statSync(lockPath).mtimeMs > 30_000;
-  }
-  try {
-    process.kill(owner.pid, 0);
-    return false;
-  } catch (error) {
-    return isNoSuchProcessError(error);
-  }
-}
-
-function readLockOwner(lockPath: string): {pid: number; token: string} | undefined {
-  try {
-    const value = JSON.parse(
-      readFileSync(join(lockPath, 'owner.json'), 'utf8'),
-    ) as unknown;
-    if (
-      typeof value === 'object' &&
-      value !== null &&
-      'pid' in value &&
-      'token' in value &&
-      typeof value.pid === 'number' &&
-      Number.isInteger(value.pid) &&
-      value.pid > 0 &&
-      typeof value.token === 'string' &&
-      value.token.length > 0
-    ) {
-      return {pid: value.pid, token: value.token};
-    }
-  } catch {
-    return undefined;
-  }
-  return undefined;
-}
-
-function isAlreadyExistsError(error: unknown): boolean {
-  return isNodeError(error) && error.code === 'EEXIST';
-}
-
-function isNoSuchProcessError(error: unknown): boolean {
-  return isNodeError(error) && error.code === 'ESRCH';
-}
-
-function isNodeError(error: unknown): error is NodeJS.ErrnoException {
-  return error instanceof Error && 'code' in error;
 }
 
 function replaceFileOnWindows(temporary: string, destination: string): void {

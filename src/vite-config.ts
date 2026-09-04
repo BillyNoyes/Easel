@@ -80,13 +80,9 @@ function createViteConfig(
       },
     },
     server: {
-      cors: config.server?.cors ?? shopifyCorsPolicy(),
+      ...(config.server?.cors === undefined ? {cors: shopifyCorsPolicy()} : {}),
       fs: {
-        allow: unique([
-          ...(config.server?.fs?.allow ?? []),
-          options.projectRoot,
-          options.sourcePath,
-        ]),
+        allow: frameFileSystemAllowList(config.server?.fs?.allow ?? [], options),
       },
     },
   };
@@ -110,6 +106,16 @@ function shopifyCorsPolicy(): {origin: RegExp[]} {
       /^https?:\/\/(?:localhost|127\.0\.0\.1|\[::1\])(?::\d+)?$/,
     ],
   };
+}
+
+function frameFileSystemAllowList(
+  configured: string[],
+  options: ResolvedFrameOptions,
+): string[] {
+  const existing = new Set(configured);
+  return unique([options.projectRoot, options.sourcePath]).filter(
+    (path) => !existing.has(path),
+  );
 }
 
 function assertCompatibleBuildConfig(config: UserConfig): void {
@@ -182,12 +188,7 @@ function assertNoLaterPostBuildHooks(config: ResolvedConfig): void {
   const frameIndex = config.plugins.findIndex(
     (plugin) => plugin.name === 'frame:shopify-theme',
   );
-  const unsafe = config.plugins.slice(frameIndex + 1).filter((plugin) =>
-    ['writeBundle', 'closeBundle'].some((hookName) => {
-      const hook = plugin[hookName as 'writeBundle' | 'closeBundle'];
-      return typeof hook === 'object' && hook.order === 'post';
-    }),
-  );
+  const unsafe = config.plugins.slice(frameIndex + 1).filter(hasPostOutputHook);
   if (unsafe.length > 0) {
     throw new Error(
       `[frame] Frame must run after plugins with post-order output hooks: ${unsafe
@@ -195,6 +196,12 @@ function assertNoLaterPostBuildHooks(config: ResolvedConfig): void {
         .join(', ')}. Move frame() after those plugins.`,
     );
   }
+}
+
+function hasPostOutputHook(plugin: ResolvedConfig['plugins'][number]): boolean {
+  return [plugin.writeBundle, plugin.closeBundle].some(
+    (hook) => typeof hook === 'object' && hook.order === 'post',
+  );
 }
 
 function unique(values: string[]): string[] {

@@ -13,24 +13,21 @@ export function frameBundleModules(getBundles: () => ResolvedFrameBundle[]): Plu
     name: 'frame:bundle-modules',
     enforce: 'pre',
     resolveId(id) {
+      const bundles = getBundles();
       if (id.startsWith(PUBLIC_PREFIX)) {
         const name = id.slice(PUBLIC_PREFIX.length);
-        if (getBundles().some((bundle) => bundle.name === name)) {
+        if (bundles.some((bundle) => bundle.name === name)) {
           return virtualBundleId(name);
         }
       }
       if (id.startsWith(INTERNAL_PREFIX)) return id;
 
       const normalizedId = normalizeModulePath(id);
-      const input = getBundles()
-        .flatMap((bundle) => [bundle.script, bundle.style])
-        .find(
-          (path): path is string =>
-            path !== undefined && normalizeModulePath(path) === normalizedId,
-        );
-      return input === undefined
-        ? undefined
-        : {id: normalizeModulePath(input), moduleSideEffects: true};
+      const isBundleInput = bundles
+        .flatMap(bundleInputs)
+        .some((path) => normalizeModulePath(path) === normalizedId);
+      // Bundle inputs are storefront entry points even when their exports are unused.
+      return isBundleInput ? {id: normalizedId, moduleSideEffects: true} : undefined;
     },
     load(id) {
       if (!id.startsWith(INTERNAL_PREFIX)) return undefined;
@@ -40,12 +37,17 @@ export function frameBundleModules(getBundles: () => ResolvedFrameBundle[]): Plu
         throw new Error(`[frame] unknown virtual bundle "${name}"`);
       }
 
-      return `${[bundle.script, bundle.style]
-        .filter((path): path is string => path !== undefined)
+      return `${bundleInputs(bundle)
         .map((path) => `import ${JSON.stringify(path)};`)
         .join('\n')}\n`;
     },
   };
+}
+
+function bundleInputs(bundle: ResolvedFrameBundle): string[] {
+  return [bundle.script, bundle.style].filter(
+    (path): path is string => path !== undefined,
+  );
 }
 
 function normalizeModulePath(path: string): string {

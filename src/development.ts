@@ -9,11 +9,17 @@ export function configureDevelopmentServer(
   server: ViteDevServer,
   options: ResolvedFrameOptions,
 ): void {
+  if (server.httpServer === null) {
+    throw new Error(
+      '[frame] Vite middleware mode is not supported; Frame requires the development server lifecycle',
+    );
+  }
+
   assertDevelopmentLiquidWritable(options);
   const stopWatching = configureRefresh(server, options);
   let restoreDevelopmentLiquid: (() => void) | undefined;
 
-  server.httpServer?.once('listening', () => {
+  server.httpServer.once('listening', () => {
     restoreDevelopmentLiquid = writeDevelopmentLiquid(
       options,
       renderDevelopmentLiquid(
@@ -22,7 +28,7 @@ export function configureDevelopmentServer(
       ),
     );
   });
-  server.httpServer?.once('close', () => {
+  server.httpServer.once('close', () => {
     stopWatching?.();
     restoreDevelopmentLiquid?.();
   });

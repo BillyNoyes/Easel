@@ -143,6 +143,22 @@ describe('resolveFrameOptions', () => {
     );
   });
 
+  it.skipIf(process.platform === 'win32')(
+    'rejects a dangling symlink in Frame state',
+    () => {
+      const root = project({
+        'src/main.ts': 'export const theme = true;',
+        'src/style.css': ':root {}',
+      });
+      mkdirSync(join(root, '.frame'), {recursive: true});
+      symlinkSync(join(root, 'missing-state'), join(root, '.frame/build'), 'dir');
+
+      expect(() => resolveFrameOptions({}, root)).toThrow(
+        'state directory must be a real directory',
+      );
+    },
+  );
+
   it('allows a script-only bundle when configured explicitly', () => {
     const root = project({'src/main.ts': 'export const theme = true;'});
 

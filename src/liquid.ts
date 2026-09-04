@@ -1,9 +1,8 @@
 import type {FrameManifest, FrameManifestEntry} from './types.js';
+import {SAFE_ASSET_FILENAME, SAFE_OUTPUT_NAME} from './validation.js';
 import {PUBLIC_PREFIX} from './virtual.js';
 
 const MAX_LIQUID_BYTES = 200_000;
-const ENTRY_NAME = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
-const ASSET_FILENAME = /^[A-Za-z0-9][A-Za-z0-9._-]*$/;
 
 export function renderProductionLiquid(manifest: FrameManifest): string {
   const entries = validatedManifestEntries(manifest);
@@ -104,7 +103,7 @@ function validatedManifestEntries(
 function validatedEntryNames(names: string[]): string[] {
   const seen = new Set<string>();
   for (const name of names) {
-    if (!ENTRY_NAME.test(name)) {
+    if (!SAFE_OUTPUT_NAME.test(name)) {
       throw new Error(`[frame] cannot render unsafe Liquid bundle name: ${name}`);
     }
     if (seen.has(name)) {
@@ -116,7 +115,7 @@ function validatedEntryNames(names: string[]): string[] {
 }
 
 function liquidEntryLiteral(name: string): string {
-  if (!ENTRY_NAME.test(name)) {
+  if (!SAFE_OUTPUT_NAME.test(name)) {
     throw new Error(`[frame] cannot render unsafe Liquid bundle name: ${name}`);
   }
   return `'${name}'`;
@@ -127,7 +126,7 @@ function liquidAssetLiteral(
   role: string,
   extension: '.css' | '.js',
 ): string {
-  if (!ASSET_FILENAME.test(filename) || !filename.endsWith(extension)) {
+  if (!SAFE_ASSET_FILENAME.test(filename) || !filename.endsWith(extension)) {
     throw new Error(`[frame] cannot render unsafe ${role} filename: ${filename}`);
   }
   return `'${filename}'`;

@@ -11,8 +11,7 @@ export function createFrameManifest(
 
   for (const bundle of bundles) {
     const chunk = findEntry(viteManifest, bundle.name);
-    const styles = collectStaticStyles(viteManifest, chunk);
-    const imports = collectStaticImports(viteManifest, chunk);
+    const {styles, imports} = collectStaticDependencies(viteManifest, chunk);
 
     if (bundle.script === undefined) {
       generated.delete(chunk.file);
@@ -47,46 +46,27 @@ function findEntry(manifest: Manifest, name: string): ManifestChunk {
   return chunk;
 }
 
-function collectStaticStyles(manifest: Manifest, entry: ManifestChunk): string[] {
-  const files = new Set<string>();
+function collectStaticDependencies(
+  manifest: Manifest,
+  entry: ManifestChunk,
+): {styles: string[]; imports: string[]} {
+  const styles = new Set<string>();
+  const imports = new Set<string>();
   const visited = new Set<string>();
 
   const visit = (chunk: ManifestChunk): void => {
     for (const key of chunk.imports ?? []) {
       if (visited.has(key)) continue;
       visited.add(key);
-      const imported = manifest[key];
-      if (imported === undefined) {
-        throw new Error(`[frame] Vite manifest import is missing: ${key}`);
-      }
+      const imported = requiredChunk(manifest, key);
+      imports.add(imported.file);
       visit(imported);
     }
-    for (const style of chunk.css ?? []) files.add(style);
+    for (const style of chunk.css ?? []) styles.add(style);
   };
 
   visit(entry);
-  return [...files];
-}
-
-function collectStaticImports(manifest: Manifest, entry: ManifestChunk): string[] {
-  const files = new Set<string>();
-  const visited = new Set<string>();
-
-  const visit = (chunk: ManifestChunk): void => {
-    for (const key of chunk.imports ?? []) {
-      if (visited.has(key)) continue;
-      visited.add(key);
-      const imported = manifest[key];
-      if (imported === undefined) {
-        throw new Error(`[frame] Vite manifest import is missing: ${key}`);
-      }
-      files.add(imported.file);
-      visit(imported);
-    }
-  };
-
-  visit(entry);
-  return [...files];
+  return {styles: [...styles], imports: [...imports]};
 }
 
 function collectGeneratedFiles(
@@ -102,14 +82,19 @@ function collectGeneratedFiles(
     for (const key of [...(chunk.imports ?? []), ...(chunk.dynamicImports ?? [])]) {
       if (visited.has(key)) continue;
       visited.add(key);
-      const imported = manifest[key];
-      if (imported === undefined) {
-        throw new Error(`[frame] Vite manifest import is missing: ${key}`);
-      }
+      const imported = requiredChunk(manifest, key);
       files.add(imported.file);
       visit(imported);
     }
   };
 
   visit(entry);
+}
+
+function requiredChunk(manifest: Manifest, key: string): ManifestChunk {
+  const chunk = manifest[key];
+  if (chunk === undefined) {
+    throw new Error(`[frame] Vite manifest import is missing: ${key}`);
+  }
+  return chunk;
 }

@@ -1,15 +1,28 @@
 import {existsSync, readFileSync, rmSync} from 'node:fs';
-import {dirname, join, sep} from 'node:path';
+import {dirname, join} from 'node:path';
+import {acquireCommitLock} from './lock.js';
 import {
-  acquireCommitLock,
+  assertAssetWritable,
+  assertLiquidWritable,
+  isDevelopmentLiquid,
+  isGeneratedLiquid,
+  ownedAssetPath,
+  ownedLiquidPath,
+  readOwnershipLedger,
+} from './ownership.js';
+import {
   recoverInterruptedCommit,
-  restoreSnapshots,
+  runFileTransaction,
   safeResolve,
-  snapshotFiles,
   writeIfChanged,
-  writeTransactionJournal,
 } from './transaction.js';
 import type {FrameManifest, FrameOwnershipLedger, ResolvedFrameOptions} from './types.js';
+
+interface PreparedAsset {
+  relativePath: string;
+  destinationPath: string;
+  content: Buffer;
+}
 
 export function commitProductionOutput(
   options: ResolvedFrameOptions,
@@ -20,84 +33,23 @@ export function commitProductionOutput(
   try {
     recoverInterruptedCommit(options);
     migrateLegacyProductionBackup(options);
-    const previous = readLedger(options.ledgerPath, options);
+
+    const previous = readOwnershipLedger(options);
     const previousFiles = new Set(previous?.generated ?? []);
+    const assets = prepareAssets(options, manifest.generated);
     const nextFiles = new Set([
-      ...manifest.generated.map((file) => ownedAssetPath(options, file)),
+      ...assets.map((asset) => asset.relativePath),
       ownedLiquidPath(options),
     ]);
 
-    for (const file of manifest.generated) {
-      const source = safeResolve(options.stagingPath, file);
-      const destination = safeResolve(join(options.themePath, 'assets'), file);
-      if (!existsSync(source)) {
-        throw new Error(`[frame] generated Vite asset is missing: ${source}`);
-      }
-      assertOwnedOrAbsent(
-        source,
-        destination,
-        ownedAssetPath(options, file),
-        previousFiles,
-      );
-    }
-    assertLiquidOwnedOrAbsent(
-      options.liquidPath,
-      ownedLiquidPath(options),
-      previousFiles,
-    );
-
+    assertProductionOutputWritable(options, assets, previousFiles);
     const stalePaths = [...previousFiles]
       .filter((file) => !nextFiles.has(file))
       .map((file) => safeResolve(options.themePath, file));
-    const changedPaths = [
-      ...manifest.generated.map((file) =>
-        safeResolve(join(options.themePath, 'assets'), file),
-      ),
-      options.liquidPath,
-      options.productionLiquidPath,
-      options.manifestPath,
-      ...stalePaths,
-      options.ledgerPath,
-    ];
-    const snapshots = snapshotFiles(changedPaths);
-    writeTransactionJournal(options, snapshots);
 
-    try {
-      for (const file of manifest.generated) {
-        writeIfChanged(
-          safeResolve(join(options.themePath, 'assets'), file),
-          readFileSync(safeResolve(options.stagingPath, file)),
-        );
-      }
-      writeIfChanged(options.liquidPath, liquid);
-      writeIfChanged(options.productionLiquidPath, liquid);
-      writeIfChanged(options.manifestPath, `${JSON.stringify(manifest, null, 2)}\n`);
-
-      for (const stale of stalePaths) {
-        if (existsSync(stale)) rmSync(stale);
-      }
-
-      const ledger: FrameOwnershipLedger = {
-        schemaVersion: 2,
-        themePath: options.themePath,
-        prefix: options.prefix,
-        liquidFilename: options.liquidFilename,
-        generated: [...nextFiles].sort(),
-      };
-      writeIfChanged(options.ledgerPath, `${JSON.stringify(ledger, null, 2)}\n`);
-      rmSync(options.transactionPath, {recursive: true});
-    } catch (error) {
-      try {
-        restoreSnapshots(snapshots);
-        rmSync(options.transactionPath, {recursive: true, force: true});
-      } catch (rollbackError) {
-        throw new AggregateError(
-          [error, rollbackError],
-          '[frame] output commit failed and could not be rolled back completely',
-        );
-      }
-      throw error;
-    }
+    runFileTransaction(options, changedOutputPaths(options, assets, stalePaths), () =>
+      publishProductionOutput(options, manifest, liquid, assets, stalePaths, nextFiles),
+    );
   } finally {
     releaseLock();
   }
@@ -105,8 +57,8 @@ export function commitProductionOutput(
 
 export function assertDevelopmentLiquidWritable(options: ResolvedFrameOptions): void {
   migrateLegacyProductionBackup(options);
-  const previous = readLedger(options.ledgerPath, options);
-  assertLiquidOwnedOrAbsent(
+  const previous = readOwnershipLedger(options);
+  assertLiquidWritable(
     options.liquidPath,
     ownedLiquidPath(options),
     new Set(previous?.generated ?? []),
@@ -118,9 +70,98 @@ export function writeDevelopmentLiquid(
   content: string,
 ): () => void {
   assertDevelopmentLiquidWritable(options);
-  const currentContent = existsSync(options.liquidPath)
-    ? readFileSync(options.liquidPath)
-    : undefined;
+  const currentContent = readOptionalFile(options.liquidPath);
+  preserveProductionLiquid(options, currentContent);
+  const productionContent =
+    currentContent !== undefined && isDevelopmentLiquid(currentContent.toString())
+      ? readProductionLiquidBackup(options)
+      : currentContent;
+  writeIfChanged(options.liquidPath, content);
+
+  return () => restoreDevelopmentLiquid(options.liquidPath, content, productionContent);
+}
+
+function prepareAssets(
+  options: ResolvedFrameOptions,
+  generatedFiles: string[],
+): PreparedAsset[] {
+  return generatedFiles.map((file) => {
+    const sourcePath = safeResolve(options.stagingPath, file);
+    if (!existsSync(sourcePath)) {
+      throw new Error(`[frame] generated Vite asset is missing: ${sourcePath}`);
+    }
+    return {
+      relativePath: ownedAssetPath(options, file),
+      destinationPath: safeResolve(join(options.themePath, 'assets'), file),
+      content: readFileSync(sourcePath),
+    };
+  });
+}
+
+function assertProductionOutputWritable(
+  options: ResolvedFrameOptions,
+  assets: PreparedAsset[],
+  previousFiles: Set<string>,
+): void {
+  for (const asset of assets) {
+    assertAssetWritable(
+      asset.destinationPath,
+      asset.relativePath,
+      asset.content,
+      previousFiles,
+    );
+  }
+  assertLiquidWritable(options.liquidPath, ownedLiquidPath(options), previousFiles);
+}
+
+function changedOutputPaths(
+  options: ResolvedFrameOptions,
+  assets: PreparedAsset[],
+  stalePaths: string[],
+): string[] {
+  return [
+    ...assets.map((asset) => asset.destinationPath),
+    options.liquidPath,
+    options.productionLiquidPath,
+    options.manifestPath,
+    ...stalePaths,
+    options.ledgerPath,
+  ];
+}
+
+function publishProductionOutput(
+  options: ResolvedFrameOptions,
+  manifest: FrameManifest,
+  liquid: string,
+  assets: PreparedAsset[],
+  stalePaths: string[],
+  nextFiles: Set<string>,
+): void {
+  for (const asset of assets) {
+    writeIfChanged(asset.destinationPath, asset.content);
+  }
+  writeIfChanged(options.liquidPath, liquid);
+  writeIfChanged(options.productionLiquidPath, liquid);
+  writeIfChanged(options.manifestPath, `${JSON.stringify(manifest, null, 2)}\n`);
+
+  for (const stale of stalePaths) {
+    if (existsSync(stale)) rmSync(stale);
+  }
+
+  const ledger: FrameOwnershipLedger = {
+    schemaVersion: 2,
+    themePath: options.themePath,
+    prefix: options.prefix,
+    liquidFilename: options.liquidFilename,
+    generated: [...nextFiles].sort(),
+  };
+  writeIfChanged(options.ledgerPath, `${JSON.stringify(ledger, null, 2)}\n`);
+}
+
+function preserveProductionLiquid(
+  options: ResolvedFrameOptions,
+  currentContent: Buffer | undefined,
+): void {
   if (
     currentContent !== undefined &&
     isGeneratedLiquid(currentContent.toString()) &&
@@ -130,109 +171,20 @@ export function writeDevelopmentLiquid(
   } else if (currentContent === undefined && existsSync(options.productionLiquidPath)) {
     rmSync(options.productionLiquidPath);
   }
-  const productionContent =
-    currentContent !== undefined && isDevelopmentLiquid(currentContent.toString())
-      ? readProductionLiquidBackup(options)
-      : currentContent;
-  writeIfChanged(options.liquidPath, content);
-
-  return () => {
-    if (!existsSync(options.liquidPath)) return;
-    const current = readFileSync(options.liquidPath, 'utf8');
-    if (current !== content) return;
-    if (productionContent === undefined) {
-      rmSync(options.liquidPath);
-    } else {
-      writeIfChanged(options.liquidPath, productionContent);
-    }
-  };
 }
 
-function readLedger(
-  path: string,
-  options: ResolvedFrameOptions,
-): FrameOwnershipLedger | undefined {
-  if (!existsSync(path)) return undefined;
-  let value: unknown;
-  try {
-    value = JSON.parse(readFileSync(path, 'utf8')) as unknown;
-  } catch {
-    throw new Error(`[frame] ownership ledger is not valid JSON: ${path}`);
-  }
-  if (!isLedgerRecord(value) || value.themePath !== options.themePath) {
-    throw new Error(`[frame] invalid ownership ledger for ${options.themePath}: ${path}`);
-  }
-
-  if (value.schemaVersion === 1 && isLegacyGeneratedList(value.generated)) {
-    return {
-      schemaVersion: 2,
-      themePath: options.themePath,
-      prefix: options.prefix,
-      liquidFilename: options.liquidFilename,
-      generated: value.generated,
-    };
-  }
-
-  if (
-    value.schemaVersion !== 2 ||
-    typeof value.prefix !== 'string' ||
-    typeof value.liquidFilename !== 'string' ||
-    !/^[a-z0-9][a-z0-9-]*-$/.test(value.prefix) ||
-    !/^[a-z0-9][a-z0-9_-]*\.liquid$/.test(value.liquidFilename) ||
-    !isGeneratedList(value.generated, value.prefix, value.liquidFilename)
-  ) {
-    throw new Error(`[frame] invalid ownership ledger for ${options.themePath}: ${path}`);
-  }
-  return {
-    schemaVersion: 2,
-    themePath: value.themePath,
-    prefix: value.prefix,
-    liquidFilename: value.liquidFilename,
-    generated: value.generated,
-  };
-}
-
-function assertOwnedOrAbsent(
-  sourcePath: string,
-  destinationPath: string,
-  relativePath: string,
-  previousFiles: Set<string>,
+function restoreDevelopmentLiquid(
+  liquidPath: string,
+  developmentContent: string,
+  productionContent: Buffer | undefined,
 ): void {
-  if (
-    existsSync(destinationPath) &&
-    !previousFiles.has(relativePath) &&
-    !readFileSync(destinationPath).equals(readFileSync(sourcePath))
-  ) {
-    throw new Error(
-      `[frame] refusing to overwrite a file Frame does not own: ${destinationPath}`,
-    );
+  if (!existsSync(liquidPath)) return;
+  if (readFileSync(liquidPath, 'utf8') !== developmentContent) return;
+  if (productionContent === undefined) {
+    rmSync(liquidPath);
+  } else {
+    writeIfChanged(liquidPath, productionContent);
   }
-}
-
-function assertLiquidOwnedOrAbsent(
-  absolutePath: string,
-  relativePath: string,
-  previousFiles: Set<string>,
-): void {
-  if (!existsSync(absolutePath) || previousFiles.has(relativePath)) return;
-  const content = readFileSync(absolutePath, 'utf8');
-  if (isGeneratedLiquid(content)) return;
-  throw new Error(
-    `[frame] refusing to overwrite a Liquid file Frame does not own: ${absolutePath}`,
-  );
-}
-
-function isGeneratedLiquid(content: string): boolean {
-  return (
-    content.startsWith('{% doc %}\nGenerated asset loader managed by Frame.\n') ||
-    isDevelopmentLiquid(content)
-  );
-}
-
-function isDevelopmentLiquid(content: string): boolean {
-  return content.startsWith(
-    '{% doc %}\nGenerated development asset loader managed by Frame.\n',
-  );
 }
 
 function migrateLegacyProductionBackup(options: ResolvedFrameOptions): void {
@@ -252,75 +204,14 @@ function migrateLegacyProductionBackup(options: ResolvedFrameOptions): void {
 }
 
 function readProductionLiquidBackup(options: ResolvedFrameOptions): Buffer | undefined {
-  if (!existsSync(options.productionLiquidPath)) return undefined;
-  const content = readFileSync(options.productionLiquidPath);
-  return isGeneratedLiquid(content.toString()) && !isDevelopmentLiquid(content.toString())
+  const content = readOptionalFile(options.productionLiquidPath);
+  return content !== undefined &&
+    isGeneratedLiquid(content.toString()) &&
+    !isDevelopmentLiquid(content.toString())
     ? content
     : undefined;
 }
 
-function ownedAssetPath(options: ResolvedFrameOptions, file: string): string {
-  return namespacedAssetPath(options.prefix, file);
-}
-
-function namespacedAssetPath(prefix: string, file: string): string {
-  const normalized = themeRelative(file);
-  if (
-    normalized.includes('/') ||
-    !normalized.startsWith(prefix) ||
-    normalized === prefix
-  ) {
-    throw new Error(`[frame] generated asset is outside Frame's namespace: ${file}`);
-  }
-  return `assets/${normalized}`;
-}
-
-function ownedLiquidPath(options: ResolvedFrameOptions): string {
-  return `snippets/${options.liquidFilename}`;
-}
-
-function isLegacyGeneratedList(value: unknown): value is string[] {
-  if (!Array.isArray(value) || !value.every((file) => typeof file === 'string')) {
-    return false;
-  }
-  const snippets = value.filter((file) => file.startsWith('snippets/'));
-  return (
-    snippets.length === 1 &&
-    /^snippets\/[a-z0-9][a-z0-9_-]*\.liquid$/.test(snippets[0] ?? '') &&
-    value.every(
-      (file) => /^assets\/[a-z0-9][a-z0-9._-]*$/.test(file) || file === snippets[0],
-    )
-  );
-}
-
-function isGeneratedList(
-  value: unknown,
-  prefix: string,
-  liquidFilename: string,
-): value is string[] {
-  return (
-    Array.isArray(value) &&
-    value.every(
-      (file): file is string =>
-        typeof file === 'string' && isOwnedThemePath(file, prefix, liquidFilename),
-    )
-  );
-}
-
-function isOwnedThemePath(file: string, prefix: string, liquidFilename: string): boolean {
-  if (file === `snippets/${liquidFilename}`) return true;
-  if (!file.startsWith('assets/')) return false;
-  try {
-    return namespacedAssetPath(prefix, file.slice('assets/'.length)) === file;
-  } catch {
-    return false;
-  }
-}
-
-function isLedgerRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === 'object' && value !== null;
-}
-
-function themeRelative(path: string): string {
-  return path.split(sep).join('/');
+function readOptionalFile(path: string): Buffer | undefined {
+  return existsSync(path) ? readFileSync(path) : undefined;
 }

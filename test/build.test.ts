@@ -4,6 +4,7 @@ import {
   mkdtempSync,
   readFileSync,
   readdirSync,
+  realpathSync,
   renameSync,
   rmSync,
   statSync,
@@ -100,6 +101,60 @@ describe('Frame development server', () => {
     );
     expect(productionLiquid).toContain("'frame-theme.js' | asset_url");
     expect(productionLiquid).not.toContain('/@vite/client');
+  });
+
+  it('preserves custom server configuration without duplicate merged values', async () => {
+    const root = themeProject();
+    const customAllowPath = join(root, 'shared');
+    writeFileSync(join(root, 'src/main.ts'), "console.log('Frame dev');");
+    writeFileSync(join(root, 'src/style.css'), 'body {}');
+    mkdirSync(customAllowPath);
+
+    const server = await createServer({
+      root,
+      configFile: false,
+      logLevel: 'silent',
+      server: {
+        cors: {origin: ['https://example.com']},
+        fs: {allow: [customAllowPath]},
+      },
+      plugins: [frame()],
+    });
+
+    try {
+      expect(server.config.server.cors).toEqual({
+        origin: ['https://example.com'],
+      });
+      for (const allowedPath of [
+        customAllowPath,
+        realpathSync(root),
+        realpathSync(join(root, 'src')),
+      ]) {
+        expect(
+          server.config.server.fs.allow.filter((path) => path === allowedPath),
+        ).toHaveLength(1);
+      }
+    } finally {
+      await server.close();
+    }
+  });
+
+  it('rejects Vite middleware mode before starting development resources', async () => {
+    const root = themeProject();
+    writeFileSync(join(root, 'src/main.ts'), "console.log('Frame dev');");
+    writeFileSync(join(root, 'src/style.css'), 'body {}');
+
+    await expect(
+      createServer({
+        root,
+        configFile: false,
+        logLevel: 'silent',
+        server: {middlewareMode: true},
+        plugins: [frame()],
+      }),
+    ).rejects.toThrow('middleware mode is not supported');
+    expect(existsSync(join(root, '.frame/shopify-ready'))).toBe(false);
+    expect(existsSync(join(root, 'snippets/frame-assets.liquid'))).toBe(false);
   });
 });
 
@@ -258,8 +313,9 @@ describe('Frame production build', () => {
     writeFileSync(join(root, 'src/style.css'), 'body {}');
     await buildTheme(root);
     const options = resolveFrameOptions({}, root);
-    const assetPath = join(root, 'assets/frame-theme.js');
-    const previous = readFileSync(assetPath);
+    const assetPath = join(root, 'assets/frame-Theme.js');
+    const previous = Buffer.from('previous generated asset');
+    writeFileSync(assetPath, previous);
     mkdirSync(options.transactionPath, {recursive: true});
     writeFileSync(join(options.transactionPath, '0.bin'), previous);
     writeFileSync(
@@ -270,7 +326,7 @@ describe('Frame production build', () => {
         entries: [
           {
             scope: 'theme',
-            path: 'assets/frame-theme.js',
+            path: 'assets/frame-Theme.js',
             existed: true,
             blob: '0.bin',
           },
@@ -766,6 +822,34 @@ describe('Frame production build', () => {
                   },
                 },
               };
+            },
+          },
+        ],
+      }),
+    ).rejects.toThrow("generated asset is outside Frame's namespace");
+    expect(readdirSync(join(root, 'assets'))).toEqual([]);
+  });
+
+  it('rejects unsafe namespaced output before changing theme files', async () => {
+    const root = themeProject();
+    writeFileSync(join(root, 'src/main.ts'), "console.log('Frame');");
+    writeFileSync(join(root, 'src/style.css'), 'body {}');
+
+    await expect(
+      build({
+        root,
+        configFile: false,
+        logLevel: 'silent',
+        plugins: [
+          frame(),
+          {
+            name: 'unsafe-frame-output',
+            buildStart() {
+              this.emitFile({
+                type: 'asset',
+                fileName: 'frame-bad name.svg',
+                source: '<svg/>',
+              });
             },
           },
         ],
