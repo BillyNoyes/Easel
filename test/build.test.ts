@@ -125,14 +125,14 @@ describe('Frame development server', () => {
       expect(server.config.server.cors).toEqual({
         origin: ['https://example.com'],
       });
-      for (const allowedPath of [
-        customAllowPath,
-        realpathSync(root),
-        realpathSync(join(root, 'src')),
-      ]) {
-        expect(
-          server.config.server.fs.allow.filter((path) => path === allowedPath),
-        ).toHaveLength(1);
+      const canonicalAllowPaths = server.config.server.fs.allow.map((path) =>
+        realpathSync(path),
+      );
+      for (const allowedPath of [customAllowPath, root, join(root, 'src')]) {
+        const canonicalPath = realpathSync(allowedPath);
+        expect(canonicalAllowPaths.filter((path) => path === canonicalPath)).toHaveLength(
+          1,
+        );
       }
     } finally {
       await server.close();
