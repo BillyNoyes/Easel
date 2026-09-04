@@ -40,4 +40,19 @@ jobs:
       - if: matrix.node != '22.12.0'
         run: pnpm lint
       - run: pnpm add --save-dev vite@^${{ matrix.vite }}
-      - run: pnpm typecheck && pnpm test && pnpm test:example && pnpm build
+      - run: pnpm typecheck && pnpm test && pnpm test:examples && pnpm build
+
+  theme-check:
+    name: Shopify Theme Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm test:examples
+      - run: npm install --global @shopify/cli@4.6.1
+      - run: pnpm test:theme-check

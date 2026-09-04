@@ -1,0 +1,18 @@
+{
+  "blocks": {"text": {"name": "Text", "text": "Text"}},
+  "general": {"not_found_name": "404 page"},
+  "sections": {
+    "footer": {"name": "Footer"},
+    "header": {"name": "Header"},
+    "hero": {
+      "default_heading": "Vanilla, built for Shopify",
+      "default_text": "<p>Frame connects modern source code to a Liquid theme.</p>",
+      "heading": "Heading",
+      "name": "Interactive hero",
+      "text": "Text"
+    }
+  },
+  "settings": {
+    "colors": {"background": "Background", "foreground": "Text", "name": "Colors"}
+  }
+}

@@ -1,0 +1,38 @@
+{% assign example_label = 'examples.label' | t %}
+<section class="mx-auto grid min-h-[70vh] w-[min(100%-2rem,72rem)] content-center justify-items-start gap-6 py-20" x-data="counter">
+  {% render 'badge', text: example_label %}
+  <h1 class="max-w-[12ch] text-5xl leading-[0.95] font-bold tracking-[-0.05em] md:text-8xl">
+    {{ section.settings.heading }}
+  </h1>
+  <div class="max-w-2xl text-lg">{{ section.settings.text }}</div>
+  <div class="flex items-center gap-4">
+    <button class="size-10 border border-current" type="button" x-on:click="count--" aria-label="{{ 'actions.decrease' | t }}">−</button>
+    <output class="min-w-8 text-center" x-text="count">0</output>
+    <button class="size-10 border border-current" type="button" x-on:click="count++" aria-label="{{ 'actions.increase' | t }}">+</button>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "t:sections.hero.name",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:sections.hero.heading",
+      "default": "t:sections.hero.default_heading"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "t:sections.hero.text",
+      "default": "t:sections.hero.default_text"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.hero.name"
+    }
+  ]
+}
+{% endschema %}

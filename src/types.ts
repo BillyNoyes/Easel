@@ -17,10 +17,8 @@ export interface FrameOptions {
   source?: string;
   /** Named storefront bundles. Defaults to src/main.ts or src/main.js plus src/style.css. */
   bundles?: Record<string, FrameBundle>;
-  /** Generated snippet filename under the theme's snippets directory. */
-  liquid?: string;
-  /** Namespace used for generated theme assets. */
-  prefix?: string;
+  /** Namespace used for generated assets and the Liquid loader. Defaults to "frame". */
+  namespace?: string;
   /** Shopify-aware full-page refresh. Enabled by default. */
   refresh?: boolean | FrameRefreshOptions;
 }
@@ -43,6 +41,7 @@ export interface ResolvedFrameOptions {
   transactionPath: string;
   liquidPath: string;
   liquidFilename: string;
+  namespace: string;
   prefix: string;
   refresh: {
     enabled: boolean;

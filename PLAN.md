@@ -791,8 +791,7 @@ Keep the initial Frame-specific configuration small:
 - `theme`: Shopify theme path, resolved relative to Vite’s root; defaults to the Vite root.
 - `source`: source-code path, resolved relative to Vite’s root; defaults to `src`.
 - `bundles`: explicit map of public bundle names to optional script and stylesheet entries. When omitted, Frame uses `src/main.ts` or `src/main.js` together with `src/style.css`.
-- `liquid`: generated Liquid snippet filename under the theme’s `snippets/` directory; defaults to `frame-assets.liquid`.
-- `prefix`: reserved namespace for Frame-generated assets; defaults to `frame-`.
+- `namespace`: base name for Frame-generated assets and the Liquid loader; defaults to `frame`, producing `assets/frame-*` and `snippets/frame-assets.liquid`.
 - `refresh`: Shopify CLI notification-file watching and debounce configuration; enabled by default.
 
 Development origins and other server behavior remain native Vite configuration through options such as `server.origin`, `server.cors`, and `server.allowedHosts`. Safe stale-output cleanup is an invariant rather than an option.
@@ -1202,8 +1201,8 @@ Deliver:
 - Full operating-system and Node/Vite CI matrix.
 - Package provenance and trusted publishing.
 - Migration guide from Barrel Shopify Vite.
-- Skeleton and Dawn examples.
-- Tailwind and Alpine recipes.
+- Focused vanilla TypeScript, Alpine/Tailwind, React, and Vue example themes.
+- Theme Editor lifecycle recipes for framework mount points.
 - GitHub Actions package and distribution-branch recipes.
 - Shopify CLI push/package documentation.
 - Compatibility policy.

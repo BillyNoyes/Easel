@@ -28,6 +28,9 @@ describe('resolveFrameOptions', () => {
 
     expect(options.themePath).toBe(realpathSync(root));
     expect(options.sourcePath).toBe(realpathSync(join(root, 'src')));
+    expect(options.namespace).toBe('frame');
+    expect(options.prefix).toBe('frame-');
+    expect(options.liquidFilename).toBe('frame-assets.liquid');
     expect(options.bundles).toEqual([
       {
         name: 'theme',
@@ -70,6 +73,30 @@ describe('resolveFrameOptions', () => {
       'storefront',
       'product',
     ]);
+  });
+
+  it('derives asset and Liquid names from a custom namespace', () => {
+    const root = project({
+      'src/main.ts': 'export const theme = true;',
+      'src/style.css': ':root {}',
+    });
+
+    const options = resolveFrameOptions({namespace: 'studio-kit'}, root);
+
+    expect(options.namespace).toBe('studio-kit');
+    expect(options.prefix).toBe('studio-kit-');
+    expect(options.liquidFilename).toBe('studio-kit-assets.liquid');
+  });
+
+  it('rejects an unsafe namespace', () => {
+    const root = project({
+      'src/main.ts': 'export const theme = true;',
+      'src/style.css': ':root {}',
+    });
+
+    expect(() => resolveFrameOptions({namespace: '../studio'}, root)).toThrow(
+      'namespace must use lowercase letters',
+    );
   });
 
   it('rejects named bundles that share a script entry', () => {

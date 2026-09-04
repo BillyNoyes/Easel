@@ -1,0 +1,27 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Frame Vue",
+    "theme_version": "0.1.0",
+    "theme_author": "Blueprint",
+    "theme_documentation_url": "https://github.com/BillyNoyes/Frame",
+    "theme_support_url": "https://github.com/BillyNoyes/Frame/issues"
+  },
+  {
+    "name": "t:settings.colors.name",
+    "settings": [
+      {
+        "type": "color",
+        "id": "background",
+        "label": "t:settings.colors.background",
+        "default": "#f5f2eb"
+      },
+      {
+        "type": "color",
+        "id": "foreground",
+        "label": "t:settings.colors.foreground",
+        "default": "#171714"
+      }
+    ]
+  }
+]

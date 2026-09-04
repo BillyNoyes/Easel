@@ -374,7 +374,7 @@ describe('Frame production build', () => {
     expect(branches.every((branch) => branch.includes('stylesheet_tag'))).toBe(true);
   });
 
-  it('migrates owned output when the prefix and Liquid filename change', async () => {
+  it('migrates legacy ownership metadata when the namespace changes', async () => {
     const root = themeProject();
     writeFileSync(join(root, 'src/main.ts'), "console.log('Frame');");
     writeFileSync(join(root, 'src/style.css'), 'body {}');
@@ -391,16 +391,31 @@ describe('Frame production build', () => {
     delete ledger.liquidFilename;
     writeFileSync(ledgerPath, `${JSON.stringify(ledger)}\n`);
 
-    await buildTheme(root, {
-      prefix: 'shop-',
-      liquid: 'shop-assets.liquid',
-    });
+    await buildTheme(root, {namespace: 'shop'});
 
     expect(existsSync(join(root, 'assets/frame-theme.js'))).toBe(false);
     expect(existsSync(join(root, 'snippets/frame-assets.liquid'))).toBe(false);
     expect(existsSync(join(root, 'assets/shop-theme.js'))).toBe(true);
     expect(existsSync(join(root, 'snippets/shop-assets.liquid'))).toBe(true);
     expect(ownershipLedger(root).generated).toContain('assets/shop-theme.js');
+  });
+
+  it('migrates current ownership metadata when the namespace changes', async () => {
+    const root = themeProject();
+    writeFileSync(join(root, 'src/main.ts'), "console.log('Frame');");
+    writeFileSync(join(root, 'src/style.css'), 'body {}');
+    await buildTheme(root);
+
+    await buildTheme(root, {namespace: 'studio'});
+
+    expect(existsSync(join(root, 'assets/frame-theme.js'))).toBe(false);
+    expect(existsSync(join(root, 'snippets/frame-assets.liquid'))).toBe(false);
+    expect(existsSync(join(root, 'assets/studio-theme.js'))).toBe(true);
+    expect(existsSync(join(root, 'snippets/studio-assets.liquid'))).toBe(true);
+    expect(ownershipLedger(root)).toMatchObject({
+      prefix: 'studio-',
+      liquidFilename: 'studio-assets.liquid',
+    });
   });
 
   it('isolates ownership ledgers for multiple themes in one Vite project', async () => {

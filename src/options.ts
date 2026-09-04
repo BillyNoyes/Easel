@@ -9,12 +9,10 @@ import type {
 } from './types.js';
 
 const DEFAULT_SOURCE = 'src';
-const DEFAULT_LIQUID = 'frame-assets.liquid';
-const DEFAULT_PREFIX = 'frame-';
+const DEFAULT_NAMESPACE = 'frame';
 const DEFAULT_REFRESH_SIGNAL = '.frame/shopify-ready';
 const DEFAULT_REFRESH_DELAY = 100;
 const ENTRY_NAME = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
-const LIQUID_FILENAME = /^[a-z0-9][a-z0-9_-]*\.liquid$/;
 
 export function resolveFrameOptions(
   options: FrameOptions,
@@ -25,13 +23,13 @@ export function resolveFrameOptions(
   assertTheme(configuredThemePath);
   const themePath = realpathSync(configuredThemePath);
   const configuredSourcePath = resolveFrom(root, options.source ?? DEFAULT_SOURCE);
-  const liquidFilename = options.liquid ?? DEFAULT_LIQUID;
-  const prefix = options.prefix ?? DEFAULT_PREFIX;
+  const namespace = options.namespace ?? DEFAULT_NAMESPACE;
 
   assertSource(configuredSourcePath);
   const sourcePath = realpathSync(configuredSourcePath);
-  assertLiquidFilename(liquidFilename);
-  assertPrefix(prefix);
+  assertNamespace(namespace);
+  const liquidFilename = `${namespace}-assets.liquid`;
+  const prefix = `${namespace}-`;
   const refresh = resolveRefresh(options.refresh, root);
 
   const bundles = resolveBundles(options.bundles, sourcePath);
@@ -61,6 +59,7 @@ export function resolveFrameOptions(
     transactionPath: join(themeStatePath, 'transaction'),
     liquidPath: join(themePath, 'snippets', liquidFilename),
     liquidFilename,
+    namespace,
     prefix,
     refresh,
     bundles,
@@ -227,18 +226,10 @@ function assertSource(sourcePath: string): void {
   }
 }
 
-function assertLiquidFilename(filename: string): void {
-  if (!LIQUID_FILENAME.test(filename)) {
+function assertNamespace(namespace: string): void {
+  if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(namespace)) {
     throw new Error(
-      `[frame] liquid must be a filename such as "frame-assets.liquid", received "${filename}"`,
-    );
-  }
-}
-
-function assertPrefix(prefix: string): void {
-  if (!/^[a-z0-9][a-z0-9-]*-$/.test(prefix)) {
-    throw new Error(
-      `[frame] prefix must use lowercase letters, numbers, and hyphens and end in a hyphen`,
+      '[frame] namespace must use lowercase letters, numbers, and single hyphens',
     );
   }
 }
