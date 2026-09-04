@@ -52,7 +52,7 @@
   "devDependencies": {
     "@tailwindcss/vite": "4.3.3",
     "@types/node": "^24.0.0",
-    "alpinejs": "3.16.3",
+    "alpinejs": "3.17.1",
     "eslint": "^10.9.1",
     "prettier": "^3.9.6",
     "tailwindcss": "4.3.3",
