@@ -55,7 +55,7 @@ export function resolveFrameOptions(
     ledgerPath,
     commitLockPath: join(themeStatePath, 'commit.lock'),
     manifestPath: join(themeStatePath, 'manifest.json'),
-    productionLiquidPath: join(themeStatePath, 'production.liquid'),
+    productionLiquidPath: join(themeStatePath, 'production.txt'),
     transactionPath: join(themeStatePath, 'transaction'),
     liquidPath: join(themePath, 'snippets', liquidFilename),
     liquidFilename,

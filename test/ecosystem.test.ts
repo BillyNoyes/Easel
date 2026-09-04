@@ -1,14 +1,23 @@
-import {mkdirSync, mkdtempSync, readFileSync, writeFileSync} from 'node:fs';
+import {mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync} from 'node:fs';
 import {join} from 'node:path';
 import tailwindcss from '@tailwindcss/vite';
 import {build} from 'vite';
-import {describe, expect, it} from 'vitest';
+import {afterEach, describe, expect, it} from 'vitest';
 import {frame} from '../src/index.js';
+
+const projects: string[] = [];
+
+afterEach(() => {
+  for (const project of projects.splice(0)) {
+    rmSync(project, {recursive: true, force: true});
+  }
+});
 
 function themeProject(): string {
   const fixtures = join(process.cwd(), '.frame');
   mkdirSync(fixtures, {recursive: true});
   const root = mkdtempSync(join(fixtures, 'ecosystem-'));
+  projects.push(root);
   for (const directory of ['assets', 'layout', 'sections', 'snippets', 'src']) {
     mkdirSync(join(root, directory), {recursive: true});
   }

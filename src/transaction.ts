@@ -206,7 +206,9 @@ function resolveJournalLocation(
   if (
     (entry.scope === 'theme' && !isJournalThemePath(entry.path)) ||
     (entry.scope === 'state' &&
-      !['outputs.json', 'production.liquid', 'manifest.json'].includes(entry.path))
+      !['outputs.json', 'production.txt', 'production.liquid', 'manifest.json'].includes(
+        entry.path,
+      ))
   ) {
     throw new Error(
       `[frame] interrupted transaction journal contains an invalid path: ${entry.path}`,

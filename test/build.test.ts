@@ -4,13 +4,14 @@ import {
   mkdtempSync,
   readFileSync,
   readdirSync,
+  renameSync,
   rmSync,
   statSync,
   symlinkSync,
   writeFileSync,
 } from 'node:fs';
 import {tmpdir} from 'node:os';
-import {join} from 'node:path';
+import {dirname, join} from 'node:path';
 import {build, createServer} from 'vite';
 import {describe, expect, it} from 'vitest';
 import {frame} from '../src/index.js';
@@ -216,6 +217,22 @@ describe('Frame production build', () => {
     expect(readFileSync(join(root, 'snippets/frame-assets.liquid'), 'utf8')).toBe(
       production,
     );
+  });
+
+  it('migrates Liquid-suffixed production backups out of Theme Check scope', async () => {
+    const root = themeProject();
+    writeFileSync(join(root, 'src/main.ts'), "console.log('Frame');");
+    writeFileSync(join(root, 'src/style.css'), 'body {}');
+    await buildTheme(root);
+    const options = resolveFrameOptions({}, root);
+    const legacyPath = join(dirname(options.productionLiquidPath), 'production.liquid');
+    renameSync(options.productionLiquidPath, legacyPath);
+
+    await buildTheme(root);
+
+    expect(existsSync(legacyPath)).toBe(false);
+    expect(existsSync(options.productionLiquidPath)).toBe(true);
+    expect(options.productionLiquidPath.endsWith('production.txt')).toBe(true);
   });
 
   it('recovers the production Liquid snippet after an interrupted dev session', async () => {
