@@ -106,19 +106,21 @@ Bundle paths resolve from `src` by default. The first bundle is used when `entry
 
 ## Configuration
 
-```ts
-frame({
-  theme: '.',
-  source: 'src',
-  namespace: 'frame',
-  refresh: {
-    signal: '.frame/shopify-ready',
-    delay: 100,
-  },
-});
-```
+Every parameter is optional.
 
-`theme` selects the Shopify theme directory. `source` selects the source directory. `namespace` controls generated asset and snippet names. `refresh: false` disables coordinated reloads.
+• `theme` sets the Shopify theme directory relative to the Vite root. It defaults to `.`.
+
+• `source` sets the source directory relative to the Vite root. It defaults to `src`.
+
+• `bundles` defines named script and stylesheet entries. Bundle paths resolve from `source`. It defaults to one `theme` bundle using `main.ts` or `main.js` with `style.css`.
+
+• `namespace` controls generated asset and Liquid snippet names. It defaults to `frame`.
+
+• `refresh` controls Shopify CLI reload coordination. It is enabled by default. Set it to `false` to disable it.
+
+• `refresh.signal` sets the Shopify CLI notification file relative to the Vite root. It defaults to `.frame/shopify-ready`.
+
+• `refresh.delay` sets the reload debounce in milliseconds. It defaults to `100`.
 
 All Vite server and build integrations remain available. Tailwind CSS, Alpine.js, React, Vue, Sass, PostCSS, and other tools use their normal Vite setup. React Fast Refresh requires `@vitejs/plugin-react/preamble` because Frame does not use an HTML entry.
 
