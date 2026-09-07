@@ -1,6 +1,14 @@
 name: Deploy documentation
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/pages.yml
+      - package.json
+      - site/**
+      - pnpm-lock.yaml
+      - pnpm-workspace.yaml
   workflow_dispatch:
 
 permissions:
