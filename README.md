@@ -352,6 +352,16 @@ The framework examples handle Shopify Theme Editor section load and unload event
 
 All four examples have also been exercised against a real Shopify development store: local previews, Vite development assets, `--notify` reloads, operation without `--notify`, production builds, strict unpublished pushes, remote asset pulls, and cleanup. The React Fast Refresh preamble and the React/Vue client mounts were verified in a browser.
 
+### Scaffold another integration example
+
+Repository contributors can create a framework-neutral theme foundation with:
+
+```sh
+pnpm scaffold:theme examples/svelte --name "Frame Svelte"
+```
+
+The command creates the Shopify directories, minimal layouts, sections, templates, locales, settings, TypeScript and CSS entries, and Frame/Vite configuration. It refuses to overwrite an existing path. From there, add only the dependencies, Vite plugin, source components, and Theme Editor lifecycle behavior required by the framework being demonstrated.
+
 ## Tested behavior
 
 Frame’s automated suite covers Vite 7 and 8 across Node 22 and 24, with Linux, macOS, and Windows CI. It includes production builds, development shutdown, CSS-only entries, dynamic imports, shared CSS, static assets, source maps, concurrent builds, failed plugin hooks, stale cleanup, ownership validation, symlink protection, and interrupted-commit recovery.
