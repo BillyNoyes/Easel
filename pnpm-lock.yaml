@@ -116,6 +116,28 @@ importers:
         specifier: 3.3.11
         version: 3.3.11(typescript@5.9.3)
 
+  site:
+    dependencies:
+      alpinejs:
+        specifier: 3.17.1
+        version: 3.17.1
+    devDependencies:
+      '@tailwindcss/vite':
+        specifier: 4.3.3
+        version: 4.3.3(vite@8.2.2(@types/node@24.13.3)(esbuild@0.27.7)(jiti@2.7.0))
+      '@types/alpinejs':
+        specifier: 3.13.11
+        version: 3.13.11
+      tailwindcss:
+        specifier: 4.3.3
+        version: 4.3.3
+      typescript:
+        specifier: 5.9.3
+        version: 5.9.3
+      vite:
+        specifier: 8.2.2
+        version: 8.2.2(@types/node@24.13.3)(esbuild@0.27.7)(jiti@2.7.0)
+
 packages:
   '@babel/helper-string-parser@7.29.7':
     resolution:

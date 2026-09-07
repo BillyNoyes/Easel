@@ -1,0 +1,101 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-ink: #17231d;
+  --color-muted: #5f6f66;
+  --color-canvas: #f7f8f4;
+  --color-panel: #ffffff;
+  --color-line: #dfe5df;
+  --color-frame: #16845b;
+  --color-frame-dark: #0f6746;
+  --color-frame-soft: #e7f5ee;
+  --font-sans: Inter, ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
+  --shadow-soft: 0 18px 60px rgb(23 35 29 / 8%);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 6rem;
+  }
+
+  body {
+    background:
+      radial-gradient(circle at 12% 4%, rgb(22 132 91 / 9%), transparent 25rem),
+      var(--color-canvas);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background: rgb(22 132 91 / 20%);
+  }
+
+  [x-cloak] {
+    display: none !important;
+  }
+}
+
+@layer components {
+  .docs-section {
+    @apply scroll-mt-24 border-b border-line py-14 last:border-0 sm:py-18;
+  }
+
+  .eyebrow {
+    @apply mb-4 inline-flex items-center gap-2 rounded-full border border-frame/20 bg-frame-soft px-3 py-1 font-mono text-[0.7rem] font-semibold tracking-[0.14em] text-frame-dark uppercase;
+  }
+
+  .section-title {
+    @apply text-3xl font-semibold tracking-[-0.035em] text-ink sm:text-4xl;
+  }
+
+  .section-lead {
+    @apply mt-4 max-w-2xl text-base leading-7 text-muted sm:text-lg;
+  }
+
+  .code-shell {
+    @apply relative overflow-hidden rounded-2xl border border-white/10 bg-[#111a16] shadow-soft;
+  }
+
+  .code-bar {
+    @apply flex items-center justify-between border-b border-white/10 px-4 py-3;
+  }
+
+  .code-label {
+    @apply font-mono text-xs text-white/50;
+  }
+
+  .copy-button {
+    @apply rounded-md px-2 py-1 font-mono text-xs text-white/55 transition hover:bg-white/10 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-frame;
+  }
+
+  .code-block {
+    @apply overflow-x-auto p-5 font-mono text-[0.78rem] leading-6 text-[#d8e5dc] sm:p-6 sm:text-[0.84rem];
+  }
+
+  .token-keyword {
+    color: #7dd3a8;
+  }
+
+  .token-string {
+    color: #f2cf88;
+  }
+
+  .token-comment {
+    color: #82948a;
+  }
+
+  .nav-link {
+    @apply flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-muted transition hover:bg-white hover:text-ink;
+  }
+
+  .nav-link-active {
+    @apply bg-white text-frame-dark shadow-sm ring-1 ring-line;
+  }
+
+  .feature-card {
+    @apply rounded-2xl border border-line bg-panel p-6 shadow-[0_1px_2px_rgb(23_35_29/3%)] transition duration-200 hover:-translate-y-0.5 hover:shadow-soft;
+  }
+}

@@ -1,0 +1,859 @@
+<!doctype html>
+<html lang="en" class="bg-canvas">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Frame is a Vite plugin for Shopify Liquid themes. Build assets, generate Liquid, and publish safely."
+    />
+    <meta name="theme-color" content="#f7f8f4" />
+    <meta property="og:title" content="Frame documentation" />
+    <meta
+      property="og:description"
+      content="Use Vite in Shopify Liquid themes without replacing Shopify CLI."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://billynoyes.github.io/Frame/" />
+    <link rel="canonical" href="https://billynoyes.github.io/Frame/" />
+    <link rel="icon" href="./frame.svg" type="image/svg+xml" />
+    <title>Frame documentation</title>
+    <script type="module" src="/src/main.ts"></script>
+  </head>
+  <body x-data="docsNavigation" class="min-h-screen antialiased">
+    <a
+      href="#content"
+      class="fixed top-3 left-3 z-[60] -translate-y-20 rounded-lg bg-ink px-4 py-2 text-sm font-semibold text-white transition focus:translate-y-0"
+    >
+      Skip to content
+    </a>
+
+    <header
+      class="sticky top-0 z-50 border-b border-line/80 bg-canvas/85 backdrop-blur-xl"
+    >
+      <div class="mx-auto flex h-16 max-w-7xl items-center justify-between px-5 lg:px-8">
+        <a href="#overview" class="group flex items-center gap-3" @click="navigate">
+          <span
+            class="grid size-9 place-items-center rounded-xl bg-ink text-white shadow-sm transition group-hover:bg-frame-dark"
+          >
+            <svg viewBox="0 0 32 32" class="size-5" aria-hidden="true">
+              <path
+                d="M8 5H5v8M24 5h3v8M8 27H5v-8m19 8h3v-8M11 11h10v10H11z"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </span>
+          <span class="text-lg font-semibold tracking-[-0.03em]">Frame</span>
+          <span
+            class="rounded-md bg-frame-soft px-2 py-0.5 font-mono text-[0.65rem] text-frame-dark"
+            >Docs</span
+          >
+        </a>
+
+        <nav class="hidden items-center gap-2 md:flex" aria-label="Primary navigation">
+          <a
+            href="https://github.com/BillyNoyes/Frame/tree/main/examples"
+            class="rounded-lg px-3 py-2 text-sm font-medium text-muted transition hover:bg-white hover:text-ink"
+          >
+            Examples
+          </a>
+          <a
+            href="https://github.com/BillyNoyes/Frame"
+            class="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-muted transition hover:bg-white hover:text-ink"
+          >
+            <svg viewBox="0 0 24 24" class="size-4" aria-hidden="true">
+              <path
+                fill="currentColor"
+                d="M12 .7a11.5 11.5 0 0 0-3.6 22.4c.6.1.8-.2.8-.6v-2.2c-3.4.7-4.1-1.4-4.1-1.4-.5-1.4-1.4-1.8-1.4-1.8-1.1-.8.1-.8.1-.8 1.3.1 1.9 1.3 1.9 1.3 1.1 1.9 2.9 1.4 3.7 1.1.1-.8.4-1.4.8-1.7-2.7-.3-5.5-1.3-5.5-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.6.1-3.1 0 0 1-.3 3.2 1.2a11 11 0 0 1 5.8 0C17 4.9 18 5.2 18 5.2c.6 1.5.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.4-2.8 5.4-5.5 5.7.5.4.9 1.1.9 2.2v3.2c0 .4.2.7.8.6A11.5 11.5 0 0 0 12 .7Z"
+              />
+            </svg>
+            GitHub
+          </a>
+          <a
+            href="#quick-start"
+            class="ml-2 rounded-lg bg-ink px-4 py-2 text-sm font-semibold text-white transition hover:bg-frame-dark"
+          >
+            Get started
+          </a>
+        </nav>
+
+        <button
+          type="button"
+          class="grid size-10 place-items-center rounded-lg text-muted hover:bg-white hover:text-ink md:hidden"
+          aria-controls="mobile-menu"
+          :aria-expanded="mobileOpen"
+          @click="mobileOpen = !mobileOpen"
+        >
+          <span class="sr-only">Toggle navigation</span>
+          <svg x-show="!mobileOpen" viewBox="0 0 24 24" class="size-5" aria-hidden="true">
+            <path
+              d="M4 7h16M4 12h16M4 17h16"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            />
+          </svg>
+          <svg
+            x-cloak
+            x-show="mobileOpen"
+            viewBox="0 0 24 24"
+            class="size-5"
+            aria-hidden="true"
+          >
+            <path
+              d="m6 6 12 12M18 6 6 18"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            />
+          </svg>
+        </button>
+      </div>
+
+      <nav
+        id="mobile-menu"
+        x-cloak
+        x-show="mobileOpen"
+        x-transition.opacity.duration.150ms
+        class="border-t border-line bg-canvas px-5 py-4 md:hidden"
+        aria-label="Mobile navigation"
+      >
+        <div class="mx-auto grid max-w-7xl gap-1">
+          <a href="#quick-start" class="nav-link" @click="navigate">Quick start</a>
+          <a href="#development" class="nav-link" @click="navigate">Development</a>
+          <a href="#production" class="nav-link" @click="navigate">Production</a>
+          <a href="#bundles" class="nav-link" @click="navigate">Bundles</a>
+          <a href="#configuration" class="nav-link" @click="navigate">Configuration</a>
+          <a href="#integrations" class="nav-link" @click="navigate">Integrations</a>
+          <a href="#safety" class="nav-link" @click="navigate">Safety</a>
+          <a href="#examples" class="nav-link" @click="navigate">Examples</a>
+          <a href="https://github.com/BillyNoyes/Frame" class="nav-link">GitHub</a>
+        </div>
+      </nav>
+    </header>
+
+    <main id="content">
+      <section id="overview" class="relative overflow-hidden border-b border-line">
+        <div
+          class="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgb(23_35_29/0.045)_1px,transparent_1px),linear-gradient(to_bottom,rgb(23_35_29/0.045)_1px,transparent_1px)] bg-[size:48px_48px] [mask-image:linear-gradient(to_bottom,black,transparent_90%)]"
+          aria-hidden="true"
+        ></div>
+        <div class="relative mx-auto max-w-7xl px-5 py-20 sm:py-28 lg:px-8 lg:py-32">
+          <div class="max-w-4xl">
+            <div class="eyebrow">
+              <span class="size-1.5 rounded-full bg-frame"></span>
+              Vite plugin for Shopify themes
+            </div>
+            <h1
+              class="max-w-3xl text-5xl leading-[1.02] font-semibold tracking-[-0.055em] text-ink sm:text-6xl lg:text-7xl"
+            >
+              Modern assets for
+              <span class="text-frame-dark">Liquid themes.</span>
+            </h1>
+            <p class="mt-7 max-w-2xl text-lg leading-8 text-muted sm:text-xl">
+              Frame builds JavaScript, TypeScript, and CSS into Shopify theme assets,
+              generates the Liquid that loads them, and safely replaces old build output.
+            </p>
+            <div class="mt-9 flex flex-col gap-3 sm:flex-row">
+              <a
+                href="#quick-start"
+                class="inline-flex items-center justify-center gap-2 rounded-xl bg-ink px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-frame-dark"
+              >
+                Start building
+                <svg viewBox="0 0 20 20" class="size-4" aria-hidden="true">
+                  <path
+                    d="m7 4 6 6-6 6"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                  />
+                </svg>
+              </a>
+              <a
+                href="https://github.com/BillyNoyes/Frame"
+                class="inline-flex items-center justify-center gap-2 rounded-xl border border-line bg-white px-5 py-3 text-sm font-semibold text-ink transition hover:border-frame/40 hover:text-frame-dark"
+              >
+                View on GitHub
+              </a>
+            </div>
+          </div>
+
+          <div class="mt-16 grid gap-4 md:grid-cols-3">
+            <article class="feature-card">
+              <div
+                class="mb-5 grid size-10 place-items-center rounded-xl bg-frame-soft text-frame-dark"
+              >
+                <svg viewBox="0 0 24 24" class="size-5" aria-hidden="true">
+                  <path
+                    d="m13 2-9 12h7l-1 8 10-13h-7V2Z"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.7"
+                  />
+                </svg>
+              </div>
+              <h2 class="font-semibold tracking-[-0.02em]">Vite stays Vite</h2>
+              <p class="mt-2 text-sm leading-6 text-muted">
+                Keep normal Vite commands, plugins, HMR, code splitting, and asset
+                imports.
+              </p>
+            </article>
+            <article class="feature-card">
+              <div
+                class="mb-5 grid size-10 place-items-center rounded-xl bg-frame-soft text-frame-dark"
+              >
+                <svg viewBox="0 0 24 24" class="size-5" aria-hidden="true">
+                  <path
+                    d="M4 7h16M7 4v6m10-6v6M5 12h14v8H5z"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.7"
+                  />
+                </svg>
+              </div>
+              <h2 class="font-semibold tracking-[-0.02em]">Shopify stays Shopify</h2>
+              <p class="mt-2 text-sm leading-6 text-muted">
+                Shopify CLI still owns previews, synchronization, pushes, and packaging.
+              </p>
+            </article>
+            <article class="feature-card">
+              <div
+                class="mb-5 grid size-10 place-items-center rounded-xl bg-frame-soft text-frame-dark"
+              >
+                <svg viewBox="0 0 24 24" class="size-5" aria-hidden="true">
+                  <path
+                    d="M12 3 4 7v5c0 4.7 3.2 7.7 8 9 4.8-1.3 8-4.3 8-9V7l-8-4Z"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.7"
+                  />
+                  <path
+                    d="m9 12 2 2 4-5"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.7"
+                  />
+                </svg>
+              </div>
+              <h2 class="font-semibold tracking-[-0.02em]">Safe output</h2>
+              <p class="mt-2 text-sm leading-6 text-muted">
+                Frame tracks its files, protects theme assets, and recovers interrupted
+                builds.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <div
+        class="mx-auto grid max-w-7xl grid-cols-1 px-5 lg:grid-cols-[13rem_minmax(0,1fr)] lg:gap-16 lg:px-8"
+      >
+        <aside class="hidden lg:block">
+          <nav class="sticky top-24 py-14" aria-label="Documentation sections">
+            <p
+              class="mb-3 px-3 font-mono text-[0.65rem] font-semibold tracking-[0.14em] text-muted uppercase"
+            >
+              Documentation
+            </p>
+            <a
+              href="#quick-start"
+              class="nav-link"
+              :class="activeSection === 'quick-start' && 'nav-link-active'"
+            >
+              Quick start
+            </a>
+            <a
+              href="#development"
+              class="nav-link"
+              :class="activeSection === 'development' && 'nav-link-active'"
+            >
+              Development
+            </a>
+            <a
+              href="#production"
+              class="nav-link"
+              :class="activeSection === 'production' && 'nav-link-active'"
+            >
+              Production
+            </a>
+            <a
+              href="#bundles"
+              class="nav-link"
+              :class="activeSection === 'bundles' && 'nav-link-active'"
+            >
+              Named bundles
+            </a>
+            <a
+              href="#configuration"
+              class="nav-link"
+              :class="activeSection === 'configuration' && 'nav-link-active'"
+            >
+              Configuration
+            </a>
+            <a
+              href="#integrations"
+              class="nav-link"
+              :class="activeSection === 'integrations' && 'nav-link-active'"
+            >
+              Integrations
+            </a>
+            <a
+              href="#safety"
+              class="nav-link"
+              :class="activeSection === 'safety' && 'nav-link-active'"
+            >
+              Output safety
+            </a>
+            <a
+              href="#examples"
+              class="nav-link"
+              :class="activeSection === 'examples' && 'nav-link-active'"
+            >
+              Examples
+            </a>
+          </nav>
+        </aside>
+
+        <div class="min-w-0 max-w-4xl">
+          <section id="quick-start" class="docs-section">
+            <span class="eyebrow">01 · Quick start</span>
+            <h2 class="section-title">Add Frame to Vite.</h2>
+            <p class="section-lead">
+              Frame expects a Shopify theme at the Vite root and source files in
+              <code>src</code>. JavaScript works in place of TypeScript.
+            </p>
+            <p class="mt-4 text-sm leading-6 text-muted">
+              Requires Node.js 22.12 or newer and Vite 7 or 8.
+            </p>
+
+            <div
+              class="mt-8 code-shell"
+              x-data="copyCode($el.querySelector('.code-label').textContent)"
+            >
+              <div class="code-bar">
+                <span class="code-label">Install Frame</span>
+                <button
+                  type="button"
+                  class="copy-button"
+                  @click="copy($event)"
+                  :aria-label="(copied ? 'Copied ' : 'Copy ') + label"
+                  aria-live="polite"
+                  x-text="copied ? 'Copied' : 'Copy'"
+                >
+                  Copy
+                </button>
+              </div>
+              <pre class="code-block"><code>pnpm add -D @blueprint/frame vite</code></pre>
+            </div>
+
+            <div
+              class="mt-5 code-shell"
+              x-data="copyCode($el.querySelector('.code-label').textContent)"
+            >
+              <div class="code-bar">
+                <span class="code-label">vite.config.ts</span>
+                <button
+                  type="button"
+                  class="copy-button"
+                  @click="copy($event)"
+                  :aria-label="(copied ? 'Copied ' : 'Copy ') + label"
+                  aria-live="polite"
+                  x-text="copied ? 'Copied' : 'Copy'"
+                >
+                  Copy
+                </button>
+              </div>
+              <pre
+                class="code-block"
+              ><code><span class="token-keyword">import</span> {defineConfig} <span class="token-keyword">from</span> <span class="token-string">'vite'</span>;
+<span class="token-keyword">import</span> frame <span class="token-keyword">from</span> <span class="token-string">'@blueprint/frame'</span>;
+
+<span class="token-keyword">export default</span> defineConfig({
+  plugins: [frame()],
+});</code></pre>
+            </div>
+
+            <div
+              class="mt-5 code-shell"
+              x-data="copyCode($el.querySelector('.code-label').textContent)"
+            >
+              <div class="code-bar">
+                <span class="code-label">layout/theme.liquid</span>
+                <button
+                  type="button"
+                  class="copy-button"
+                  @click="copy($event)"
+                  :aria-label="(copied ? 'Copied ' : 'Copy ') + label"
+                  aria-live="polite"
+                  x-text="copied ? 'Copied' : 'Copy'"
+                >
+                  Copy
+                </button>
+              </div>
+              <pre class="code-block"><code>{% render 'frame-assets' %}</code></pre>
+            </div>
+
+            <div
+              class="mt-5 code-shell"
+              x-data="copyCode($el.querySelector('.code-label').textContent)"
+            >
+              <div class="code-bar">
+                <span class="code-label">Generated output ignores</span>
+                <button
+                  type="button"
+                  class="copy-button"
+                  @click="copy($event)"
+                  :aria-label="(copied ? 'Copied ' : 'Copy ') + label"
+                  aria-live="polite"
+                  x-text="copied ? 'Copied' : 'Copy'"
+                >
+                  Copy
+                </button>
+              </div>
+              <pre class="code-block"><code>.frame/
+assets/frame-*
+snippets/frame-assets.liquid</code></pre>
+            </div>
+
+            <div class="mt-8 rounded-2xl border border-frame/20 bg-frame-soft p-5 sm:p-6">
+              <p class="font-semibold text-frame-dark">Zero configuration entry</p>
+              <p class="mt-2 text-sm leading-6 text-muted">
+                Frame creates a bundle named <code>theme</code> from
+                <code>src/main.ts</code> or <code>src/main.js</code>, plus
+                <code>src/style.css</code>.
+              </p>
+            </div>
+          </section>
+
+          <section id="development" class="docs-section">
+            <span class="eyebrow">02 · Development</span>
+            <h2 class="section-title">Two tools, one workflow.</h2>
+            <p class="section-lead">
+              Run Vite and Shopify CLI independently. Vite serves frontend assets while
+              Shopify CLI synchronizes the theme.
+            </p>
+
+            <div class="mt-8 grid gap-5 sm:grid-cols-2">
+              <div
+                class="code-shell"
+                x-data="copyCode($el.querySelector('.code-label').textContent)"
+              >
+                <div class="code-bar">
+                  <span class="code-label">Terminal one</span>
+                  <button
+                    type="button"
+                    class="copy-button"
+                    @click="copy($event)"
+                    :aria-label="(copied ? 'Copied ' : 'Copy ') + label"
+                    aria-live="polite"
+                    x-text="copied ? 'Copied' : 'Copy'"
+                  >
+                    Copy
+                  </button>
+                </div>
+                <pre class="code-block"><code>npm run dev</code></pre>
+              </div>
+              <div
+                class="code-shell"
+                x-data="copyCode($el.querySelector('.code-label').textContent)"
+              >
+                <div class="code-bar">
+                  <span class="code-label">Terminal two</span>
+                  <button
+                    type="button"
+                    class="copy-button"
+                    @click="copy($event)"
+                    :aria-label="(copied ? 'Copied ' : 'Copy ') + label"
+                    aria-live="polite"
+                    x-text="copied ? 'Copied' : 'Copy'"
+                  >
+                    Copy
+                  </button>
+                </div>
+                <pre class="code-block"><code>shopify theme dev \
+  --notify .frame/shopify-ready</code></pre>
+              </div>
+            </div>
+
+            <p class="mt-6 text-sm leading-6 text-muted">
+              The notification lets Frame request a full page reload after Shopify CLI
+              finishes an update. It is optional. Vite HMR and Shopify CLI live reload
+              continue to work without it.
+            </p>
+          </section>
+
+          <section id="production" class="docs-section">
+            <span class="eyebrow">03 · Production</span>
+            <h2 class="section-title">Build, then deploy normally.</h2>
+            <p class="section-lead">
+              Frame publishes generated assets into the theme and replaces the development
+              loader with Shopify CDN asset tags.
+            </p>
+
+            <div
+              class="mt-8 code-shell"
+              x-data="copyCode($el.querySelector('.code-label').textContent)"
+            >
+              <div class="code-bar">
+                <span class="code-label">Build and push</span>
+                <button
+                  type="button"
+                  class="copy-button"
+                  @click="copy($event)"
+                  :aria-label="(copied ? 'Copied ' : 'Copy ') + label"
+                  aria-live="polite"
+                  x-text="copied ? 'Copied' : 'Copy'"
+                >
+                  Copy
+                </button>
+              </div>
+              <pre class="code-block"><code>npm run build
+shopify theme push</code></pre>
+            </div>
+            <p class="mt-5 text-sm leading-6 text-muted">
+              Run the build before <code>shopify theme push</code> or
+              <code>shopify theme package</code>. Shopify CLI remains responsible for
+              deployment.
+            </p>
+          </section>
+
+          <section id="bundles" class="docs-section">
+            <span class="eyebrow">04 · Named bundles</span>
+            <h2 class="section-title">Load code where it belongs.</h2>
+            <p class="section-lead">
+              Start with the default bundle. Add named bundles when a substantial feature
+              should only load on selected Liquid surfaces.
+            </p>
+
+            <div
+              class="mt-8 code-shell"
+              x-data="copyCode($el.querySelector('.code-label').textContent)"
+            >
+              <div class="code-bar">
+                <span class="code-label">vite.config.ts</span>
+                <button
+                  type="button"
+                  class="copy-button"
+                  @click="copy($event)"
+                  :aria-label="(copied ? 'Copied ' : 'Copy ') + label"
+                  aria-live="polite"
+                  x-text="copied ? 'Copied' : 'Copy'"
+                >
+                  Copy
+                </button>
+              </div>
+              <pre class="code-block"><code>frame({
+  bundles: {
+    theme: {script: <span class="token-string">'main.ts'</span>, style: <span class="token-string">'style.css'</span>},
+    product: {script: <span class="token-string">'product.ts'</span>, style: <span class="token-string">'product.css'</span>},
+  },
+});</code></pre>
+            </div>
+
+            <div
+              class="mt-5 code-shell"
+              x-data="copyCode($el.querySelector('.code-label').textContent)"
+            >
+              <div class="code-bar">
+                <span class="code-label">layout/theme.liquid</span>
+                <button
+                  type="button"
+                  class="copy-button"
+                  @click="copy($event)"
+                  :aria-label="(copied ? 'Copied ' : 'Copy ') + label"
+                  aria-live="polite"
+                  x-text="copied ? 'Copied' : 'Copy'"
+                >
+                  Copy
+                </button>
+              </div>
+              <pre class="code-block"><code>{% render 'frame-assets', entry: 'theme' %}
+
+{% if request.page_type == 'product' %}
+  {% render 'frame-assets', entry: 'product' %}
+{% endif %}</code></pre>
+            </div>
+
+            <div class="mt-7 grid gap-4 sm:grid-cols-2">
+              <div class="feature-card">
+                <p class="font-semibold">Use dynamic imports first</p>
+                <p class="mt-2 text-sm leading-6 text-muted">
+                  They keep one entry architecture while Vite loads optional features on
+                  demand.
+                </p>
+              </div>
+              <div class="feature-card">
+                <p class="font-semibold">Use bundles for clear boundaries</p>
+                <p class="mt-2 text-sm leading-6 text-muted">
+                  Product configurators, account areas, and store locators are good
+                  candidates.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <section id="configuration" class="docs-section">
+            <span class="eyebrow">05 · Configuration</span>
+            <h2 class="section-title">Small API, explicit control.</h2>
+            <p class="section-lead">Every Frame option is optional.</p>
+
+            <div
+              class="mt-8 code-shell"
+              x-data="copyCode($el.querySelector('.code-label').textContent)"
+            >
+              <div class="code-bar">
+                <span class="code-label">vite.config.ts</span>
+                <button
+                  type="button"
+                  class="copy-button"
+                  @click="copy($event)"
+                  :aria-label="(copied ? 'Copied ' : 'Copy ') + label"
+                  aria-live="polite"
+                  x-text="copied ? 'Copied' : 'Copy'"
+                >
+                  Copy
+                </button>
+              </div>
+              <pre class="code-block"><code>frame({
+  <span class="token-comment">// Theme directory relative to the Vite root.</span>
+  theme: <span class="token-string">'.'</span>,
+
+  <span class="token-comment">// Source directory relative to the Vite root.</span>
+  source: <span class="token-string">'src'</span>,
+
+  <span class="token-comment">// Namespace for generated assets and Liquid.</span>
+  namespace: <span class="token-string">'frame'</span>,
+
+  <span class="token-comment">// Set to false to disable coordinated reloads.</span>
+  refresh: {
+    signal: <span class="token-string">'.frame/shopify-ready'</span>,
+    delay: 100,
+  },
+});</code></pre>
+            </div>
+
+            <div class="mt-8 overflow-hidden rounded-2xl border border-line bg-white">
+              <dl class="divide-y divide-line">
+                <div class="grid gap-2 p-5 sm:grid-cols-[9rem_1fr]">
+                  <dt class="font-mono text-sm font-semibold text-frame-dark">theme</dt>
+                  <dd class="text-sm leading-6 text-muted">
+                    Shopify theme directory. Defaults to the Vite root.
+                  </dd>
+                </div>
+                <div class="grid gap-2 p-5 sm:grid-cols-[9rem_1fr]">
+                  <dt class="font-mono text-sm font-semibold text-frame-dark">source</dt>
+                  <dd class="text-sm leading-6 text-muted">
+                    Source directory. Defaults to <code>src</code>.
+                  </dd>
+                </div>
+                <div class="grid gap-2 p-5 sm:grid-cols-[9rem_1fr]">
+                  <dt class="font-mono text-sm font-semibold text-frame-dark">bundles</dt>
+                  <dd class="text-sm leading-6 text-muted">
+                    Named script and stylesheet entry definitions.
+                  </dd>
+                </div>
+                <div class="grid gap-2 p-5 sm:grid-cols-[9rem_1fr]">
+                  <dt class="font-mono text-sm font-semibold text-frame-dark">
+                    namespace
+                  </dt>
+                  <dd class="text-sm leading-6 text-muted">
+                    Generated asset and snippet namespace. Defaults to <code>frame</code>.
+                  </dd>
+                </div>
+                <div class="grid gap-2 p-5 sm:grid-cols-[9rem_1fr]">
+                  <dt class="font-mono text-sm font-semibold text-frame-dark">refresh</dt>
+                  <dd class="text-sm leading-6 text-muted">
+                    Notification file and debounce settings, or <code>false</code>.
+                  </dd>
+                </div>
+              </dl>
+            </div>
+          </section>
+
+          <section id="integrations" class="docs-section">
+            <span class="eyebrow">06 · Integrations</span>
+            <h2 class="section-title">Bring the Vite ecosystem.</h2>
+            <p class="section-lead">
+              Frame does not wrap frontend frameworks. Add their official Vite plugins as
+              usual.
+            </p>
+
+            <div class="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3">
+              <div class="feature-card">
+                <p class="font-semibold">Tailwind CSS</p>
+                <p class="mt-1 text-sm text-muted">Official Vite plugin</p>
+              </div>
+              <div class="feature-card">
+                <p class="font-semibold">Alpine.js</p>
+                <p class="mt-1 text-sm text-muted">Standard entry import</p>
+              </div>
+              <div class="feature-card">
+                <p class="font-semibold">React</p>
+                <p class="mt-1 text-sm text-muted">Fast Refresh ready</p>
+              </div>
+              <div class="feature-card">
+                <p class="font-semibold">Vue</p>
+                <p class="mt-1 text-sm text-muted">Single file components</p>
+              </div>
+              <div class="feature-card">
+                <p class="font-semibold">Sass</p>
+                <p class="mt-1 text-sm text-muted">Native Vite support</p>
+              </div>
+              <div class="feature-card">
+                <p class="font-semibold">PostCSS</p>
+                <p class="mt-1 text-sm text-muted">Native Vite config</p>
+              </div>
+            </div>
+            <p class="mt-6 text-sm leading-6 text-muted">
+              React Fast Refresh requires
+              <code>@vitejs/plugin-react/preamble</code> because Frame does not use an
+              HTML entry. Framework code mounted inside sections should handle Shopify
+              Theme Editor section load and unload events.
+            </p>
+          </section>
+
+          <section id="safety" class="docs-section">
+            <span class="eyebrow">07 · Output safety</span>
+            <h2 class="section-title">Built for a shared assets directory.</h2>
+            <p class="section-lead">
+              Shopify mixes generated assets and hand authored files in one directory.
+              Frame cleans up without treating that directory like a disposable build
+              folder.
+            </p>
+
+            <div class="mt-8 grid gap-4 sm:grid-cols-2">
+              <article class="feature-card">
+                <p class="font-semibold">Ownership ledger</p>
+                <p class="mt-2 text-sm leading-6 text-muted">
+                  Only files recorded as Frame output can be removed as stale.
+                </p>
+              </article>
+              <article class="feature-card">
+                <p class="font-semibold">Isolated staging</p>
+                <p class="mt-2 text-sm leading-6 text-muted">
+                  Every build finishes away from the theme before publication.
+                </p>
+              </article>
+              <article class="feature-card">
+                <p class="font-semibold">Protected writes</p>
+                <p class="mt-2 text-sm leading-6 text-muted">
+                  Unknown theme files are never silently overwritten.
+                </p>
+              </article>
+              <article class="feature-card">
+                <p class="font-semibold">Recovery journal</p>
+                <p class="mt-2 text-sm leading-6 text-muted">
+                  Interrupted publication is restored before the next build continues.
+                </p>
+              </article>
+            </div>
+          </section>
+
+          <section id="examples" class="docs-section">
+            <span class="eyebrow">08 · Examples</span>
+            <h2 class="section-title">See it in a real theme.</h2>
+            <p class="section-lead">
+              Every example is independently runnable, checked in CI, and tested against a
+              Shopify development store.
+            </p>
+
+            <div class="mt-8 grid gap-4 sm:grid-cols-2">
+              <a
+                href="https://github.com/BillyNoyes/Frame/tree/main/examples/vanilla"
+                class="feature-card group"
+              >
+                <div class="flex items-start justify-between gap-4">
+                  <div>
+                    <p class="font-semibold">Vanilla</p>
+                    <p class="mt-2 text-sm text-muted">
+                      TypeScript, CSS, dynamic imports, fonts, and images
+                    </p>
+                  </div>
+                  <span
+                    class="text-muted transition group-hover:translate-x-1 group-hover:text-frame"
+                    >→</span
+                  >
+                </div>
+              </a>
+              <a
+                href="https://github.com/BillyNoyes/Frame/tree/main/examples/alpine-tailwind"
+                class="feature-card group"
+              >
+                <div class="flex items-start justify-between gap-4">
+                  <div>
+                    <p class="font-semibold">Alpine and Tailwind</p>
+                    <p class="mt-2 text-sm text-muted">
+                      Alpine.js with Tailwind CSS through Vite
+                    </p>
+                  </div>
+                  <span
+                    class="text-muted transition group-hover:translate-x-1 group-hover:text-frame"
+                    >→</span
+                  >
+                </div>
+              </a>
+              <a
+                href="https://github.com/BillyNoyes/Frame/tree/main/examples/react"
+                class="feature-card group"
+              >
+                <div class="flex items-start justify-between gap-4">
+                  <div>
+                    <p class="font-semibold">React</p>
+                    <p class="mt-2 text-sm text-muted">
+                      React components mounted inside Liquid sections
+                    </p>
+                  </div>
+                  <span
+                    class="text-muted transition group-hover:translate-x-1 group-hover:text-frame"
+                    >→</span
+                  >
+                </div>
+              </a>
+              <a
+                href="https://github.com/BillyNoyes/Frame/tree/main/examples/vue"
+                class="feature-card group"
+              >
+                <div class="flex items-start justify-between gap-4">
+                  <div>
+                    <p class="font-semibold">Vue</p>
+                    <p class="mt-2 text-sm text-muted">
+                      Vue single file components inside Liquid sections
+                    </p>
+                  </div>
+                  <span
+                    class="text-muted transition group-hover:translate-x-1 group-hover:text-frame"
+                    >→</span
+                  >
+                </div>
+              </a>
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
+
+    <footer class="border-t border-line bg-white/55">
+      <div
+        class="mx-auto flex max-w-7xl flex-col gap-4 px-5 py-8 text-sm text-muted sm:flex-row sm:items-center sm:justify-between lg:px-8"
+      >
+        <div class="flex items-center gap-2 font-medium text-ink">
+          <span
+            class="grid size-7 place-items-center rounded-lg bg-ink text-xs font-bold text-white"
+            >F</span
+          >
+          Frame
+        </div>
+        <p>Built by Billy Noyes for Shopify Liquid themes.</p>
+        <a
+          href="https://github.com/BillyNoyes/Frame"
+          class="font-medium transition hover:text-frame-dark"
+          >GitHub</a
+        >
+      </div>
+    </footer>
+  </body>
+</html>
