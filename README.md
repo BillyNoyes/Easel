@@ -132,25 +132,15 @@ Shopify CLI remains responsible for authentication, previews, synchronization, p
 
 ## Examples
 
-[`examples/vanilla`](examples/vanilla) shows TypeScript and CSS.
+• [`examples/vanilla`](examples/vanilla) for TypeScript and CSS
 
-[`examples/alpine-tailwind`](examples/alpine-tailwind) shows Alpine.js and Tailwind CSS.
+• [`examples/alpine-tailwind`](examples/alpine-tailwind) for Alpine.js and Tailwind CSS
 
-[`examples/react`](examples/react) shows React inside Liquid sections.
+• [`examples/react`](examples/react) for React inside Liquid sections
 
-[`examples/vue`](examples/vue) shows Vue single file components inside Liquid sections.
+• [`examples/vue`](examples/vue) for Vue single file components inside Liquid sections
 
-The framework examples include Shopify Theme Editor mount and unmount handling. Every example is built and checked in CI, and all four have been tested against a real Shopify development store.
-
-## Scaffold an example
-
-Create a framework neutral theme foundation, then add only the integration being demonstrated.
-
-```sh
-pnpm scaffold:theme examples/svelte --name "Frame Svelte"
-```
-
-The command creates the Shopify structure, starter Liquid, locales, settings, TypeScript, CSS, and Vite configuration. It refuses to overwrite an existing path. New example directories are discovered by CI automatically.
+Each example includes Shopify Theme Editor lifecycle handling, passes CI, and has been tested against a real Shopify development store.
 
 ## License
 
