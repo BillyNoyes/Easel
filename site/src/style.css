@@ -1,17 +1,16 @@
 @import 'tailwindcss';
 
 @theme {
-  --color-ink: #17231d;
-  --color-muted: #5f6f66;
-  --color-canvas: #f7f8f4;
-  --color-panel: #ffffff;
-  --color-line: #dfe5df;
-  --color-frame: #16845b;
-  --color-frame-dark: #0f6746;
-  --color-frame-soft: #e7f5ee;
+  --color-ink: #f2f5f3;
+  --color-muted: #98a69f;
+  --color-canvas: #080b0a;
+  --color-panel: #0e1311;
+  --color-line: #27312d;
+  --color-frame: #008060;
+  --color-frame-dark: #4fd1a5;
+  --color-frame-soft: #102a22;
   --font-sans: Inter, ui-sans-serif, system-ui, sans-serif;
   --font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
-  --shadow-soft: 0 18px 60px rgb(23 35 29 / 8%);
 }
 
 @layer base {
@@ -21,16 +20,28 @@
   }
 
   body {
-    background:
-      radial-gradient(circle at 12% 4%, rgb(22 132 91 / 9%), transparent 25rem),
-      var(--color-canvas);
+    background-color: var(--color-canvas);
+    background-image:
+      linear-gradient(rgb(39 49 45 / 22%) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(39 49 45 / 22%) 1px, transparent 1px);
+    background-size: 64px 64px;
     color: var(--color-ink);
     font-family: var(--font-sans);
     text-rendering: optimizeLegibility;
   }
 
   ::selection {
-    background: rgb(22 132 91 / 20%);
+    background: #008060;
+    color: white;
+  }
+
+  :not(pre) > code {
+    border: 1px solid var(--color-line);
+    background: #111815;
+    padding: 0.12rem 0.32rem;
+    color: var(--color-frame-dark);
+    font-family: var(--font-mono);
+    font-size: 0.86em;
   }
 
   [x-cloak] {
@@ -40,35 +51,43 @@
 
 @layer components {
   .docs-section {
-    @apply scroll-mt-24 border-b border-line py-14 last:border-0 sm:py-18;
+    @apply relative scroll-mt-24 border-b border-line py-16 last:border-0 sm:py-20;
   }
 
-  .eyebrow {
-    @apply mb-4 inline-flex items-center gap-2 rounded-full border border-frame/20 bg-frame-soft px-3 py-1 font-mono text-[0.7rem] font-semibold tracking-[0.14em] text-frame-dark uppercase;
+  .docs-section::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: 0;
+    width: 3rem;
+    height: 2px;
+    background: var(--color-frame);
   }
 
   .section-title {
-    @apply text-3xl font-semibold tracking-[-0.035em] text-ink sm:text-4xl;
+    @apply max-w-3xl text-3xl font-semibold tracking-[-0.045em] text-ink sm:text-5xl;
   }
 
   .section-lead {
-    @apply mt-4 max-w-2xl text-base leading-7 text-muted sm:text-lg;
+    @apply mt-5 max-w-2xl text-base leading-7 text-muted sm:text-lg;
   }
 
   .code-shell {
-    @apply relative overflow-hidden rounded-2xl border border-white/10 bg-[#111a16] shadow-soft;
+    @apply relative overflow-hidden border border-line border-l-frame bg-[#0a0f0d];
+    border-left-width: 3px;
+    box-shadow: 12px 12px 0 rgb(0 128 96 / 7%);
   }
 
   .code-bar {
-    @apply flex items-center justify-between border-b border-white/10 px-4 py-3;
+    @apply flex items-center justify-between border-b border-line bg-[#0d1310] px-4 py-3;
   }
 
   .code-label {
-    @apply font-mono text-xs text-white/50;
+    @apply font-mono text-[0.7rem] tracking-[0.08em] text-muted uppercase;
   }
 
   .copy-button {
-    @apply rounded-md px-2 py-1 font-mono text-xs text-white/55 transition hover:bg-white/10 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-frame;
+    @apply border border-transparent px-2 py-1 font-mono text-xs text-muted transition hover:border-line hover:bg-panel hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-frame;
   }
 
   .code-block {
@@ -76,11 +95,11 @@
   }
 
   .token-keyword {
-    color: #7dd3a8;
+    color: #55d6ad;
   }
 
   .token-string {
-    color: #f2cf88;
+    color: #d6bc74;
   }
 
   .token-comment {
@@ -88,14 +107,81 @@
   }
 
   .nav-link {
-    @apply flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-muted transition hover:bg-white hover:text-ink;
+    @apply flex items-center gap-3 border-l-2 border-transparent px-3 py-2 font-mono text-xs tracking-wide text-muted transition hover:border-line hover:bg-panel hover:text-ink;
   }
 
   .nav-link-active {
-    @apply bg-white text-frame-dark shadow-sm ring-1 ring-line;
+    @apply border-frame bg-frame-soft text-frame-dark;
   }
 
   .feature-card {
-    @apply rounded-2xl border border-line bg-panel p-6 shadow-[0_1px_2px_rgb(23_35_29/3%)] transition duration-200 hover:-translate-y-0.5 hover:shadow-soft;
+    @apply relative border border-line bg-panel p-6 transition duration-200 hover:border-frame/70;
+  }
+
+  .feature-card::after {
+    content: '';
+    position: absolute;
+    top: -1px;
+    right: -1px;
+    width: 0.8rem;
+    height: 0.8rem;
+    border-top: 1px solid var(--color-canvas);
+    border-right: 1px solid var(--color-canvas);
+    background: var(--color-canvas);
+    clip-path: polygon(100% 0, 100% 100%, 0 0);
+  }
+
+  .hero-layout {
+    @apply grid items-center gap-16 lg:grid-cols-[minmax(0,1fr)_22rem];
+  }
+
+  .hero-mark {
+    position: relative;
+    aspect-ratio: 1;
+    color: var(--color-frame-dark);
+  }
+
+  .hero-mark::before,
+  .hero-mark::after,
+  .hero-mark span::before,
+  .hero-mark span::after {
+    content: '';
+    position: absolute;
+    width: 34%;
+    height: 34%;
+    border-color: var(--color-frame);
+  }
+
+  .hero-mark::before {
+    top: 0;
+    left: 0;
+    border-top: 3px solid;
+    border-left: 3px solid;
+  }
+
+  .hero-mark::after {
+    top: 0;
+    right: 0;
+    border-top: 3px solid;
+    border-right: 3px solid;
+  }
+
+  .hero-mark span::before {
+    bottom: 0;
+    left: 0;
+    border-bottom: 3px solid;
+    border-left: 3px solid;
+  }
+
+  .hero-mark span::after {
+    right: 0;
+    bottom: 0;
+    border-right: 3px solid;
+    border-bottom: 3px solid;
+  }
+
+  .hero-mark span {
+    @apply absolute inset-[21%] grid place-items-center border border-line bg-panel font-mono text-sm tracking-[0.18em] uppercase;
+    box-shadow: 16px 16px 0 rgb(0 128 96 / 14%);
   }
 }

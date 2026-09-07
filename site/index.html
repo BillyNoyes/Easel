@@ -7,7 +7,7 @@
       name="description"
       content="Frame is a Vite plugin for Shopify Liquid themes. Build assets, generate Liquid, and publish safely."
     />
-    <meta name="theme-color" content="#f7f8f4" />
+    <meta name="theme-color" content="#080b0a" />
     <meta property="og:title" content="Frame documentation" />
     <meta
       property="og:description"
@@ -23,18 +23,16 @@
   <body x-data="docsNavigation" class="min-h-screen antialiased">
     <a
       href="#content"
-      class="fixed top-3 left-3 z-[60] -translate-y-20 rounded-lg bg-ink px-4 py-2 text-sm font-semibold text-white transition focus:translate-y-0"
+      class="fixed top-3 left-3 z-[60] -translate-y-20 border border-frame bg-canvas px-4 py-2 text-sm font-semibold text-ink transition focus:translate-y-0"
     >
       Skip to content
     </a>
 
-    <header
-      class="sticky top-0 z-50 border-b border-line/80 bg-canvas/85 backdrop-blur-xl"
-    >
+    <header class="sticky top-0 z-50 border-b border-line bg-canvas/95 backdrop-blur-md">
       <div class="mx-auto flex h-16 max-w-7xl items-center justify-between px-5 lg:px-8">
         <a href="#overview" class="group flex items-center gap-3" @click="navigate">
           <span
-            class="grid size-9 place-items-center rounded-xl bg-ink text-white shadow-sm transition group-hover:bg-frame-dark"
+            class="grid size-9 place-items-center border border-frame bg-frame text-white transition group-hover:bg-frame-dark"
           >
             <svg viewBox="0 0 32 32" class="size-5" aria-hidden="true">
               <path
@@ -49,7 +47,7 @@
           </span>
           <span class="text-lg font-semibold tracking-[-0.03em]">Frame</span>
           <span
-            class="rounded-md bg-frame-soft px-2 py-0.5 font-mono text-[0.65rem] text-frame-dark"
+            class="border border-line px-2 py-0.5 font-mono text-[0.6rem] tracking-wider text-muted uppercase"
             >Docs</span
           >
         </a>
@@ -57,13 +55,13 @@
         <nav class="hidden items-center gap-2 md:flex" aria-label="Primary navigation">
           <a
             href="https://github.com/BillyNoyes/Frame/tree/main/examples"
-            class="rounded-lg px-3 py-2 text-sm font-medium text-muted transition hover:bg-white hover:text-ink"
+            class="border-b border-transparent px-3 py-2 text-sm font-medium text-muted transition hover:border-frame hover:text-ink"
           >
             Examples
           </a>
           <a
             href="https://github.com/BillyNoyes/Frame"
-            class="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-muted transition hover:bg-white hover:text-ink"
+            class="flex items-center gap-2 border-b border-transparent px-3 py-2 text-sm font-medium text-muted transition hover:border-frame hover:text-ink"
           >
             <svg viewBox="0 0 24 24" class="size-4" aria-hidden="true">
               <path
@@ -75,7 +73,7 @@
           </a>
           <a
             href="#quick-start"
-            class="ml-2 rounded-lg bg-ink px-4 py-2 text-sm font-semibold text-white transition hover:bg-frame-dark"
+            class="ml-2 bg-frame px-4 py-2 text-sm font-semibold text-white transition hover:bg-frame-dark hover:text-canvas"
           >
             Get started
           </a>
@@ -83,7 +81,7 @@
 
         <button
           type="button"
-          class="grid size-10 place-items-center rounded-lg text-muted hover:bg-white hover:text-ink md:hidden"
+          class="grid size-10 place-items-center border border-transparent text-muted hover:border-line hover:bg-panel hover:text-ink md:hidden"
           aria-controls="mobile-menu"
           :aria-expanded="mobileOpen"
           @click="mobileOpen = !mobileOpen"
@@ -139,50 +137,52 @@
     <main id="content">
       <section id="overview" class="relative overflow-hidden border-b border-line">
         <div
-          class="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgb(23_35_29/0.045)_1px,transparent_1px),linear-gradient(to_bottom,rgb(23_35_29/0.045)_1px,transparent_1px)] bg-[size:48px_48px] [mask-image:linear-gradient(to_bottom,black,transparent_90%)]"
+          class="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgb(0_128_96/0.08)_1px,transparent_1px),linear-gradient(to_bottom,rgb(0_128_96/0.08)_1px,transparent_1px)] bg-[size:64px_64px] [mask-image:linear-gradient(to_bottom,black,transparent_92%)]"
           aria-hidden="true"
         ></div>
         <div class="relative mx-auto max-w-7xl px-5 py-20 sm:py-28 lg:px-8 lg:py-32">
-          <div class="max-w-4xl">
-            <div class="eyebrow">
-              <span class="size-1.5 rounded-full bg-frame"></span>
-              Vite plugin for Shopify themes
+          <div class="hero-layout">
+            <div>
+              <h1
+                class="max-w-3xl text-5xl leading-[1.02] font-semibold tracking-[-0.055em] text-ink sm:text-6xl lg:text-7xl"
+              >
+                Modern assets for
+                <span class="text-frame-dark">Liquid themes.</span>
+              </h1>
+              <p class="mt-7 max-w-2xl text-lg leading-8 text-muted sm:text-xl">
+                Frame builds JavaScript, TypeScript, and CSS into Shopify theme assets,
+                generates the Liquid that loads them, and safely replaces old build
+                output.
+              </p>
+              <div class="mt-9 flex flex-col gap-3 sm:flex-row">
+                <a
+                  href="#quick-start"
+                  class="inline-flex items-center justify-center gap-2 bg-frame px-5 py-3 text-sm font-semibold text-white transition hover:bg-frame-dark hover:text-canvas"
+                >
+                  Start building
+                  <svg viewBox="0 0 20 20" class="size-4" aria-hidden="true">
+                    <path
+                      d="m7 4 6 6-6 6"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.8"
+                    />
+                  </svg>
+                </a>
+                <a
+                  href="https://github.com/BillyNoyes/Frame"
+                  class="inline-flex items-center justify-center gap-2 border border-line bg-panel px-5 py-3 text-sm font-semibold text-ink transition hover:border-frame hover:text-frame-dark"
+                >
+                  View on GitHub
+                </a>
+              </div>
             </div>
-            <h1
-              class="max-w-3xl text-5xl leading-[1.02] font-semibold tracking-[-0.055em] text-ink sm:text-6xl lg:text-7xl"
-            >
-              Modern assets for
-              <span class="text-frame-dark">Liquid themes.</span>
-            </h1>
-            <p class="mt-7 max-w-2xl text-lg leading-8 text-muted sm:text-xl">
-              Frame builds JavaScript, TypeScript, and CSS into Shopify theme assets,
-              generates the Liquid that loads them, and safely replaces old build output.
-            </p>
-            <div class="mt-9 flex flex-col gap-3 sm:flex-row">
-              <a
-                href="#quick-start"
-                class="inline-flex items-center justify-center gap-2 rounded-xl bg-ink px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-frame-dark"
-              >
-                Start building
-                <svg viewBox="0 0 20 20" class="size-4" aria-hidden="true">
-                  <path
-                    d="m7 4 6 6-6 6"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="1.8"
-                  />
-                </svg>
-              </a>
-              <a
-                href="https://github.com/BillyNoyes/Frame"
-                class="inline-flex items-center justify-center gap-2 rounded-xl border border-line bg-white px-5 py-3 text-sm font-semibold text-ink transition hover:border-frame/40 hover:text-frame-dark"
-              >
-                View on GitHub
-              </a>
+            <div class="hero-mark hidden lg:block" aria-hidden="true">
+              <span>Liquid / Vite</span>
             </div>
           </div>
 
-          <div class="mt-16 grid gap-4 md:grid-cols-3">
+          <div class="mt-16 grid gap-px border border-line bg-line md:grid-cols-3">
             <article class="feature-card">
               <div
                 class="mb-5 grid size-10 place-items-center rounded-xl bg-frame-soft text-frame-dark"
@@ -320,7 +320,6 @@
 
         <div class="min-w-0 max-w-4xl">
           <section id="quick-start" class="docs-section">
-            <span class="eyebrow">01 · Quick start</span>
             <h2 class="section-title">Add Frame to Vite.</h2>
             <p class="section-lead">
               Frame expects a Shopify theme at the Vite root and source files in
@@ -419,7 +418,7 @@ assets/frame-*
 snippets/frame-assets.liquid</code></pre>
             </div>
 
-            <div class="mt-8 rounded-2xl border border-frame/20 bg-frame-soft p-5 sm:p-6">
+            <div class="mt-8 border border-frame/40 bg-frame-soft p-5 sm:p-6">
               <p class="font-semibold text-frame-dark">Zero configuration entry</p>
               <p class="mt-2 text-sm leading-6 text-muted">
                 Frame creates a bundle named <code>theme</code> from
@@ -430,7 +429,6 @@ snippets/frame-assets.liquid</code></pre>
           </section>
 
           <section id="development" class="docs-section">
-            <span class="eyebrow">02 · Development</span>
             <h2 class="section-title">Two tools, one workflow.</h2>
             <p class="section-lead">
               Run Vite and Shopify CLI independently. Vite serves frontend assets while
@@ -487,7 +485,6 @@ snippets/frame-assets.liquid</code></pre>
           </section>
 
           <section id="production" class="docs-section">
-            <span class="eyebrow">03 · Production</span>
             <h2 class="section-title">Build, then deploy normally.</h2>
             <p class="section-lead">
               Frame publishes generated assets into the theme and replaces the development
@@ -522,7 +519,6 @@ shopify theme push</code></pre>
           </section>
 
           <section id="bundles" class="docs-section">
-            <span class="eyebrow">04 · Named bundles</span>
             <h2 class="section-title">Load code where it belongs.</h2>
             <p class="section-lead">
               Start with the default bundle. Add named bundles when a substantial feature
@@ -597,7 +593,6 @@ shopify theme push</code></pre>
           </section>
 
           <section id="configuration" class="docs-section">
-            <span class="eyebrow">05 · Configuration</span>
             <h2 class="section-title">Small API, explicit control.</h2>
             <p class="section-lead">Every Frame option is optional.</p>
 
@@ -636,7 +631,7 @@ shopify theme push</code></pre>
 });</code></pre>
             </div>
 
-            <div class="mt-8 overflow-hidden rounded-2xl border border-line bg-white">
+            <div class="mt-8 overflow-hidden border border-line bg-panel">
               <dl class="divide-y divide-line">
                 <div class="grid gap-2 p-5 sm:grid-cols-[9rem_1fr]">
                   <dt class="font-mono text-sm font-semibold text-frame-dark">theme</dt>
@@ -675,7 +670,6 @@ shopify theme push</code></pre>
           </section>
 
           <section id="integrations" class="docs-section">
-            <span class="eyebrow">06 · Integrations</span>
             <h2 class="section-title">Bring the Vite ecosystem.</h2>
             <p class="section-lead">
               Frame does not wrap frontend frameworks. Add their official Vite plugins as
@@ -717,7 +711,6 @@ shopify theme push</code></pre>
           </section>
 
           <section id="safety" class="docs-section">
-            <span class="eyebrow">07 · Output safety</span>
             <h2 class="section-title">Built for a shared assets directory.</h2>
             <p class="section-lead">
               Shopify mixes generated assets and hand authored files in one directory.
@@ -754,7 +747,6 @@ shopify theme push</code></pre>
           </section>
 
           <section id="examples" class="docs-section">
-            <span class="eyebrow">08 · Examples</span>
             <h2 class="section-title">See it in a real theme.</h2>
             <p class="section-lead">
               Every example is independently runnable, checked in CI, and tested against a
@@ -836,13 +828,13 @@ shopify theme push</code></pre>
       </div>
     </main>
 
-    <footer class="border-t border-line bg-white/55">
+    <footer class="border-t border-line bg-panel/70">
       <div
         class="mx-auto flex max-w-7xl flex-col gap-4 px-5 py-8 text-sm text-muted sm:flex-row sm:items-center sm:justify-between lg:px-8"
       >
         <div class="flex items-center gap-2 font-medium text-ink">
           <span
-            class="grid size-7 place-items-center rounded-lg bg-ink text-xs font-bold text-white"
+            class="grid size-7 place-items-center bg-frame text-xs font-bold text-white"
             >F</span
           >
           Frame
