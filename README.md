@@ -1,12 +1,12 @@
 # Frame
 
-**Vite for Shopify Liquid themes, with safe asset publishing and generated Liquid.**
+Frame is a Vite plugin for Shopify Liquid themes.
 
-Keep Vite. Keep Shopify CLI. Lose the glue code.
+It builds JavaScript, TypeScript, and CSS into Shopify theme assets, generates the Liquid snippet that loads them, and safely replaces old build output. During development, it can coordinate Vite updates with Shopify CLI reloads. Shopify CLI still handles previews, syncing, and deployment.
 
-Frame turns Vite output into Shopify theme assets, generates the Liquid loader, removes stale bundles safely, and coordinates reloads with Shopify CLI. It adds no storefront runtime and does not replace your existing tools.
+Frame adds no storefront runtime.
 
-> Frame is an early prototype. The API and generated formats may change before the first stable release.
+> Frame is an early prototype. Its API and generated output may change before the first stable release.
 
 ## Install
 
