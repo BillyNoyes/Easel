@@ -106,23 +106,34 @@ Bundle paths resolve from `src` by default. The first bundle is used when `entry
 
 ## Configuration
 
-Every parameter is optional.
+```ts
+frame({
+  // Shopify theme directory relative to the Vite root. Defaults to the Vite root.
+  theme: '.',
 
-• `theme` sets the Shopify theme directory relative to the Vite root. It defaults to `.`.
+  // Source directory relative to the Vite root. Defaults to src.
+  source: 'src',
 
-• `source` sets the source directory relative to the Vite root. It defaults to `src`.
+  // Named entries relative to source. Defaults to main.ts or main.js with style.css.
+  bundles: {
+    theme: {script: 'main.ts', style: 'style.css'},
+  },
 
-• `bundles` defines named script and stylesheet entries. Bundle paths resolve from `source`. It defaults to one `theme` bundle using `main.ts` or `main.js` with `style.css`.
+  // Namespace used by generated assets and the Liquid snippet. Defaults to frame.
+  namespace: 'frame',
 
-• `namespace` controls generated asset and Liquid snippet names. It defaults to `frame`.
+  // Shopify CLI reload coordination. Use false to disable it.
+  refresh: {
+    // Notification file relative to the Vite root.
+    signal: '.frame/shopify-ready',
 
-• `refresh` controls Shopify CLI reload coordination. It is enabled by default. Set it to `false` to disable it.
+    // Reload debounce in milliseconds. Defaults to 100.
+    delay: 100,
+  },
+});
+```
 
-• `refresh.signal` sets the Shopify CLI notification file relative to the Vite root. It defaults to `.frame/shopify-ready`.
-
-• `refresh.delay` sets the reload debounce in milliseconds. It defaults to `100`.
-
-All Vite server and build integrations remain available. Tailwind CSS, Alpine.js, React, Vue, Sass, PostCSS, and other tools use their normal Vite setup. React Fast Refresh requires `@vitejs/plugin-react/preamble` because Frame does not use an HTML entry.
+Use Tailwind CSS, Alpine.js, React, Vue, Sass, PostCSS, and other tools through their normal Vite setup. React Fast Refresh requires `@vitejs/plugin-react/preamble` because Frame does not use an HTML entry.
 
 ## Safe by default
 
