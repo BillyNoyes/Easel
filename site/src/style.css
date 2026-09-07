@@ -50,6 +50,54 @@
 }
 
 @layer components {
+  .landing-shell {
+    @apply relative grid min-h-[100svh] place-items-center overflow-hidden px-5 py-16;
+  }
+
+  .landing-shell::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 1px;
+    height: 100%;
+    background: linear-gradient(transparent, var(--color-frame), transparent);
+    opacity: 0.25;
+  }
+
+  .landing-github {
+    @apply absolute top-6 right-6 z-10 text-muted transition hover:text-frame-dark focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-frame;
+  }
+
+  .landing-content {
+    @apply relative z-10 mx-auto w-full max-w-3xl text-center;
+  }
+
+  .landing-brand {
+    @apply flex items-center justify-center gap-5;
+  }
+
+  .landing-logo {
+    @apply grid size-16 place-items-center bg-frame text-white sm:size-20;
+    box-shadow: 10px 10px 0 rgb(0 128 96 / 18%);
+  }
+
+  .landing-brand h1 {
+    @apply text-6xl font-semibold tracking-[-0.065em] text-ink sm:text-8xl;
+  }
+
+  .landing-lead {
+    @apply mt-6 text-lg text-muted sm:text-xl;
+  }
+
+  .landing-cta {
+    @apply mt-8 inline-flex items-center gap-3 bg-frame px-5 py-3 text-sm font-semibold text-white transition hover:bg-frame-dark hover:text-canvas focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-frame;
+  }
+
+  .landing-code {
+    @apply mt-14 text-left sm:mt-16;
+  }
+
   .docs-section {
     @apply relative scroll-mt-24 border-b border-line py-16 last:border-0 sm:py-20;
   }
