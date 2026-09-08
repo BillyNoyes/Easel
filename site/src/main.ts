@@ -2,7 +2,7 @@ import Alpine from 'alpinejs';
 import './style.css';
 
 Alpine.data('docsNavigation', () => ({
-  activeSection: 'overview',
+  activeSection: 'quick-start',
   mobileOpen: false,
   observer: undefined as IntersectionObserver | undefined,
   init() {

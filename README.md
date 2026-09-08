@@ -9,7 +9,7 @@ It builds JavaScript, TypeScript, and CSS into Shopify theme assets, generates t
 ## Install
 
 ```sh
-pnpm add -D @blueprint/frame vite
+pnpm add -D vite-plugin-shopify-frame vite
 ```
 
 Frame requires Node.js 22.12 or newer and supports Vite 7 and 8.
@@ -35,7 +35,7 @@ vite.config.ts
 
 ```ts
 import {defineConfig} from 'vite';
-import frame from '@blueprint/frame';
+import frame from 'vite-plugin-shopify-frame';
 
 export default defineConfig({
   plugins: [frame()],
@@ -81,7 +81,7 @@ Load only the code each Liquid surface needs.
 
 ```ts
 import {defineConfig} from 'vite';
-import frame from '@blueprint/frame';
+import frame from 'vite-plugin-shopify-frame';
 
 export default defineConfig({
   plugins: [

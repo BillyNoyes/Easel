@@ -42,7 +42,7 @@ jobs:
       - if: matrix.node != '22.12.0'
         run: pnpm lint
       - run: pnpm add --workspace-root --save-dev vite@^${{ matrix.vite }}
-      - run: pnpm typecheck && pnpm test && pnpm test:examples && pnpm test:site && pnpm build
+      - run: pnpm typecheck && pnpm test && pnpm test:examples && pnpm test:site && pnpm build && pnpm test:package
 
   theme-check:
     name: Shopify Theme Check

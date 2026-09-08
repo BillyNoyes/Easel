@@ -1,0 +1,91 @@
+#!/usr/bin/env node
+
+import {execFile} from 'node:child_process';
+import {mkdtemp, mkdir, readFile, readdir, rm, writeFile} from 'node:fs/promises';
+import {tmpdir} from 'node:os';
+import {join} from 'node:path';
+import {promisify} from 'node:util';
+
+const execFileAsync = promisify(execFile);
+const root = process.cwd();
+const temporary = await mkdtemp(join(tmpdir(), 'frame-package-'));
+const consumer = join(temporary, 'consumer');
+
+try {
+  await execFileAsync('pnpm', ['pack', '--pack-destination', temporary], {cwd: root});
+  const tarballs = (await readdir(temporary)).filter((file) => file.endsWith('.tgz'));
+  if (tarballs.length !== 1) throw new Error('expected pnpm pack to create one tarball');
+  const tarball = join(temporary, tarballs[0]);
+
+  const {stdout: tarballListing} = await execFileAsync('tar', ['-tzf', tarball]);
+  for (const required of [
+    'package/package.json',
+    'package/README.md',
+    'package/LICENSE',
+    'package/dist/index.js',
+    'package/dist/index.d.ts',
+  ]) {
+    if (!tarballListing.split('\n').includes(required)) {
+      throw new Error(`package tarball is missing ${required}`);
+    }
+  }
+  if (tarballListing.split('\n').some((file) => file.startsWith('package/src/'))) {
+    throw new Error('package tarball must not contain source files');
+  }
+
+  for (const directory of ['assets', 'layout', 'sections', 'snippets', 'src']) {
+    await mkdir(join(consumer, directory), {recursive: true});
+  }
+  await Promise.all([
+    writeFile(
+      join(consumer, 'package.json'),
+      `${JSON.stringify(
+        {
+          name: 'frame-package-consumer',
+          private: true,
+          type: 'module',
+          dependencies: {
+            'vite-plugin-shopify-frame': `file:${tarball}`,
+            vite: '^8.0.0',
+          },
+        },
+        null,
+        2,
+      )}\n`,
+    ),
+    writeFile(
+      join(consumer, 'vite.config.mjs'),
+      "import {defineConfig} from 'vite';\nimport frame from 'vite-plugin-shopify-frame';\n\nexport default defineConfig({plugins: [frame()]});\n",
+    ),
+    writeFile(join(consumer, 'src/main.ts'), "console.log('Frame package consumer');\n"),
+    writeFile(join(consumer, 'src/style.css'), 'body { color: rebeccapurple; }\n'),
+    writeFile(
+      join(consumer, 'layout/theme.liquid'),
+      "{% render 'frame-assets' %}{{ content_for_layout }}\n",
+    ),
+  ]);
+
+  await execFileAsync('pnpm', ['install', '--ignore-scripts', '--prefer-offline'], {
+    cwd: consumer,
+  });
+  await execFileAsync('pnpm', ['exec', 'vite', 'build'], {cwd: consumer});
+
+  const [javascript, stylesheet, liquid] = await Promise.all([
+    readFile(join(consumer, 'assets/frame-theme.js'), 'utf8'),
+    readFile(join(consumer, 'assets/frame-theme.css'), 'utf8'),
+    readFile(join(consumer, 'snippets/frame-assets.liquid'), 'utf8'),
+  ]);
+  if (!javascript.includes('Frame package consumer')) {
+    throw new Error('installed package did not build the consumer script');
+  }
+  if (!stylesheet.includes('body')) {
+    throw new Error('installed package did not build the consumer stylesheet');
+  }
+  if (!liquid.includes("'frame-theme.js' | asset_url")) {
+    throw new Error('installed package did not generate the Liquid loader');
+  }
+
+  console.log(`Verified install and build from ${tarballs[0]}`);
+} finally {
+  await rm(temporary, {recursive: true, force: true});
+}

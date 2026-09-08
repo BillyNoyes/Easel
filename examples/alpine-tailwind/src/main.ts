@@ -3,16 +3,20 @@ import Alpine from 'alpinejs';
 Alpine.data('counter', () => ({count: 0}));
 Alpine.start();
 
-const shopifyWindow = window as typeof window & {
-  Shopify?: {designMode?: boolean};
-};
+function handleSectionLoad(event: Event): void {
+  Alpine.initTree(event.target as HTMLElement);
+}
 
-if (shopifyWindow.Shopify?.designMode) {
-  document.addEventListener('shopify:section:load', (event) => {
-    Alpine.initTree(event.target as HTMLElement);
-  });
+function handleSectionUnload(event: Event): void {
+  Alpine.destroyTree(event.target as HTMLElement);
+}
 
-  document.addEventListener('shopify:section:unload', (event) => {
-    Alpine.destroyTree(event.target as HTMLElement);
+document.addEventListener('shopify:section:load', handleSectionLoad);
+document.addEventListener('shopify:section:unload', handleSectionUnload);
+
+if (import.meta.hot) {
+  import.meta.hot.dispose(() => {
+    document.removeEventListener('shopify:section:load', handleSectionLoad);
+    document.removeEventListener('shopify:section:unload', handleSectionUnload);
   });
 }

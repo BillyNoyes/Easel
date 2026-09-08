@@ -773,14 +773,14 @@ Avoid silently selecting a Git policy.
 
 ## Proposed package design
 
-Start with one package, tentatively named `@blueprint/frame`, that exports the Vite plugin. Frame does not replace the native `vite` and `vite build` commands. A future `frame` executable is reserved for diagnostics and recovery tasks that Vite does not provide.
+Start with one package named `vite-plugin-shopify-frame`, that exports the Vite plugin. Frame does not replace the native `vite` and `vite build` commands. A future `frame` executable is reserved for diagnostics and recovery tasks that Vite does not provide.
 
 Possible later packages:
 
-- `@blueprint/frame-islands`
-- `@blueprint/frame-import-maps`
-- `@blueprint/frame-sections`
-- `@blueprint/frame-tailwind`
+- `vite-plugin-shopify-frame-islands`
+- `vite-plugin-shopify-frame-import-maps`
+- `vite-plugin-shopify-frame-sections`
+- `vite-plugin-shopify-frame-tailwind`
 
 Do not create these packages before the core manifest contract is stable and a real user requests them.
 
@@ -1301,24 +1301,20 @@ If Frame executes only five ideas exceptionally well, they should be:
 
 **Name:** Frame
 
-**Family:** Blueprint
+**Package:** `vite-plugin-shopify-frame`
 
-Possible product expressions:
+Product expressions:
 
-- Blueprint Frame
-- Frame by Blueprint
-- `@blueprint/frame`
-- `frame dev`
-- `frame build`
+- Frame
+- `vite-plugin-shopify-frame`
 - `frame inspect`
 
 Possible taglines:
 
+- Modern assets for Liquid themes.
+- Vite for Shopify Liquid themes.
 - Frame your theme for production.
-- The build system for Blueprint themes.
 - Build the structure behind your Shopify theme.
-- Blueprint defines it. Frame builds it.
-- A stronger frame for Shopify Liquid development.
 
 ## Primary sources
 

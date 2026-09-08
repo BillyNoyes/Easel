@@ -10,14 +10,15 @@ function mountAnnouncements(root: ParentNode = document): void {
   }
 }
 
+function handleSectionLoad(event: Event): void {
+  mountAnnouncements(event.target as ParentNode);
+}
+
 mountAnnouncements();
+document.addEventListener('shopify:section:load', handleSectionLoad);
 
-const shopifyWindow = window as typeof window & {
-  Shopify?: {designMode?: boolean};
-};
-
-if (shopifyWindow.Shopify?.designMode) {
-  document.addEventListener('shopify:section:load', (event) => {
-    mountAnnouncements(event.target as ParentNode);
+if (import.meta.hot) {
+  import.meta.hot.dispose(() => {
+    document.removeEventListener('shopify:section:load', handleSectionLoad);
   });
 }

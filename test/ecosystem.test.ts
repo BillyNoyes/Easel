@@ -29,6 +29,23 @@ function themeProject(): string {
 }
 
 describe('frontend ecosystem compatibility', () => {
+  it('cleans up Shopify section listeners during Vite HMR', () => {
+    const entries = [
+      'examples/alpine-tailwind/src/main.ts',
+      'examples/react/src/main.tsx',
+      'examples/vanilla/src/main.ts',
+      'examples/vanilla/src/announcement.ts',
+      'examples/vue/src/main.ts',
+    ];
+
+    for (const entry of entries) {
+      const source = readFileSync(join(process.cwd(), entry), 'utf8');
+      expect(source, entry).toContain("addEventListener('shopify:section:load'");
+      expect(source, entry).toContain("removeEventListener('shopify:section:load'");
+      expect(source, entry).toContain('import.meta.hot.dispose');
+    }
+  });
+
   it('builds custom TypeScript, Alpine.js, and Tailwind CSS v4 entries', async () => {
     const root = themeProject();
     writeFileSync(

@@ -55,17 +55,22 @@ function unmount(root: ParentNode): void {
   }
 }
 
+function handleSectionLoad(event: Event): void {
+  mount(event.target as ParentNode);
+}
+
+function handleSectionUnload(event: Event): void {
+  unmount(event.target as ParentNode);
+}
+
 mount();
+document.addEventListener('shopify:section:load', handleSectionLoad);
+document.addEventListener('shopify:section:unload', handleSectionUnload);
 
-const shopifyWindow = window as typeof window & {
-  Shopify?: {designMode?: boolean};
-};
-
-if (shopifyWindow.Shopify?.designMode) {
-  document.addEventListener('shopify:section:load', (event) =>
-    mount(event.target as ParentNode),
-  );
-  document.addEventListener('shopify:section:unload', (event) =>
-    unmount(event.target as ParentNode),
-  );
+if (import.meta.hot) {
+  import.meta.hot.dispose(() => {
+    document.removeEventListener('shopify:section:load', handleSectionLoad);
+    document.removeEventListener('shopify:section:unload', handleSectionUnload);
+    unmount(document);
+  });
 }
