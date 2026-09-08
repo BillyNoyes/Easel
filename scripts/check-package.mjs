@@ -8,11 +8,16 @@ import {promisify} from 'node:util';
 
 const execFileAsync = promisify(execFile);
 const root = process.cwd();
+const pnpm = process.platform === 'win32' ? 'pnpm.cmd' : 'pnpm';
+const pnpmUsesShell = process.platform === 'win32';
 const temporary = await mkdtemp(join(tmpdir(), 'frame-package-'));
 const consumer = join(temporary, 'consumer');
 
 try {
-  await execFileAsync('pnpm', ['pack', '--pack-destination', temporary], {cwd: root});
+  await execFileAsync(pnpm, ['pack', '--pack-destination', temporary], {
+    cwd: root,
+    shell: pnpmUsesShell,
+  });
   const tarballs = (await readdir(temporary)).filter((file) => file.endsWith('.tgz'));
   if (tarballs.length !== 1) throw new Error('expected pnpm pack to create one tarball');
   const tarball = join(temporary, tarballs[0]);
@@ -45,7 +50,7 @@ try {
           private: true,
           type: 'module',
           dependencies: {
-            'vite-plugin-shopify-frame': `file:${tarball}`,
+            'vite-plugin-shopify-frame': `file:../${tarballs[0]}`,
             vite: '^8.0.0',
           },
         },
@@ -65,10 +70,14 @@ try {
     ),
   ]);
 
-  await execFileAsync('pnpm', ['install', '--ignore-scripts', '--prefer-offline'], {
+  await execFileAsync(pnpm, ['install', '--ignore-scripts', '--prefer-offline'], {
     cwd: consumer,
+    shell: pnpmUsesShell,
   });
-  await execFileAsync('pnpm', ['exec', 'vite', 'build'], {cwd: consumer});
+  await execFileAsync(pnpm, ['exec', 'vite', 'build'], {
+    cwd: consumer,
+    shell: pnpmUsesShell,
+  });
 
   const [javascript, stylesheet, liquid] = await Promise.all([
     readFile(join(consumer, 'assets/frame-theme.js'), 'utf8'),
