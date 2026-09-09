@@ -251,6 +251,10 @@
   text-underline-offset: 0.25em;
 }
 
+.vbg-custom-frame-sticky .vbg-custom-frame-nav-link:focus-visible {
+  outline-offset: -2px;
+}
+
 .vbg-custom-frame-section {
   display: flex;
   flex-direction: column;
@@ -288,6 +292,7 @@
 }
 
 .vbg-custom-frame-options {
+  container-type: inline-size;
   display: flex;
   flex-direction: column;
   gap: var(--vbg-space-6);
@@ -316,6 +321,15 @@
   overflow-wrap: anywhere;
 }
 
+@container (min-width: 52rem) {
+  .vbg-custom-frame-option-detail {
+    display: grid;
+    grid-template-columns: 18rem minmax(0, 1fr);
+    align-items: baseline;
+    column-gap: var(--vbg-space-6);
+  }
+}
+
 @media (min-width: 768px) {
   .vbg-custom-frame-container {
     padding-inline: 1.25rem;
@@ -329,6 +343,7 @@
 
   .vbg-custom-frame-option {
     flex-direction: row;
+    align-items: baseline;
     gap: var(--vbg-space-6);
   }
 
@@ -349,7 +364,6 @@
   .vbg-custom-frame-sticky {
     max-block-size: calc(100dvh - 2 * var(--vbg-space-8));
     overflow-y: auto;
-    padding: var(--vbg-space-1);
   }
 
   .vbg-custom-frame-mobile-nav {
