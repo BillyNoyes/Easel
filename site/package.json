@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "build": "vite build",
-    "check": "tsc && vite build",
+    "check": "tsc && vite build && node scripts/check-build.mjs",
     "dev": "vite",
     "preview": "vite preview"
   },

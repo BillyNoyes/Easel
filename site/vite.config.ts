@@ -11,6 +11,15 @@ export default defineConfig({
         landing: fileURLToPath(new URL('./index.html', import.meta.url)),
         docs: fileURLToPath(new URL('./docs/index.html', import.meta.url)),
       },
+      output: {
+        entryFileNames: 'assets/site.js',
+        chunkFileNames: 'assets/main.js',
+        assetFileNames(asset) {
+          return asset.names.some((name) => name.endsWith('.css'))
+            ? 'assets/site.css'
+            : 'assets/[name][extname]';
+        },
+      },
     },
   },
 });
