@@ -37,7 +37,9 @@ for (const [route, html] of pages) {
   assert.match(html, /<title>[^<]+<\/title>/);
   assert.match(html, /<meta\s+name="description"\s+content="[^"]+"/);
   assert.match(html, /class="vbg-report"/);
-  assert.match(html, /class="vbg-shell"/);
+  assert.match(html, /class="vbg-custom-frame-container"/);
+  assert.match(html, /<header class="vbg-custom-frame-header"/);
+  assert.match(html, /<footer class="vbg-custom-frame-footer"/);
   assert.match(html, /class="vbg-skip-link"/);
   assert.doesNotMatch(html, /vbg-(?:wordmark|logo)\b|vercel-wordmark|vercel-logo/);
   assert.doesNotMatch(html, /file:\/\/|bg-canvas|token-(?:keyword|string)|theme-switch/);
@@ -59,7 +61,7 @@ for (const [route, html] of pages) {
   );
   assert.doesNotMatch(html, /fonts\.googleapis\.com|fonts\.gstatic\.com/);
   for (const font of [
-    'offbit-trial-regular.woff2',
+    'offbit-trial-bold.woff2',
     'inter_n4.b2a3f24c19b4de56e8871f609e73ca7f6d2e2bb9.woff2',
   ]) {
     const preload = links.find(

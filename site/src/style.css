@@ -37,7 +37,7 @@
 :root {
   --font-display-family: 'OffBit', Inter, sans-serif;
   --font-heading-family: 'OffBit', Inter, sans-serif;
-  --font-heading-weight: 400;
+  --font-heading-weight: 700;
   --font-body-family: Inter, sans-serif;
   --font-body-weight: 400;
 }
@@ -56,6 +56,27 @@
   font-weight: var(--font-heading-weight);
 }
 
+.vbg-custom-frame-container {
+  width: 100%;
+  max-width: none;
+  margin-inline: auto;
+  padding-inline: 0.75rem;
+}
+
+.vbg-custom-frame-header {
+  padding-block: 1rem;
+}
+
+.vbg-custom-frame-footer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--vbg-space-5);
+  padding-block: 1.5rem;
+  color: var(--vbg-text-secondary);
+  font-size: var(--vbg-type-metadata);
+  line-height: var(--vbg-leading-caption);
+}
+
 .vbg-custom-frame-masthead {
   display: flex;
   align-items: baseline;
@@ -67,7 +88,7 @@
   color: var(--vbg-text-primary);
   font-size: var(--vbg-type-subsection);
   font-family: var(--font-display-family);
-  font-weight: var(--font-heading-weight);
+  font-weight: var(--vbg-weight-regular);
   text-decoration: none;
 }
 
@@ -184,7 +205,6 @@
 .vbg-custom-frame-article {
   flex: 1;
   min-inline-size: 0;
-  max-inline-size: 56rem;
 }
 
 .vbg-custom-frame-docs-opening {
@@ -296,6 +316,16 @@
 }
 
 @media (min-width: 768px) {
+  .vbg-custom-frame-container {
+    padding-inline: 1.25rem;
+  }
+
+  .vbg-custom-frame-footer {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
   .vbg-custom-frame-option {
     flex-direction: row;
     gap: var(--vbg-space-6);
