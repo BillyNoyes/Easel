@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" class="bg-canvas">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,71 +7,89 @@
       name="description"
       content="Frame is a Vite plugin for Shopify Liquid themes."
     />
-    <meta name="theme-color" content="#080b0a" />
-    <meta property="og:title" content="Frame" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)" />
+    <meta property="og:title" content="Frame · Vite for Shopify themes" />
     <meta
       property="og:description"
-      content="Use Vite in Shopify Liquid themes without replacing Shopify CLI."
+      content="Frame is a Vite plugin for Shopify Liquid themes."
     />
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Frame" />
     <meta property="og:url" content="https://frame.billynoyes.co.uk/" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Frame · Vite for Shopify themes" />
+    <meta
+      name="twitter:description"
+      content="Frame is a Vite plugin for Shopify Liquid themes."
+    />
     <link rel="canonical" href="https://frame.billynoyes.co.uk/" />
-    <link rel="icon" href="./frame.svg" type="image/svg+xml" />
+    <link rel="icon" href="/frame.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@400..600&amp;family=Geist+Mono:wght@400..600&amp;display=swap"
+      rel="stylesheet"
+      referrerpolicy="no-referrer"
+    />
+    <link rel="stylesheet" href="/assets/vercel-brand.css" />
+    <link rel="stylesheet" href="/src/style.css" />
     <title>Frame · Vite for Shopify themes</title>
-    <script type="module" src="/src/main.ts"></script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Frame",
+        "url": "https://frame.billynoyes.co.uk/",
+        "description": "Frame is a Vite plugin for Shopify Liquid themes.",
+        "inLanguage": "en",
+        "author": {
+          "@type": "Person",
+          "name": "Billy Noyes",
+          "url": "https://billynoyes.co.uk/"
+        }
+      }
+    </script>
   </head>
-  <body class="min-h-screen antialiased">
-    <main class="landing-shell">
-      <a
-        href="https://github.com/BillyNoyes/Frame"
-        class="landing-github"
-        aria-label="Frame on GitHub"
-      >
-        <svg viewBox="0 0 24 24" class="size-5" aria-hidden="true">
-          <path
-            fill="currentColor"
-            d="M12 .7a11.5 11.5 0 0 0-3.6 22.4c.6.1.8-.2.8-.6v-2.2c-3.4.7-4.1-1.4-4.1-1.4-.5-1.4-1.4-1.8-1.4-1.8-1.1-.8.1-.8.1-.8 1.3.1 1.9 1.3 1.9 1.3 1.1 1.9 2.9 1.4 3.7 1.1.1-.8.4-1.4.8-1.7-2.7-.3-5.5-1.3-5.5-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.6.1-3.1 0 0 1-.3 3.2 1.2a11 11 0 0 1 5.8 0C17 4.9 18 5.2 18 5.2c.6 1.5.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.4-2.8 5.4-5.5 5.7.5.4.9 1.1.9 2.2v3.2c0 .4.2.7.8.6A11.5 11.5 0 0 0 12 .7Z"
-          />
-        </svg>
-      </a>
-
-      <div class="landing-content">
-        <div class="landing-brand">
-          <span class="landing-logo" aria-hidden="true">
-            <svg viewBox="0 0 32 32" class="size-10">
-              <path
-                d="M8 5H5v8M24 5h3v8M8 27H5v-8m19 8h3v-8M11 11h10v10H11z"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="square"
-              />
-            </svg>
-          </span>
-          <h1>Frame</h1>
+  <body class="vbg-report">
+    <div class="vbg-shell">
+      <a class="vbg-skip-link" href="#main">Skip to content</a>
+      <header class="vbg-header">
+        <div class="vbg-custom-frame-masthead">
+          <a href="/" class="vbg-custom-frame-brand">Frame</a>
+          <nav aria-label="Primary navigation">
+            <a href="https://github.com/BillyNoyes/Frame" class="vbg-custom-frame-link"
+              >GitHub</a
+            >
+          </nav>
         </div>
-
-        <p class="landing-lead">Vite Plugin for Shopify Liquid Themes.</p>
-
-        <a href="./docs/" class="landing-cta">
-          Get started
-          <span aria-hidden="true">→</span>
-        </a>
-
-        <div class="landing-code code-shell">
-          <div class="code-bar">
-            <span class="code-label">vite.config.ts</span>
+      </header>
+      <main id="main" class="vbg-custom-frame-landing" tabindex="-1">
+        <h1 class="vbg-title">Vite Plugin for Shopify Liquid Themes.</h1>
+        <div class="vbg-custom-frame-code" data-code-block>
+          <div class="vbg-custom-frame-code-bar">
+            <span id="code-label-1" class="vbg-mono" data-code-label>vite.config.ts</span>
           </div>
           <pre
-            class="code-block"
-          ><code><span class="token-keyword">import</span> {defineConfig} <span class="token-keyword">from</span> <span class="token-string">'vite'</span>;
-<span class="token-keyword">import</span> frame <span class="token-keyword">from</span> <span class="token-string">'vite-plugin-shopify-frame'</span>;
+            class="vbg-custom-frame-code-scroll"
+            tabindex="0"
+            role="region"
+            aria-labelledby="code-label-1"
+          ><code>import {defineConfig} from 'vite';
+import frame from 'vite-plugin-shopify-frame';
 
-<span class="token-keyword">export default</span> defineConfig({
+export default defineConfig({
   plugins: [frame()],
 });</code></pre>
         </div>
-      </div>
-    </main>
+        <div>
+          <a class="vbg-button" href="/docs/"
+            >Get started <span aria-hidden="true">→</span></a
+          >
+        </div>
+      </main>
+      <footer class="vbg-footer"><span>Frame</span></footer>
+    </div>
   </body>
 </html>

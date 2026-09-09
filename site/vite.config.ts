@@ -6,14 +6,16 @@ export default defineConfig({
   base: './',
   plugins: [tailwindcss()],
   build: {
+    cssCodeSplit: false,
     rollupOptions: {
       input: {
         landing: fileURLToPath(new URL('./index.html', import.meta.url)),
-        docs: fileURLToPath(new URL('./docs/index.html', import.meta.url)),
+        main: fileURLToPath(new URL('./docs/index.html', import.meta.url)),
       },
       output: {
-        entryFileNames: 'assets/site.js',
-        chunkFileNames: 'assets/main.js',
+        // Pages replaces the deployment, so cached HTML needs stable asset URLs.
+        entryFileNames: 'assets/[name].js',
+        chunkFileNames: 'assets/chunks/[name].js',
         assetFileNames(asset) {
           return asset.names.some((name) => name.endsWith('.css'))
             ? 'assets/site.css'

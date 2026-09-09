@@ -1,10 +1,15 @@
 import tseslint from 'typescript-eslint';
 
-const typescriptFiles = ['src/**/*.ts', 'test/**/*.ts'];
+const typescriptFiles = [
+  'src/**/*.ts',
+  'test/**/*.ts',
+  'site/src/**/*.ts',
+  'site/vite.config.ts',
+];
 
 export default tseslint.config(
   {
-    ignores: ['dist/**', '.frame/**', '.pi-subagents/**', 'eslint.config.js'],
+    ignores: ['**/dist/**', '.frame/**', '.pi-subagents/**', 'eslint.config.js'],
   },
   ...tseslint.configs.recommendedTypeChecked.map((config) => ({
     ...config,
