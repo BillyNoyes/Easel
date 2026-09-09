@@ -57,8 +57,19 @@ for (const [route, html] of pages) {
     1,
     `${route}: stable CSS`,
   );
-  assert(links.some((tag) => attribute(tag, 'href')?.includes('family=Geist:')));
-  assert(links.some((tag) => attribute(tag, 'href')?.includes('family=Geist+Mono:')));
+  assert.doesNotMatch(html, /fonts\.googleapis\.com|fonts\.gstatic\.com/);
+  for (const font of [
+    'offbit-trial-regular.woff2',
+    'inter_n4.b2a3f24c19b4de56e8871f609e73ca7f6d2e2bb9.woff2',
+  ]) {
+    const preload = links.find(
+      (tag) => new URL(attribute(tag, 'href'), pageURL).pathname === `/fonts/${font}`,
+    );
+    assert(preload, `${route}: preload ${font}`);
+    assert.equal(attribute(preload, 'rel'), 'preload');
+    assert.equal(attribute(preload, 'as'), 'font');
+    assert.match(preload, /\scrossorigin(?:[\s=>])/);
+  }
   const ogURL = tags(html, 'meta').find(
     ([tag]) => attribute(tag, 'property') === 'og:url',
   );
@@ -126,6 +137,20 @@ for (const [route, html] of pages) {
     assert.match(html, /milliseconds/);
   }
 }
+
+for (const name of (await readdir('public/fonts')).filter((name) =>
+  name.endsWith('.woff2'),
+)) {
+  const source = await readFile(`public/fonts/${name}`);
+  assert.equal(source.toString('ascii', 0, 4), 'wOF2', `${name}: valid WOFF2 signature`);
+  assert.equal(source.readUInt32BE(8), source.length, `${name}: complete font file`);
+  assert.deepEqual(
+    await readFile(`dist/fonts/${name}`),
+    source,
+    `${name}: unchanged asset`,
+  );
+}
+await access('dist/fonts/Inter-LICENSE.txt');
 
 const assets = await readdir('dist/assets');
 assert(!assets.some((file) => /^(?:main|site)-[\w-]+\.(?:js|css)$/.test(file)));
