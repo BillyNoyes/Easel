@@ -58,19 +58,9 @@
           <span aria-hidden="true">→</span>
         </a>
 
-        <div class="landing-code code-shell" x-data="copyCode('Vite configuration')">
+        <div class="landing-code code-shell">
           <div class="code-bar">
             <span class="code-label">vite.config.ts</span>
-            <button
-              type="button"
-              class="copy-button"
-              @click="copy($event)"
-              :aria-label="(copied ? 'Copied ' : 'Copy ') + label"
-              aria-live="polite"
-              x-text="copied ? 'Copied' : 'Copy'"
-            >
-              Copy
-            </button>
           </div>
           <pre
             class="code-block"
