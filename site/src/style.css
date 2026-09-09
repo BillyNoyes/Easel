@@ -121,8 +121,7 @@
   }
 
   .code-shell {
-    @apply relative overflow-hidden border border-line border-l-frame bg-[#0a0f0d];
-    border-left-width: 3px;
+    @apply relative overflow-hidden border border-line bg-[#0a0f0d];
     box-shadow: 12px 12px 0 rgb(0 128 96 / 7%);
   }
 
