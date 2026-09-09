@@ -130,7 +130,7 @@
   }
 
   .copy-button {
-    @apply border border-transparent px-2 py-1 font-mono text-xs text-muted transition hover:border-line hover:bg-panel hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-frame;
+    @apply cursor-pointer border border-transparent px-2 py-1 font-mono text-xs text-muted transition hover:border-line hover:bg-panel hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-frame;
   }
 
   .code-block {
@@ -150,11 +150,11 @@
   }
 
   .nav-link {
-    @apply flex items-center gap-3 border-l-2 border-transparent px-3 py-2 font-mono text-xs tracking-wide text-muted transition hover:border-line hover:bg-panel hover:text-ink;
+    @apply flex items-center gap-3 px-3 py-2 font-mono text-xs tracking-wide text-muted transition hover:bg-panel hover:text-ink;
   }
 
   .nav-link-active {
-    @apply border-frame bg-frame-soft text-frame-dark;
+    @apply bg-frame-soft text-frame-dark;
   }
 
   .feature-card {
