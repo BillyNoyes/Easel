@@ -54,6 +54,7 @@
 .vbg-custom-frame-typography :is(h1, h2, h3, h4, h5, h6) {
   font-family: var(--font-heading-family);
   font-weight: var(--font-heading-weight);
+  letter-spacing: normal;
 }
 
 .vbg-custom-frame-container {
