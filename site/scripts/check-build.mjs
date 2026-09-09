@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
 import assert from 'node:assert/strict';
-import {createHash} from 'node:crypto';
 import {access, readFile, readdir} from 'node:fs/promises';
 import {resolve} from 'node:path';
 
@@ -21,7 +20,9 @@ const pages = new Map([
   ['/docs/', await readFile('dist/docs/index.html', 'utf8')],
 ]);
 const idsFor = (html) => [...html.matchAll(/\sid="([^"]+)"/g)].map((match) => match[1]);
-const tags = (html, name) => [...html.matchAll(new RegExp(`<${name}\\b[^>]*>`, 'g'))];
+const tags = (html, name) => [
+  ...html.matchAll(new RegExp(`<${name}\\b(?:[^"'<>]|"[^"]*"|'[^']*')*>`, 'g')),
+];
 const attribute = (tag, name) => tag.match(new RegExp(`\\s${name}="([^"]*)"`))?.[1];
 const localPath = (url) =>
   resolve('dist', `.${url.pathname}${url.pathname.endsWith('/') ? 'index.html' : ''}`);
@@ -36,12 +37,23 @@ for (const [route, html] of pages) {
   assert.match(html, /<html lang="en"/);
   assert.match(html, /<title>[^<]+<\/title>/);
   assert.match(html, /<meta\s+name="description"\s+content="[^"]+"/);
-  assert.match(html, /class="vbg-report"/);
-  assert.match(html, /class="vbg-custom-frame-container"/);
-  assert.match(html, /<header class="vbg-custom-frame-header"/);
-  assert.match(html, /<footer class="vbg-custom-frame-footer"/);
-  assert.match(html, /class="vbg-skip-link"/);
-  assert.doesNotMatch(html, /vbg-(?:wordmark|logo)\b|vercel-wordmark|vercel-logo/);
+  assert.equal(tags(html, 'header').length, 1, `${route}: header landmark`);
+  assert.equal(tags(html, 'footer').length, 1, `${route}: footer landmark`);
+  assert(
+    tags(html, 'a').some(([tag]) => attribute(tag, 'href') === '#main'),
+    `${route}: skip link`,
+  );
+  assert.doesNotMatch(html, /vbg-|vercel-brand|<style\b|\sstyle=/);
+  for (const [heading] of [
+    ...tags(html, 'h1'),
+    ...tags(html, 'h2'),
+    ...tags(html, 'h3'),
+  ]) {
+    const classes = new Set(attribute(heading, 'class')?.split(/\s+/));
+    for (const utility of ['font-heading', 'font-bold', 'tracking-normal']) {
+      assert(classes.has(utility), `${route}: heading uses ${utility}`);
+    }
+  }
   assert.doesNotMatch(html, /file:\/\/|bg-canvas|token-(?:keyword|string)|theme-switch/);
 
   const links = tags(html, 'link').map(([tag]) => tag);
@@ -49,10 +61,9 @@ for (const [route, html] of pages) {
   assert(canonical, `${route}: canonical URL`);
   assert.equal(attribute(canonical, 'href'), pageURL.href);
   assert.equal(
-    links.filter((tag) => attribute(tag, 'href')?.endsWith('/assets/vercel-brand.css'))
-      .length,
+    links.filter((tag) => attribute(tag, 'rel') === 'stylesheet').length,
     1,
-    `${route}: one local foundation stylesheet`,
+    `${route}: one Tailwind stylesheet`,
   );
   assert.equal(
     links.filter((tag) => attribute(tag, 'href')?.endsWith('/assets/site.css')).length,
@@ -113,7 +124,7 @@ for (const [route, html] of pages) {
   if (route === '/') {
     assert.equal(runtimeScripts.length, 0, 'Landing is CSS-only');
     assert.doesNotMatch(html, /x-data|@click|data-code-block[^>]*x-data|<button/);
-    assert.match(html, /<h1[^>]*>Vite Plugin for Shopify Liquid Themes\.<\/h1>/);
+    assert.match(html, /<h1[^>]*>\s*Vite Plugin for Shopify Liquid Themes\.\s*<\/h1>/);
     assert.match(html, /href="\/docs\/"[^>]*>\s*Get started/);
   } else {
     assert.equal(runtimeScripts.length, 1, 'Docs has one runtime entry');
@@ -156,13 +167,14 @@ await access('dist/fonts/Inter-LICENSE.txt');
 
 const assets = await readdir('dist/assets');
 assert(!assets.some((file) => /^(?:main|site)-[\w-]+\.(?:js|css)$/.test(file)));
-const foundation = await readFile('public/assets/vercel-brand.css');
-assert.equal(
-  createHash('sha256').update(foundation).digest('hex'),
-  'e4f4f41f48947fbb24f4eb49cab37cb077a04af656f746388a9052c1c7f1330e',
-  'Foundation matches the upstream snapshot',
-);
-assert.deepEqual(await readFile('dist/assets/vercel-brand.css'), foundation);
+assert(!assets.includes('vercel-brand.css'), 'No separate styling framework is shipped');
+const stylesheet = await readFile('src/style.css', 'utf8');
+const customRules = stylesheet
+  .replace(/\/\*[\s\S]*?\*\//g, '')
+  .replace(/@import ['"]tailwindcss['"];|(?:@font-face|@theme|:root)\s*\{[^{}]*\}/g, '')
+  .trim();
+assert.equal(customRules, '', 'CSS only defines Tailwind theme tokens and font faces');
+assert.doesNotMatch(await readFile('dist/assets/site.css', 'utf8'), /vbg-/);
 
 const sitemap = await readFile('dist/sitemap.xml', 'utf8');
 assert.match(sitemap, /xmlns="http:\/\/www\.sitemaps\.org\/schemas\/sitemap\/0\.9"/);
@@ -176,5 +188,5 @@ assert(robots.includes(`Sitemap: ${origin}/sitemap.xml`));
 assert(!/Disallow:\s*\//.test(robots));
 
 console.log(
-  'Site build checks passed: routes, local assets, stable URLs, CSS-only landing, headings, navigation, code access, SEO, and foundation integrity.',
+  'Site build checks passed: routes, local assets, stable URLs, CSS-only landing, headings, navigation, code access, SEO, and Tailwind-only styling.',
 );

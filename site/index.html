@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" class="vbg-custom-frame-typography">
+<html lang="en" class="scheme-light dark:scheme-dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -40,7 +40,6 @@
       type="font/woff2"
       crossorigin
     />
-    <link rel="stylesheet" href="/assets/vercel-brand.css" />
     <link rel="stylesheet" href="/src/style.css" />
     <title>Frame · Vite for Shopify themes</title>
     <script type="application/ld+json">
@@ -59,27 +58,54 @@
       }
     </script>
   </head>
-  <body class="vbg-report">
-    <div class="vbg-custom-frame-container">
-      <a class="vbg-skip-link" href="#main">Skip to content</a>
-      <header class="vbg-custom-frame-header">
-        <div class="vbg-custom-frame-masthead">
-          <a href="/" class="vbg-custom-frame-brand">Frame</a>
+  <body
+    class="min-h-screen bg-white font-body text-base/6 font-normal text-ink antialiased dark:bg-black dark:text-ink-inverse"
+  >
+    <div class="mx-auto w-full max-w-none px-3 md:px-5">
+      <a
+        class="fixed top-4 left-4 z-50 -translate-y-[200%] rounded-md bg-ink px-3 py-2 text-sm/5 font-medium text-white focus:translate-y-0 focus-visible:outline-2 focus-visible:outline-offset-4 dark:bg-ink-inverse dark:text-black"
+        href="#main"
+        >Skip to content</a
+      >
+      <header class="py-4">
+        <div class="flex items-baseline justify-between gap-6">
+          <a
+            href="/"
+            class="font-display text-xl/6 font-normal no-underline text-ink dark:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
+            >Frame</a
+          >
           <nav aria-label="Primary navigation">
-            <a href="https://github.com/BillyNoyes/Frame" class="vbg-custom-frame-link"
+            <a
+              href="https://github.com/BillyNoyes/Frame"
+              class="text-inherit underline underline-offset-[0.2em] hover:text-ink dark:hover:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
               >GitHub</a
             >
           </nav>
         </div>
       </header>
-      <main id="main" class="vbg-custom-frame-landing" tabindex="-1">
-        <h1 class="vbg-title">Vite Plugin for Shopify Liquid Themes.</h1>
-        <div class="vbg-custom-frame-code" data-code-block>
-          <div class="vbg-custom-frame-code-bar">
-            <span id="code-label-1" class="vbg-mono" data-code-label>vite.config.ts</span>
+      <main
+        id="main"
+        class="flex max-w-[52rem] flex-col items-stretch gap-8 pt-8 pb-12 focus-visible:outline-2 focus-visible:outline-offset-4"
+        tabindex="-1"
+      >
+        <h1
+          class="max-w-[28ch] font-heading font-bold tracking-normal text-[2rem]/10 md:text-[2.5rem]/12"
+        >
+          Vite Plugin for Shopify Liquid Themes.
+        </h1>
+        <div
+          class="min-w-0 rounded-md border border-black/8 dark:border-white/14 bg-panel dark:bg-panel-inverse"
+          data-code-block
+        >
+          <div
+            class="flex flex-wrap items-center justify-between gap-3 px-5 pt-4 text-muted dark:text-muted-inverse wrap-anywhere"
+          >
+            <span id="code-label-1" class="font-mono" data-code-label
+              >vite.config.ts</span
+            >
           </div>
           <pre
-            class="vbg-custom-frame-code-scroll"
+            class="min-w-0 max-w-full overflow-x-auto p-5 font-mono text-sm/6 font-normal [tab-size:2] text-ink dark:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
             tabindex="0"
             role="region"
             aria-labelledby="code-label-1"
@@ -91,12 +117,18 @@ export default defineConfig({
 });</code></pre>
         </div>
         <div>
-          <a class="vbg-button" href="/docs/"
+          <a
+            class="inline-flex min-h-9 max-w-full cursor-pointer items-center justify-center gap-2 rounded-md border border-black/8 dark:border-white/14 bg-white px-4 py-[7px] text-sm/5 font-medium text-ink dark:text-ink-inverse no-underline hover:bg-neutral-100 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-black dark:hover:bg-neutral-900 focus-visible:outline-2 focus-visible:outline-offset-4"
+            href="/docs/"
             >Get started <span aria-hidden="true">→</span></a
           >
         </div>
       </main>
-      <footer class="vbg-custom-frame-footer"><span>Frame</span></footer>
+      <footer
+        class="flex flex-col gap-5 py-6 text-[13px]/[18px] text-muted dark:text-muted-inverse md:flex-row md:items-center md:justify-between"
+      >
+        <span>Frame</span>
+      </footer>
     </div>
   </body>
 </html>

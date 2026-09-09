@@ -1,14 +1,12 @@
 # Site assets
 
-`public/assets/vercel-brand.css` is a byte-identical copy of the published foundation at https://vercel.com/geist/vercel-brand.css. It is hosted locally to avoid a third-party stylesheet dependency at runtime and excluded from Prettier. Update it only by replacing the complete upstream file, not by editing its implementation.
+All page and component styling uses Tailwind utilities directly in the HTML, including automatic dark mode, responsive layouts, container queries, focus states, and Alpine's `x-cloak` visibility. `src/style.css` contains only the Tailwind import, font faces, and shared font/color tokens. JavaScript uses semantic elements and data attributes rather than styling classes.
 
-SHA-256: `e4f4f41f48947fbb24f4eb49cab37cb077a04af656f746388a9052c1c7f1330e`.
-
-Frame uses the foundation's published CSS API and adapts its design guidance. This is a Frame website by Billy Noyes, not an official Vercel website or an assertion of Vercel affiliation.
+Vercel's design guidance informs the visual design; its stylesheet is not a runtime dependency. This is a Frame website by Billy Noyes, not an official Vercel website or an assertion of Vercel affiliation.
 
 ## Page layout
 
-The outer container, header, and footer use Frame-owned layout classes to match [billynoyes.co.uk](https://billynoyes.co.uk/): full width without a maximum, 12px horizontal padding below 768px and 20px above, 16px header padding vertically, and 24px footer padding vertically. Reading prose and the landing snippet retain their own width limits.
+The outer container, header, and footer use Tailwind utilities to match [billynoyes.co.uk](https://billynoyes.co.uk/): full width without a maximum, 12px horizontal padding below 768px and 20px above, 16px header padding vertically, and 24px footer padding vertically. Reading prose and the landing snippet retain their own width limits.
 
 ## Typography
 

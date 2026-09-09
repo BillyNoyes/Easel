@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" class="vbg-custom-frame-typography">
+<html lang="en" class="scheme-light dark:scheme-dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -40,7 +40,6 @@
       type="font/woff2"
       crossorigin
     />
-    <link rel="stylesheet" href="/assets/vercel-brand.css" />
     <link rel="stylesheet" href="/src/style.css" />
     <title>Frame documentation</title>
     <script type="application/ld+json">
@@ -60,69 +59,91 @@
     </script>
     <script type="module" src="/src/main.ts"></script>
   </head>
-  <body class="vbg-report" x-data="docsNavigation($el)">
-    <div class="vbg-custom-frame-container">
-      <a class="vbg-skip-link" href="#main">Skip to content</a>
-      <header class="vbg-custom-frame-header">
-        <div class="vbg-custom-frame-masthead">
-          <a href="/" class="vbg-custom-frame-brand">Frame</a>
+  <body
+    class="min-h-screen bg-white font-body text-base/6 font-normal text-ink antialiased dark:bg-black dark:text-ink-inverse"
+    x-data="docsNavigation($el)"
+  >
+    <div class="mx-auto w-full max-w-none px-3 md:px-5">
+      <a
+        class="fixed top-4 left-4 z-50 -translate-y-[200%] rounded-md bg-ink px-3 py-2 text-sm/5 font-medium text-white focus:translate-y-0 focus-visible:outline-2 focus-visible:outline-offset-4 dark:bg-ink-inverse dark:text-black"
+        href="#main"
+        >Skip to content</a
+      >
+      <header class="py-4">
+        <div class="flex items-baseline justify-between gap-6">
+          <a
+            href="/"
+            class="font-display text-xl/6 font-normal no-underline text-ink dark:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
+            >Frame</a
+          >
           <nav aria-label="Primary navigation">
-            <a href="https://github.com/BillyNoyes/Frame" class="vbg-custom-frame-link"
+            <a
+              href="https://github.com/BillyNoyes/Frame"
+              class="text-inherit underline underline-offset-[0.2em] hover:text-ink dark:hover:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
               >GitHub</a
             >
           </nav>
         </div>
       </header>
-      <main id="main" class="vbg-custom-frame-docs-layout" tabindex="-1">
-        <aside class="vbg-custom-frame-sidebar">
-          <div class="vbg-custom-frame-sticky">
-            <p class="vbg-label">Documentation</p>
-            <nav class="vbg-custom-frame-section-nav" aria-label="Documentation sections">
+      <main
+        id="main"
+        class="flex items-start gap-12 pt-6 pb-12 focus-visible:outline-2 focus-visible:outline-offset-4"
+        tabindex="-1"
+      >
+        <aside class="hidden min-w-0 lg:sticky lg:top-8 lg:block lg:flex-[0_0_13rem]">
+          <div class="lg:max-h-[calc(100dvh-4rem)] lg:overflow-y-auto">
+            <p class="text-[13px]/4 font-normal text-muted dark:text-muted-inverse">
+              Documentation
+            </p>
+            <nav
+              class="flex flex-col items-start py-2"
+              aria-label="Documentation sections"
+            >
               <a
                 href="#quick-start"
-                class="vbg-custom-frame-nav-link"
+                class="block py-2 text-muted dark:text-muted-inverse no-underline hover:text-ink dark:hover:text-ink-inverse aria-[current=location]:text-ink aria-[current=location]:underline aria-[current=location]:underline-offset-4 dark:aria-[current=location]:text-ink-inverse focus-visible:outline-2 focus-visible:-outline-offset-2"
                 :aria-current="activeSection === 'quick-start' ? 'location' : null"
                 @click="navigate"
                 >Quick start</a
               ><a
                 href="#development"
-                class="vbg-custom-frame-nav-link"
+                class="block py-2 text-muted dark:text-muted-inverse no-underline hover:text-ink dark:hover:text-ink-inverse aria-[current=location]:text-ink aria-[current=location]:underline aria-[current=location]:underline-offset-4 dark:aria-[current=location]:text-ink-inverse focus-visible:outline-2 focus-visible:-outline-offset-2"
                 :aria-current="activeSection === 'development' ? 'location' : null"
                 @click="navigate"
                 >Development</a
               ><a
                 href="#production"
-                class="vbg-custom-frame-nav-link"
+                class="block py-2 text-muted dark:text-muted-inverse no-underline hover:text-ink dark:hover:text-ink-inverse aria-[current=location]:text-ink aria-[current=location]:underline aria-[current=location]:underline-offset-4 dark:aria-[current=location]:text-ink-inverse focus-visible:outline-2 focus-visible:-outline-offset-2"
                 :aria-current="activeSection === 'production' ? 'location' : null"
                 @click="navigate"
                 >Production</a
               ><a
                 href="#bundles"
-                class="vbg-custom-frame-nav-link"
+                class="block py-2 text-muted dark:text-muted-inverse no-underline hover:text-ink dark:hover:text-ink-inverse aria-[current=location]:text-ink aria-[current=location]:underline aria-[current=location]:underline-offset-4 dark:aria-[current=location]:text-ink-inverse focus-visible:outline-2 focus-visible:-outline-offset-2"
                 :aria-current="activeSection === 'bundles' ? 'location' : null"
                 @click="navigate"
                 >Named bundles</a
               ><a
                 href="#configuration"
-                class="vbg-custom-frame-nav-link"
+                class="block py-2 text-muted dark:text-muted-inverse no-underline hover:text-ink dark:hover:text-ink-inverse aria-[current=location]:text-ink aria-[current=location]:underline aria-[current=location]:underline-offset-4 dark:aria-[current=location]:text-ink-inverse focus-visible:outline-2 focus-visible:-outline-offset-2"
                 :aria-current="activeSection === 'configuration' ? 'location' : null"
                 @click="navigate"
                 >Configuration</a
               ><a
                 href="#integrations"
-                class="vbg-custom-frame-nav-link"
+                class="block py-2 text-muted dark:text-muted-inverse no-underline hover:text-ink dark:hover:text-ink-inverse aria-[current=location]:text-ink aria-[current=location]:underline aria-[current=location]:underline-offset-4 dark:aria-[current=location]:text-ink-inverse focus-visible:outline-2 focus-visible:-outline-offset-2"
                 :aria-current="activeSection === 'integrations' ? 'location' : null"
                 @click="navigate"
                 >Integrations</a
               ><a
                 href="#safety"
-                class="vbg-custom-frame-nav-link"
+                class="block py-2 text-muted dark:text-muted-inverse no-underline hover:text-ink dark:hover:text-ink-inverse aria-[current=location]:text-ink aria-[current=location]:underline aria-[current=location]:underline-offset-4 dark:aria-[current=location]:text-ink-inverse focus-visible:outline-2 focus-visible:-outline-offset-2"
                 :aria-current="activeSection === 'safety' ? 'location' : null"
                 @click="navigate"
                 >Output safety</a
               ><a
                 href="#examples"
-                class="vbg-custom-frame-nav-link"
+                class="block py-2 text-muted dark:text-muted-inverse no-underline hover:text-ink dark:hover:text-ink-inverse aria-[current=location]:text-ink aria-[current=location]:underline aria-[current=location]:underline-offset-4 dark:aria-[current=location]:text-ink-inverse focus-visible:outline-2 focus-visible:-outline-offset-2"
                 :aria-current="activeSection === 'examples' ? 'location' : null"
                 @click="navigate"
                 >Examples</a
@@ -130,73 +151,84 @@
             </nav>
           </div>
         </aside>
-        <div class="vbg-custom-frame-article">
-          <div class="vbg-custom-frame-docs-opening">
-            <h1 class="vbg-title">Documentation</h1>
-            <div class="vbg-custom-frame-quick-links">
-              <a class="vbg-custom-frame-link" href="#quick-start" @click="navigate"
+        <div class="min-w-0 flex-1">
+          <div class="flex flex-col gap-5 pb-10">
+            <h1
+              class="max-w-[28ch] font-heading font-bold tracking-normal text-[2rem]/10 md:text-[2.5rem]/12"
+            >
+              Documentation
+            </h1>
+            <div class="flex flex-wrap gap-5">
+              <a
+                class="text-inherit underline underline-offset-[0.2em] hover:text-ink dark:hover:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
+                href="#quick-start"
+                @click="navigate"
                 >Get started</a
               >
               <a
-                class="vbg-custom-frame-link"
+                class="text-inherit underline underline-offset-[0.2em] hover:text-ink dark:hover:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
                 href="https://github.com/BillyNoyes/Frame/tree/main/examples"
                 >Examples on GitHub</a
               >
             </div>
             <details
-              class="vbg-custom-frame-mobile-nav"
+              class="border-y border-black/8 dark:border-white/14 py-4 lg:hidden"
               @keydown.escape.stop.prevent="closeMenu"
             >
-              <summary class="vbg-custom-frame-menu-trigger">On this page</summary>
+              <summary
+                class="cursor-pointer py-4 font-medium focus-visible:outline-2 focus-visible:outline-offset-4"
+              >
+                On this page
+              </summary>
               <nav
-                class="vbg-custom-frame-section-nav"
+                class="flex flex-col items-start py-2"
                 aria-label="Mobile documentation sections"
               >
                 <a
                   href="#quick-start"
-                  class="vbg-custom-frame-nav-link"
+                  class="block py-2 text-muted dark:text-muted-inverse no-underline hover:text-ink dark:hover:text-ink-inverse aria-[current=location]:text-ink aria-[current=location]:underline aria-[current=location]:underline-offset-4 dark:aria-[current=location]:text-ink-inverse focus-visible:outline-2 focus-visible:-outline-offset-2"
                   :aria-current="activeSection === 'quick-start' ? 'location' : null"
                   @click="navigate"
                   >Quick start</a
                 ><a
                   href="#development"
-                  class="vbg-custom-frame-nav-link"
+                  class="block py-2 text-muted dark:text-muted-inverse no-underline hover:text-ink dark:hover:text-ink-inverse aria-[current=location]:text-ink aria-[current=location]:underline aria-[current=location]:underline-offset-4 dark:aria-[current=location]:text-ink-inverse focus-visible:outline-2 focus-visible:-outline-offset-2"
                   :aria-current="activeSection === 'development' ? 'location' : null"
                   @click="navigate"
                   >Development</a
                 ><a
                   href="#production"
-                  class="vbg-custom-frame-nav-link"
+                  class="block py-2 text-muted dark:text-muted-inverse no-underline hover:text-ink dark:hover:text-ink-inverse aria-[current=location]:text-ink aria-[current=location]:underline aria-[current=location]:underline-offset-4 dark:aria-[current=location]:text-ink-inverse focus-visible:outline-2 focus-visible:-outline-offset-2"
                   :aria-current="activeSection === 'production' ? 'location' : null"
                   @click="navigate"
                   >Production</a
                 ><a
                   href="#bundles"
-                  class="vbg-custom-frame-nav-link"
+                  class="block py-2 text-muted dark:text-muted-inverse no-underline hover:text-ink dark:hover:text-ink-inverse aria-[current=location]:text-ink aria-[current=location]:underline aria-[current=location]:underline-offset-4 dark:aria-[current=location]:text-ink-inverse focus-visible:outline-2 focus-visible:-outline-offset-2"
                   :aria-current="activeSection === 'bundles' ? 'location' : null"
                   @click="navigate"
                   >Named bundles</a
                 ><a
                   href="#configuration"
-                  class="vbg-custom-frame-nav-link"
+                  class="block py-2 text-muted dark:text-muted-inverse no-underline hover:text-ink dark:hover:text-ink-inverse aria-[current=location]:text-ink aria-[current=location]:underline aria-[current=location]:underline-offset-4 dark:aria-[current=location]:text-ink-inverse focus-visible:outline-2 focus-visible:-outline-offset-2"
                   :aria-current="activeSection === 'configuration' ? 'location' : null"
                   @click="navigate"
                   >Configuration</a
                 ><a
                   href="#integrations"
-                  class="vbg-custom-frame-nav-link"
+                  class="block py-2 text-muted dark:text-muted-inverse no-underline hover:text-ink dark:hover:text-ink-inverse aria-[current=location]:text-ink aria-[current=location]:underline aria-[current=location]:underline-offset-4 dark:aria-[current=location]:text-ink-inverse focus-visible:outline-2 focus-visible:-outline-offset-2"
                   :aria-current="activeSection === 'integrations' ? 'location' : null"
                   @click="navigate"
                   >Integrations</a
                 ><a
                   href="#safety"
-                  class="vbg-custom-frame-nav-link"
+                  class="block py-2 text-muted dark:text-muted-inverse no-underline hover:text-ink dark:hover:text-ink-inverse aria-[current=location]:text-ink aria-[current=location]:underline aria-[current=location]:underline-offset-4 dark:aria-[current=location]:text-ink-inverse focus-visible:outline-2 focus-visible:-outline-offset-2"
                   :aria-current="activeSection === 'safety' ? 'location' : null"
                   @click="navigate"
                   >Output safety</a
                 ><a
                   href="#examples"
-                  class="vbg-custom-frame-nav-link"
+                  class="block py-2 text-muted dark:text-muted-inverse no-underline hover:text-ink dark:hover:text-ink-inverse aria-[current=location]:text-ink aria-[current=location]:underline aria-[current=location]:underline-offset-4 dark:aria-[current=location]:text-ink-inverse focus-visible:outline-2 focus-visible:-outline-offset-2"
                   :aria-current="activeSection === 'examples' ? 'location' : null"
                   @click="navigate"
                   >Examples</a
@@ -206,27 +238,47 @@
           </div>
           <section
             id="quick-start"
-            class="vbg-custom-frame-section"
+            class="flex scroll-mt-8 flex-col gap-5 [&+section]:mt-12 focus-visible:outline-2 focus-visible:outline-offset-4"
             tabindex="-1"
             aria-labelledby="quick-start-title"
           >
-            <h2 id="quick-start-title" class="vbg-heading-24">Add Frame to Vite.</h2>
-            <p class="vbg-custom-frame-prose">
+            <h2
+              id="quick-start-title"
+              class="font-heading font-bold tracking-normal text-2xl/8"
+            >
+              Add Frame to Vite.
+            </h2>
+            <p class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere">
               Frame expects a Shopify theme at the Vite root and source files in
-              <code class="vbg-mono">src</code>. JavaScript works in place of TypeScript.
+              <code
+                class="font-mono rounded border border-black/10 bg-code px-[0.3em] py-[0.1em] text-[0.875em] dark:border-white/13 dark:bg-code-inverse"
+                >src</code
+              >. JavaScript works in place of TypeScript.
             </p>
-            <p class="vbg-custom-frame-prose">
+            <p class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere">
               Requires Node.js 22.12 or newer and Vite 7 or 8.
             </p>
-            <div class="vbg-custom-frame-code" data-code-block x-data="copyCode($el)">
-              <div class="vbg-custom-frame-code-bar">
-                <span id="code-label-2" class="vbg-label" data-code-label
+            <div
+              class="min-w-0 rounded-md border border-black/8 dark:border-white/14 bg-panel dark:bg-panel-inverse"
+              data-code-block
+              x-data="copyCode($el)"
+            >
+              <div
+                class="flex flex-wrap items-center justify-between gap-3 px-5 pt-4 text-muted dark:text-muted-inverse wrap-anywhere"
+              >
+                <span
+                  id="code-label-2"
+                  class="text-[13px]/4 font-normal text-muted dark:text-muted-inverse"
+                  data-code-label
                   >Install Frame</span
                 >
-                <div class="vbg-custom-frame-copy" x-cloak>
+                <div
+                  class="flex flex-wrap items-center gap-3 [&[x-cloak]]:hidden!"
+                  x-cloak
+                >
                   <button
                     type="button"
-                    class="vbg-button"
+                    class="inline-flex min-h-9 max-w-full cursor-pointer items-center justify-center gap-2 rounded-md border border-black/8 dark:border-white/14 bg-white px-4 py-[7px] text-sm/5 font-medium text-ink dark:text-ink-inverse no-underline hover:bg-neutral-100 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-black dark:hover:bg-neutral-900 focus-visible:outline-2 focus-visible:outline-offset-4"
                     @click="copy"
                     :disabled="pending"
                     :aria-label="'Copy ' + label"
@@ -235,28 +287,37 @@
                     Copy
                   </button>
                   <span
-                    class="vbg-custom-frame-copy-status"
+                    class="max-w-[28ch] text-[13px]/[18px] text-muted dark:text-muted-inverse"
                     role="status"
                     x-text="status"
                   ></span>
                 </div>
               </div>
               <pre
-                class="vbg-custom-frame-code-scroll"
+                class="min-w-0 max-w-full overflow-x-auto p-5 font-mono text-sm/6 font-normal [tab-size:2] text-ink dark:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
                 tabindex="0"
                 role="region"
                 aria-labelledby="code-label-2"
               ><code>pnpm add -D vite-plugin-shopify-frame vite</code></pre>
             </div>
-            <div class="vbg-custom-frame-code" data-code-block x-data="copyCode($el)">
-              <div class="vbg-custom-frame-code-bar">
-                <span id="code-label-3" class="vbg-mono" data-code-label
+            <div
+              class="min-w-0 rounded-md border border-black/8 dark:border-white/14 bg-panel dark:bg-panel-inverse"
+              data-code-block
+              x-data="copyCode($el)"
+            >
+              <div
+                class="flex flex-wrap items-center justify-between gap-3 px-5 pt-4 text-muted dark:text-muted-inverse wrap-anywhere"
+              >
+                <span id="code-label-3" class="font-mono" data-code-label
                   >vite.config.ts</span
                 >
-                <div class="vbg-custom-frame-copy" x-cloak>
+                <div
+                  class="flex flex-wrap items-center gap-3 [&[x-cloak]]:hidden!"
+                  x-cloak
+                >
                   <button
                     type="button"
-                    class="vbg-button"
+                    class="inline-flex min-h-9 max-w-full cursor-pointer items-center justify-center gap-2 rounded-md border border-black/8 dark:border-white/14 bg-white px-4 py-[7px] text-sm/5 font-medium text-ink dark:text-ink-inverse no-underline hover:bg-neutral-100 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-black dark:hover:bg-neutral-900 focus-visible:outline-2 focus-visible:outline-offset-4"
                     @click="copy"
                     :disabled="pending"
                     :aria-label="'Copy ' + label"
@@ -265,14 +326,14 @@
                     Copy
                   </button>
                   <span
-                    class="vbg-custom-frame-copy-status"
+                    class="max-w-[28ch] text-[13px]/[18px] text-muted dark:text-muted-inverse"
                     role="status"
                     x-text="status"
                   ></span>
                 </div>
               </div>
               <pre
-                class="vbg-custom-frame-code-scroll"
+                class="min-w-0 max-w-full overflow-x-auto p-5 font-mono text-sm/6 font-normal [tab-size:2] text-ink dark:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
                 tabindex="0"
                 role="region"
                 aria-labelledby="code-label-3"
@@ -283,18 +344,31 @@ export default defineConfig({
   plugins: [frame()],
 });</code></pre>
             </div>
-            <p class="vbg-custom-frame-prose">
-              Add these scripts to your <code class="vbg-mono">package.json</code>:
+            <p class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere">
+              Add these scripts to your
+              <code
+                class="font-mono rounded border border-black/10 bg-code px-[0.3em] py-[0.1em] text-[0.875em] dark:border-white/13 dark:bg-code-inverse"
+                >package.json</code
+              >:
             </p>
-            <div class="vbg-custom-frame-code" data-code-block x-data="copyCode($el)">
-              <div class="vbg-custom-frame-code-bar">
-                <span id="code-label-4" class="vbg-mono" data-code-label
+            <div
+              class="min-w-0 rounded-md border border-black/8 dark:border-white/14 bg-panel dark:bg-panel-inverse"
+              data-code-block
+              x-data="copyCode($el)"
+            >
+              <div
+                class="flex flex-wrap items-center justify-between gap-3 px-5 pt-4 text-muted dark:text-muted-inverse wrap-anywhere"
+              >
+                <span id="code-label-4" class="font-mono" data-code-label
                   >package.json</span
                 >
-                <div class="vbg-custom-frame-copy" x-cloak>
+                <div
+                  class="flex flex-wrap items-center gap-3 [&[x-cloak]]:hidden!"
+                  x-cloak
+                >
                   <button
                     type="button"
-                    class="vbg-button"
+                    class="inline-flex min-h-9 max-w-full cursor-pointer items-center justify-center gap-2 rounded-md border border-black/8 dark:border-white/14 bg-white px-4 py-[7px] text-sm/5 font-medium text-ink dark:text-ink-inverse no-underline hover:bg-neutral-100 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-black dark:hover:bg-neutral-900 focus-visible:outline-2 focus-visible:outline-offset-4"
                     @click="copy"
                     :disabled="pending"
                     :aria-label="'Copy ' + label"
@@ -303,14 +377,14 @@ export default defineConfig({
                     Copy
                   </button>
                   <span
-                    class="vbg-custom-frame-copy-status"
+                    class="max-w-[28ch] text-[13px]/[18px] text-muted dark:text-muted-inverse"
                     role="status"
                     x-text="status"
                   ></span>
                 </div>
               </div>
               <pre
-                class="vbg-custom-frame-code-scroll"
+                class="min-w-0 max-w-full overflow-x-auto p-5 font-mono text-sm/6 font-normal [tab-size:2] text-ink dark:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
                 tabindex="0"
                 role="region"
                 aria-labelledby="code-label-4"
@@ -321,15 +395,24 @@ export default defineConfig({
   }
 }</code></pre>
             </div>
-            <div class="vbg-custom-frame-code" data-code-block x-data="copyCode($el)">
-              <div class="vbg-custom-frame-code-bar">
-                <span id="code-label-5" class="vbg-mono" data-code-label
+            <div
+              class="min-w-0 rounded-md border border-black/8 dark:border-white/14 bg-panel dark:bg-panel-inverse"
+              data-code-block
+              x-data="copyCode($el)"
+            >
+              <div
+                class="flex flex-wrap items-center justify-between gap-3 px-5 pt-4 text-muted dark:text-muted-inverse wrap-anywhere"
+              >
+                <span id="code-label-5" class="font-mono" data-code-label
                   >layout/theme.liquid</span
                 >
-                <div class="vbg-custom-frame-copy" x-cloak>
+                <div
+                  class="flex flex-wrap items-center gap-3 [&[x-cloak]]:hidden!"
+                  x-cloak
+                >
                   <button
                     type="button"
-                    class="vbg-button"
+                    class="inline-flex min-h-9 max-w-full cursor-pointer items-center justify-center gap-2 rounded-md border border-black/8 dark:border-white/14 bg-white px-4 py-[7px] text-sm/5 font-medium text-ink dark:text-ink-inverse no-underline hover:bg-neutral-100 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-black dark:hover:bg-neutral-900 focus-visible:outline-2 focus-visible:outline-offset-4"
                     @click="copy"
                     :disabled="pending"
                     :aria-label="'Copy ' + label"
@@ -338,28 +421,40 @@ export default defineConfig({
                     Copy
                   </button>
                   <span
-                    class="vbg-custom-frame-copy-status"
+                    class="max-w-[28ch] text-[13px]/[18px] text-muted dark:text-muted-inverse"
                     role="status"
                     x-text="status"
                   ></span>
                 </div>
               </div>
               <pre
-                class="vbg-custom-frame-code-scroll"
+                class="min-w-0 max-w-full overflow-x-auto p-5 font-mono text-sm/6 font-normal [tab-size:2] text-ink dark:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
                 tabindex="0"
                 role="region"
                 aria-labelledby="code-label-5"
               ><code>{% render 'frame-assets' %}</code></pre>
             </div>
-            <div class="vbg-custom-frame-code" data-code-block x-data="copyCode($el)">
-              <div class="vbg-custom-frame-code-bar">
-                <span id="code-label-6" class="vbg-label" data-code-label
+            <div
+              class="min-w-0 rounded-md border border-black/8 dark:border-white/14 bg-panel dark:bg-panel-inverse"
+              data-code-block
+              x-data="copyCode($el)"
+            >
+              <div
+                class="flex flex-wrap items-center justify-between gap-3 px-5 pt-4 text-muted dark:text-muted-inverse wrap-anywhere"
+              >
+                <span
+                  id="code-label-6"
+                  class="text-[13px]/4 font-normal text-muted dark:text-muted-inverse"
+                  data-code-label
                   >Generated output ignores</span
                 >
-                <div class="vbg-custom-frame-copy" x-cloak>
+                <div
+                  class="flex flex-wrap items-center gap-3 [&[x-cloak]]:hidden!"
+                  x-cloak
+                >
                   <button
                     type="button"
-                    class="vbg-button"
+                    class="inline-flex min-h-9 max-w-full cursor-pointer items-center justify-center gap-2 rounded-md border border-black/8 dark:border-white/14 bg-white px-4 py-[7px] text-sm/5 font-medium text-ink dark:text-ink-inverse no-underline hover:bg-neutral-100 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-black dark:hover:bg-neutral-900 focus-visible:outline-2 focus-visible:outline-offset-4"
                     @click="copy"
                     :disabled="pending"
                     :aria-label="'Copy ' + label"
@@ -368,14 +463,14 @@ export default defineConfig({
                     Copy
                   </button>
                   <span
-                    class="vbg-custom-frame-copy-status"
+                    class="max-w-[28ch] text-[13px]/[18px] text-muted dark:text-muted-inverse"
                     role="status"
                     x-text="status"
                   ></span>
                 </div>
               </div>
               <pre
-                class="vbg-custom-frame-code-scroll"
+                class="min-w-0 max-w-full overflow-x-auto p-5 font-mono text-sm/6 font-normal [tab-size:2] text-ink dark:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
                 tabindex="0"
                 role="region"
                 aria-labelledby="code-label-6"
@@ -383,38 +478,70 @@ export default defineConfig({
 assets/frame-*
 snippets/frame-assets.liquid</code></pre>
             </div>
-            <div class="vbg-custom-frame-group">
-              <h3 class="vbg-heading-16">Zero configuration entry</h3>
-              <p class="vbg-custom-frame-prose">
-                Frame creates a bundle named <code class="vbg-mono">theme</code> from
-                <code class="vbg-mono">src/main.ts</code> or
-                <code class="vbg-mono">src/main.js</code>, plus
-                <code class="vbg-mono">src/style.css</code>.
+            <div class="flex flex-col gap-2">
+              <h3 class="font-heading font-bold tracking-normal text-base/6">
+                Zero configuration entry
+              </h3>
+              <p class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere">
+                Frame creates a bundle named
+                <code
+                  class="font-mono rounded border border-black/10 bg-code px-[0.3em] py-[0.1em] text-[0.875em] dark:border-white/13 dark:bg-code-inverse"
+                  >theme</code
+                >
+                from
+                <code
+                  class="font-mono rounded border border-black/10 bg-code px-[0.3em] py-[0.1em] text-[0.875em] dark:border-white/13 dark:bg-code-inverse"
+                  >src/main.ts</code
+                >
+                or
+                <code
+                  class="font-mono rounded border border-black/10 bg-code px-[0.3em] py-[0.1em] text-[0.875em] dark:border-white/13 dark:bg-code-inverse"
+                  >src/main.js</code
+                >, plus
+                <code
+                  class="font-mono rounded border border-black/10 bg-code px-[0.3em] py-[0.1em] text-[0.875em] dark:border-white/13 dark:bg-code-inverse"
+                  >src/style.css</code
+                >.
               </p>
             </div>
           </section>
           <section
             id="development"
-            class="vbg-custom-frame-section"
+            class="flex scroll-mt-8 flex-col gap-5 [&+section]:mt-12 focus-visible:outline-2 focus-visible:outline-offset-4"
             tabindex="-1"
             aria-labelledby="development-title"
           >
-            <h2 id="development-title" class="vbg-heading-24">
+            <h2
+              id="development-title"
+              class="font-heading font-bold tracking-normal text-2xl/8"
+            >
               Two tools, one workflow.
             </h2>
-            <p class="vbg-custom-frame-prose">
+            <p class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere">
               Run Vite and Shopify CLI independently. Vite serves frontend assets while
               Shopify CLI synchronizes the theme.
             </p>
-            <div class="vbg-custom-frame-code" data-code-block x-data="copyCode($el)">
-              <div class="vbg-custom-frame-code-bar">
-                <span id="code-label-7" class="vbg-label" data-code-label
+            <div
+              class="min-w-0 rounded-md border border-black/8 dark:border-white/14 bg-panel dark:bg-panel-inverse"
+              data-code-block
+              x-data="copyCode($el)"
+            >
+              <div
+                class="flex flex-wrap items-center justify-between gap-3 px-5 pt-4 text-muted dark:text-muted-inverse wrap-anywhere"
+              >
+                <span
+                  id="code-label-7"
+                  class="text-[13px]/4 font-normal text-muted dark:text-muted-inverse"
+                  data-code-label
                   >Terminal one</span
                 >
-                <div class="vbg-custom-frame-copy" x-cloak>
+                <div
+                  class="flex flex-wrap items-center gap-3 [&[x-cloak]]:hidden!"
+                  x-cloak
+                >
                   <button
                     type="button"
-                    class="vbg-button"
+                    class="inline-flex min-h-9 max-w-full cursor-pointer items-center justify-center gap-2 rounded-md border border-black/8 dark:border-white/14 bg-white px-4 py-[7px] text-sm/5 font-medium text-ink dark:text-ink-inverse no-underline hover:bg-neutral-100 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-black dark:hover:bg-neutral-900 focus-visible:outline-2 focus-visible:outline-offset-4"
                     @click="copy"
                     :disabled="pending"
                     :aria-label="'Copy ' + label"
@@ -423,28 +550,40 @@ snippets/frame-assets.liquid</code></pre>
                     Copy
                   </button>
                   <span
-                    class="vbg-custom-frame-copy-status"
+                    class="max-w-[28ch] text-[13px]/[18px] text-muted dark:text-muted-inverse"
                     role="status"
                     x-text="status"
                   ></span>
                 </div>
               </div>
               <pre
-                class="vbg-custom-frame-code-scroll"
+                class="min-w-0 max-w-full overflow-x-auto p-5 font-mono text-sm/6 font-normal [tab-size:2] text-ink dark:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
                 tabindex="0"
                 role="region"
                 aria-labelledby="code-label-7"
               ><code>npm run dev</code></pre>
             </div>
-            <div class="vbg-custom-frame-code" data-code-block x-data="copyCode($el)">
-              <div class="vbg-custom-frame-code-bar">
-                <span id="code-label-8" class="vbg-label" data-code-label
+            <div
+              class="min-w-0 rounded-md border border-black/8 dark:border-white/14 bg-panel dark:bg-panel-inverse"
+              data-code-block
+              x-data="copyCode($el)"
+            >
+              <div
+                class="flex flex-wrap items-center justify-between gap-3 px-5 pt-4 text-muted dark:text-muted-inverse wrap-anywhere"
+              >
+                <span
+                  id="code-label-8"
+                  class="text-[13px]/4 font-normal text-muted dark:text-muted-inverse"
+                  data-code-label
                   >Terminal two</span
                 >
-                <div class="vbg-custom-frame-copy" x-cloak>
+                <div
+                  class="flex flex-wrap items-center gap-3 [&[x-cloak]]:hidden!"
+                  x-cloak
+                >
                   <button
                     type="button"
-                    class="vbg-button"
+                    class="inline-flex min-h-9 max-w-full cursor-pointer items-center justify-center gap-2 rounded-md border border-black/8 dark:border-white/14 bg-white px-4 py-[7px] text-sm/5 font-medium text-ink dark:text-ink-inverse no-underline hover:bg-neutral-100 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-black dark:hover:bg-neutral-900 focus-visible:outline-2 focus-visible:outline-offset-4"
                     @click="copy"
                     :disabled="pending"
                     :aria-label="'Copy ' + label"
@@ -453,21 +592,21 @@ snippets/frame-assets.liquid</code></pre>
                     Copy
                   </button>
                   <span
-                    class="vbg-custom-frame-copy-status"
+                    class="max-w-[28ch] text-[13px]/[18px] text-muted dark:text-muted-inverse"
                     role="status"
                     x-text="status"
                   ></span>
                 </div>
               </div>
               <pre
-                class="vbg-custom-frame-code-scroll"
+                class="min-w-0 max-w-full overflow-x-auto p-5 font-mono text-sm/6 font-normal [tab-size:2] text-ink dark:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
                 tabindex="0"
                 role="region"
                 aria-labelledby="code-label-8"
               ><code>shopify theme dev \
   --notify .frame/shopify-ready</code></pre>
             </div>
-            <p class="vbg-custom-frame-prose">
+            <p class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere">
               The notification lets Frame request a full page reload after Shopify CLI
               finishes an update. It is optional. Vite HMR and Shopify CLI live reload
               continue to work without it.
@@ -475,26 +614,41 @@ snippets/frame-assets.liquid</code></pre>
           </section>
           <section
             id="production"
-            class="vbg-custom-frame-section"
+            class="flex scroll-mt-8 flex-col gap-5 [&+section]:mt-12 focus-visible:outline-2 focus-visible:outline-offset-4"
             tabindex="-1"
             aria-labelledby="production-title"
           >
-            <h2 id="production-title" class="vbg-heading-24">
+            <h2
+              id="production-title"
+              class="font-heading font-bold tracking-normal text-2xl/8"
+            >
               Build, then deploy normally.
             </h2>
-            <p class="vbg-custom-frame-prose">
+            <p class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere">
               Frame publishes generated assets into the theme and replaces the development
               loader with Shopify CDN asset tags.
             </p>
-            <div class="vbg-custom-frame-code" data-code-block x-data="copyCode($el)">
-              <div class="vbg-custom-frame-code-bar">
-                <span id="code-label-9" class="vbg-label" data-code-label
+            <div
+              class="min-w-0 rounded-md border border-black/8 dark:border-white/14 bg-panel dark:bg-panel-inverse"
+              data-code-block
+              x-data="copyCode($el)"
+            >
+              <div
+                class="flex flex-wrap items-center justify-between gap-3 px-5 pt-4 text-muted dark:text-muted-inverse wrap-anywhere"
+              >
+                <span
+                  id="code-label-9"
+                  class="text-[13px]/4 font-normal text-muted dark:text-muted-inverse"
+                  data-code-label
                   >Build and push</span
                 >
-                <div class="vbg-custom-frame-copy" x-cloak>
+                <div
+                  class="flex flex-wrap items-center gap-3 [&[x-cloak]]:hidden!"
+                  x-cloak
+                >
                   <button
                     type="button"
-                    class="vbg-button"
+                    class="inline-flex min-h-9 max-w-full cursor-pointer items-center justify-center gap-2 rounded-md border border-black/8 dark:border-white/14 bg-white px-4 py-[7px] text-sm/5 font-medium text-ink dark:text-ink-inverse no-underline hover:bg-neutral-100 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-black dark:hover:bg-neutral-900 focus-visible:outline-2 focus-visible:outline-offset-4"
                     @click="copy"
                     :disabled="pending"
                     :aria-label="'Copy ' + label"
@@ -503,46 +657,67 @@ snippets/frame-assets.liquid</code></pre>
                     Copy
                   </button>
                   <span
-                    class="vbg-custom-frame-copy-status"
+                    class="max-w-[28ch] text-[13px]/[18px] text-muted dark:text-muted-inverse"
                     role="status"
                     x-text="status"
                   ></span>
                 </div>
               </div>
               <pre
-                class="vbg-custom-frame-code-scroll"
+                class="min-w-0 max-w-full overflow-x-auto p-5 font-mono text-sm/6 font-normal [tab-size:2] text-ink dark:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
                 tabindex="0"
                 role="region"
                 aria-labelledby="code-label-9"
               ><code>npm run build
 shopify theme push</code></pre>
             </div>
-            <p class="vbg-custom-frame-prose">
-              Run the build before <code class="vbg-mono">shopify theme push</code> or
-              <code class="vbg-mono">shopify theme package</code>. Shopify CLI remains
-              responsible for deployment.
+            <p class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere">
+              Run the build before
+              <code
+                class="font-mono rounded border border-black/10 bg-code px-[0.3em] py-[0.1em] text-[0.875em] dark:border-white/13 dark:bg-code-inverse"
+                >shopify theme push</code
+              >
+              or
+              <code
+                class="font-mono rounded border border-black/10 bg-code px-[0.3em] py-[0.1em] text-[0.875em] dark:border-white/13 dark:bg-code-inverse"
+                >shopify theme package</code
+              >. Shopify CLI remains responsible for deployment.
             </p>
           </section>
           <section
             id="bundles"
-            class="vbg-custom-frame-section"
+            class="flex scroll-mt-8 flex-col gap-5 [&+section]:mt-12 focus-visible:outline-2 focus-visible:outline-offset-4"
             tabindex="-1"
             aria-labelledby="bundles-title"
           >
-            <h2 id="bundles-title" class="vbg-heading-24">Load code where it belongs.</h2>
-            <p class="vbg-custom-frame-prose">
+            <h2
+              id="bundles-title"
+              class="font-heading font-bold tracking-normal text-2xl/8"
+            >
+              Load code where it belongs.
+            </h2>
+            <p class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere">
               Start with the default bundle. Add named bundles when a substantial feature
               should only load on selected Liquid surfaces.
             </p>
-            <div class="vbg-custom-frame-code" data-code-block x-data="copyCode($el)">
-              <div class="vbg-custom-frame-code-bar">
-                <span id="code-label-10" class="vbg-mono" data-code-label
+            <div
+              class="min-w-0 rounded-md border border-black/8 dark:border-white/14 bg-panel dark:bg-panel-inverse"
+              data-code-block
+              x-data="copyCode($el)"
+            >
+              <div
+                class="flex flex-wrap items-center justify-between gap-3 px-5 pt-4 text-muted dark:text-muted-inverse wrap-anywhere"
+              >
+                <span id="code-label-10" class="font-mono" data-code-label
                   >vite.config.ts</span
                 >
-                <div class="vbg-custom-frame-copy" x-cloak>
+                <div
+                  class="flex flex-wrap items-center gap-3 [&[x-cloak]]:hidden!"
+                  x-cloak
+                >
                   <button
                     type="button"
-                    class="vbg-button"
+                    class="inline-flex min-h-9 max-w-full cursor-pointer items-center justify-center gap-2 rounded-md border border-black/8 dark:border-white/14 bg-white px-4 py-[7px] text-sm/5 font-medium text-ink dark:text-ink-inverse no-underline hover:bg-neutral-100 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-black dark:hover:bg-neutral-900 focus-visible:outline-2 focus-visible:outline-offset-4"
                     @click="copy"
                     :disabled="pending"
                     :aria-label="'Copy ' + label"
@@ -551,14 +726,14 @@ shopify theme push</code></pre>
                     Copy
                   </button>
                   <span
-                    class="vbg-custom-frame-copy-status"
+                    class="max-w-[28ch] text-[13px]/[18px] text-muted dark:text-muted-inverse"
                     role="status"
                     x-text="status"
                   ></span>
                 </div>
               </div>
               <pre
-                class="vbg-custom-frame-code-scroll"
+                class="min-w-0 max-w-full overflow-x-auto p-5 font-mono text-sm/6 font-normal [tab-size:2] text-ink dark:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
                 tabindex="0"
                 role="region"
                 aria-labelledby="code-label-10"
@@ -569,15 +744,24 @@ shopify theme push</code></pre>
   },
 });</code></pre>
             </div>
-            <div class="vbg-custom-frame-code" data-code-block x-data="copyCode($el)">
-              <div class="vbg-custom-frame-code-bar">
-                <span id="code-label-11" class="vbg-mono" data-code-label
+            <div
+              class="min-w-0 rounded-md border border-black/8 dark:border-white/14 bg-panel dark:bg-panel-inverse"
+              data-code-block
+              x-data="copyCode($el)"
+            >
+              <div
+                class="flex flex-wrap items-center justify-between gap-3 px-5 pt-4 text-muted dark:text-muted-inverse wrap-anywhere"
+              >
+                <span id="code-label-11" class="font-mono" data-code-label
                   >layout/theme.liquid</span
                 >
-                <div class="vbg-custom-frame-copy" x-cloak>
+                <div
+                  class="flex flex-wrap items-center gap-3 [&[x-cloak]]:hidden!"
+                  x-cloak
+                >
                   <button
                     type="button"
-                    class="vbg-button"
+                    class="inline-flex min-h-9 max-w-full cursor-pointer items-center justify-center gap-2 rounded-md border border-black/8 dark:border-white/14 bg-white px-4 py-[7px] text-sm/5 font-medium text-ink dark:text-ink-inverse no-underline hover:bg-neutral-100 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-black dark:hover:bg-neutral-900 focus-visible:outline-2 focus-visible:outline-offset-4"
                     @click="copy"
                     :disabled="pending"
                     :aria-label="'Copy ' + label"
@@ -586,14 +770,14 @@ shopify theme push</code></pre>
                     Copy
                   </button>
                   <span
-                    class="vbg-custom-frame-copy-status"
+                    class="max-w-[28ch] text-[13px]/[18px] text-muted dark:text-muted-inverse"
                     role="status"
                     x-text="status"
                   ></span>
                 </div>
               </div>
               <pre
-                class="vbg-custom-frame-code-scroll"
+                class="min-w-0 max-w-full overflow-x-auto p-5 font-mono text-sm/6 font-normal [tab-size:2] text-ink dark:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
                 tabindex="0"
                 role="region"
                 aria-labelledby="code-label-11"
@@ -603,17 +787,23 @@ shopify theme push</code></pre>
   {% render 'frame-assets', entry: 'product' %}
 {% endif %}</code></pre>
             </div>
-            <ul class="vbg-custom-frame-peers">
-              <li class="vbg-custom-frame-group">
-                <h3 class="vbg-heading-16">Use dynamic imports first</h3>
-                <p class="vbg-custom-frame-prose">
+            <ul
+              class="flex list-none flex-wrap gap-x-8 gap-y-6 p-0 [&>*]:min-w-0 [&>*]:flex-[1_1_16rem]"
+            >
+              <li class="flex flex-col gap-2">
+                <h3 class="font-heading font-bold tracking-normal text-base/6">
+                  Use dynamic imports first
+                </h3>
+                <p class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere">
                   They keep one entry architecture while Vite loads optional features on
                   demand.
                 </p>
               </li>
-              <li class="vbg-custom-frame-group">
-                <h3 class="vbg-heading-16">Use bundles for clear boundaries</h3>
-                <p class="vbg-custom-frame-prose">
+              <li class="flex flex-col gap-2">
+                <h3 class="font-heading font-bold tracking-normal text-base/6">
+                  Use bundles for clear boundaries
+                </h3>
+                <p class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere">
                   Product configurators, account areas, and store locators are good
                   candidates.
                 </p>
@@ -622,23 +812,37 @@ shopify theme push</code></pre>
           </section>
           <section
             id="configuration"
-            class="vbg-custom-frame-section"
+            class="flex scroll-mt-8 flex-col gap-5 [&+section]:mt-12 focus-visible:outline-2 focus-visible:outline-offset-4"
             tabindex="-1"
             aria-labelledby="configuration-title"
           >
-            <h2 id="configuration-title" class="vbg-heading-24">
+            <h2
+              id="configuration-title"
+              class="font-heading font-bold tracking-normal text-2xl/8"
+            >
               Small API, explicit control.
             </h2>
-            <p class="vbg-custom-frame-prose">Every Frame option is optional.</p>
-            <div class="vbg-custom-frame-code" data-code-block x-data="copyCode($el)">
-              <div class="vbg-custom-frame-code-bar">
-                <span id="code-label-12" class="vbg-mono" data-code-label
+            <p class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere">
+              Every Frame option is optional.
+            </p>
+            <div
+              class="min-w-0 rounded-md border border-black/8 dark:border-white/14 bg-panel dark:bg-panel-inverse"
+              data-code-block
+              x-data="copyCode($el)"
+            >
+              <div
+                class="flex flex-wrap items-center justify-between gap-3 px-5 pt-4 text-muted dark:text-muted-inverse wrap-anywhere"
+              >
+                <span id="code-label-12" class="font-mono" data-code-label
                   >vite.config.ts</span
                 >
-                <div class="vbg-custom-frame-copy" x-cloak>
+                <div
+                  class="flex flex-wrap items-center gap-3 [&[x-cloak]]:hidden!"
+                  x-cloak
+                >
                   <button
                     type="button"
-                    class="vbg-button"
+                    class="inline-flex min-h-9 max-w-full cursor-pointer items-center justify-center gap-2 rounded-md border border-black/8 dark:border-white/14 bg-white px-4 py-[7px] text-sm/5 font-medium text-ink dark:text-ink-inverse no-underline hover:bg-neutral-100 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-black dark:hover:bg-neutral-900 focus-visible:outline-2 focus-visible:outline-offset-4"
                     @click="copy"
                     :disabled="pending"
                     :aria-label="'Copy ' + label"
@@ -647,142 +851,256 @@ shopify theme push</code></pre>
                     Copy
                   </button>
                   <span
-                    class="vbg-custom-frame-copy-status"
+                    class="max-w-[28ch] text-[13px]/[18px] text-muted dark:text-muted-inverse"
                     role="status"
                     x-text="status"
                   ></span>
                 </div>
               </div>
               <pre
-                class="vbg-custom-frame-code-scroll"
+                class="min-w-0 max-w-full overflow-x-auto p-5 font-mono text-sm/6 font-normal [tab-size:2] text-ink dark:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
                 tabindex="0"
                 role="region"
                 aria-labelledby="code-label-12"
               ><code>frame({
-  <span class="vbg-custom-frame-comment">// Theme directory relative to the Vite root.</span>
+  <span class="text-muted dark:text-muted-inverse">// Theme directory relative to the Vite root.</span>
   theme: '.',
 
-  <span class="vbg-custom-frame-comment">// Source directory relative to the Vite root.</span>
+  <span class="text-muted dark:text-muted-inverse">// Source directory relative to the Vite root.</span>
   source: 'src',
 
-  <span class="vbg-custom-frame-comment">// Namespace for generated assets and Liquid.</span>
+  <span class="text-muted dark:text-muted-inverse">// Namespace for generated assets and Liquid.</span>
   namespace: 'frame',
 
-  <span class="vbg-custom-frame-comment">// Set to false to disable coordinated reloads.</span>
+  <span class="text-muted dark:text-muted-inverse">// Set to false to disable coordinated reloads.</span>
   refresh: {
     signal: '.frame/shopify-ready',
     delay: 100,
   },
 });</code></pre>
             </div>
-            <dl class="vbg-custom-frame-options">
-              <div class="vbg-custom-frame-option">
-                <dt class="vbg-custom-frame-option-name">
-                  <code class="vbg-mono">theme</code>
+            <dl class="@container/options flex flex-col gap-6">
+              <div
+                class="flex min-w-0 flex-col gap-2 md:flex-row md:items-baseline md:gap-6"
+              >
+                <dt class="min-w-0 font-medium wrap-anywhere md:flex-[0_0_13rem]">
+                  <code
+                    class="font-mono rounded border border-black/10 bg-code px-[0.3em] py-[0.1em] text-[0.875em] dark:border-white/13 dark:bg-code-inverse"
+                    >theme</code
+                  >
                 </dt>
-                <dd class="vbg-custom-frame-option-detail">
-                  <span class="vbg-mono">string</span>
-                  <p class="vbg-custom-frame-prose">
+                <dd
+                  class="flex min-w-0 flex-1 flex-col gap-2 text-muted dark:text-muted-inverse wrap-anywhere @min-[52rem]/options:grid @min-[52rem]/options:grid-cols-[18rem_minmax(0,1fr)] @min-[52rem]/options:items-baseline @min-[52rem]/options:gap-x-6"
+                >
+                  <span class="font-mono">string</span>
+                  <p
+                    class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere"
+                  >
                     Shopify theme directory. Defaults to the Vite root.
                   </p>
                 </dd>
               </div>
-              <div class="vbg-custom-frame-option">
-                <dt class="vbg-custom-frame-option-name">
-                  <code class="vbg-mono">source</code>
+              <div
+                class="flex min-w-0 flex-col gap-2 md:flex-row md:items-baseline md:gap-6"
+              >
+                <dt class="min-w-0 font-medium wrap-anywhere md:flex-[0_0_13rem]">
+                  <code
+                    class="font-mono rounded border border-black/10 bg-code px-[0.3em] py-[0.1em] text-[0.875em] dark:border-white/13 dark:bg-code-inverse"
+                    >source</code
+                  >
                 </dt>
-                <dd class="vbg-custom-frame-option-detail">
-                  <span class="vbg-mono">string</span>
-                  <p class="vbg-custom-frame-prose">
-                    Source directory. Defaults to <code class="vbg-mono">src</code>.
+                <dd
+                  class="flex min-w-0 flex-1 flex-col gap-2 text-muted dark:text-muted-inverse wrap-anywhere @min-[52rem]/options:grid @min-[52rem]/options:grid-cols-[18rem_minmax(0,1fr)] @min-[52rem]/options:items-baseline @min-[52rem]/options:gap-x-6"
+                >
+                  <span class="font-mono">string</span>
+                  <p
+                    class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere"
+                  >
+                    Source directory. Defaults to
+                    <code
+                      class="font-mono rounded border border-black/10 bg-code px-[0.3em] py-[0.1em] text-[0.875em] dark:border-white/13 dark:bg-code-inverse"
+                      >src</code
+                    >.
                   </p>
                 </dd>
               </div>
-              <div class="vbg-custom-frame-option">
-                <dt class="vbg-custom-frame-option-name">
-                  <code class="vbg-mono">bundles</code>
+              <div
+                class="flex min-w-0 flex-col gap-2 md:flex-row md:items-baseline md:gap-6"
+              >
+                <dt class="min-w-0 font-medium wrap-anywhere md:flex-[0_0_13rem]">
+                  <code
+                    class="font-mono rounded border border-black/10 bg-code px-[0.3em] py-[0.1em] text-[0.875em] dark:border-white/13 dark:bg-code-inverse"
+                    >bundles</code
+                  >
                 </dt>
-                <dd class="vbg-custom-frame-option-detail">
-                  <span class="vbg-mono">Record&lt;string, FrameBundle&gt;</span>
-                  <p class="vbg-custom-frame-prose">
+                <dd
+                  class="flex min-w-0 flex-1 flex-col gap-2 text-muted dark:text-muted-inverse wrap-anywhere @min-[52rem]/options:grid @min-[52rem]/options:grid-cols-[18rem_minmax(0,1fr)] @min-[52rem]/options:items-baseline @min-[52rem]/options:gap-x-6"
+                >
+                  <span class="font-mono">Record&lt;string, FrameBundle&gt;</span>
+                  <p
+                    class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere"
+                  >
                     Named script and stylesheet entry definitions. Each bundle needs a
                     script, a style, or both.
                   </p>
                 </dd>
               </div>
-              <div class="vbg-custom-frame-option">
-                <dt class="vbg-custom-frame-option-name">
-                  <code class="vbg-mono">bundles[name].script</code>
+              <div
+                class="flex min-w-0 flex-col gap-2 md:flex-row md:items-baseline md:gap-6"
+              >
+                <dt class="min-w-0 font-medium wrap-anywhere md:flex-[0_0_13rem]">
+                  <code
+                    class="font-mono rounded border border-black/10 bg-code px-[0.3em] py-[0.1em] text-[0.875em] dark:border-white/13 dark:bg-code-inverse"
+                    >bundles[name].script</code
+                  >
                 </dt>
-                <dd class="vbg-custom-frame-option-detail">
-                  <span class="vbg-mono">string</span>
-                  <p class="vbg-custom-frame-prose">
+                <dd
+                  class="flex min-w-0 flex-1 flex-col gap-2 text-muted dark:text-muted-inverse wrap-anywhere @min-[52rem]/options:grid @min-[52rem]/options:grid-cols-[18rem_minmax(0,1fr)] @min-[52rem]/options:items-baseline @min-[52rem]/options:gap-x-6"
+                >
+                  <span class="font-mono">string</span>
+                  <p
+                    class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere"
+                  >
                     Optional script entry, relative to
-                    <code class="vbg-mono">source</code>. When provided, script entries
-                    must be distinct across named bundles.
+                    <code
+                      class="font-mono rounded border border-black/10 bg-code px-[0.3em] py-[0.1em] text-[0.875em] dark:border-white/13 dark:bg-code-inverse"
+                      >source</code
+                    >. When provided, script entries must be distinct across named
+                    bundles.
                   </p>
                 </dd>
               </div>
-              <div class="vbg-custom-frame-option">
-                <dt class="vbg-custom-frame-option-name">
-                  <code class="vbg-mono">bundles[name].style</code>
+              <div
+                class="flex min-w-0 flex-col gap-2 md:flex-row md:items-baseline md:gap-6"
+              >
+                <dt class="min-w-0 font-medium wrap-anywhere md:flex-[0_0_13rem]">
+                  <code
+                    class="font-mono rounded border border-black/10 bg-code px-[0.3em] py-[0.1em] text-[0.875em] dark:border-white/13 dark:bg-code-inverse"
+                    >bundles[name].style</code
+                  >
                 </dt>
-                <dd class="vbg-custom-frame-option-detail">
-                  <span class="vbg-mono">string</span>
-                  <p class="vbg-custom-frame-prose">
+                <dd
+                  class="flex min-w-0 flex-1 flex-col gap-2 text-muted dark:text-muted-inverse wrap-anywhere @min-[52rem]/options:grid @min-[52rem]/options:grid-cols-[18rem_minmax(0,1fr)] @min-[52rem]/options:items-baseline @min-[52rem]/options:gap-x-6"
+                >
+                  <span class="font-mono">string</span>
+                  <p
+                    class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere"
+                  >
                     Optional stylesheet entry, relative to
-                    <code class="vbg-mono">source</code>.
+                    <code
+                      class="font-mono rounded border border-black/10 bg-code px-[0.3em] py-[0.1em] text-[0.875em] dark:border-white/13 dark:bg-code-inverse"
+                      >source</code
+                    >.
                   </p>
                 </dd>
               </div>
-              <div class="vbg-custom-frame-option">
-                <dt class="vbg-custom-frame-option-name">
-                  <code class="vbg-mono">namespace</code>
+              <div
+                class="flex min-w-0 flex-col gap-2 md:flex-row md:items-baseline md:gap-6"
+              >
+                <dt class="min-w-0 font-medium wrap-anywhere md:flex-[0_0_13rem]">
+                  <code
+                    class="font-mono rounded border border-black/10 bg-code px-[0.3em] py-[0.1em] text-[0.875em] dark:border-white/13 dark:bg-code-inverse"
+                    >namespace</code
+                  >
                 </dt>
-                <dd class="vbg-custom-frame-option-detail">
-                  <span class="vbg-mono">string</span>
-                  <p class="vbg-custom-frame-prose">
+                <dd
+                  class="flex min-w-0 flex-1 flex-col gap-2 text-muted dark:text-muted-inverse wrap-anywhere @min-[52rem]/options:grid @min-[52rem]/options:grid-cols-[18rem_minmax(0,1fr)] @min-[52rem]/options:items-baseline @min-[52rem]/options:gap-x-6"
+                >
+                  <span class="font-mono">string</span>
+                  <p
+                    class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere"
+                  >
                     Generated asset and snippet namespace. Defaults to
-                    <code class="vbg-mono">frame</code>.
+                    <code
+                      class="font-mono rounded border border-black/10 bg-code px-[0.3em] py-[0.1em] text-[0.875em] dark:border-white/13 dark:bg-code-inverse"
+                      >frame</code
+                    >.
                   </p>
                 </dd>
               </div>
-              <div class="vbg-custom-frame-option">
-                <dt class="vbg-custom-frame-option-name">
-                  <code class="vbg-mono">refresh</code>
+              <div
+                class="flex min-w-0 flex-col gap-2 md:flex-row md:items-baseline md:gap-6"
+              >
+                <dt class="min-w-0 font-medium wrap-anywhere md:flex-[0_0_13rem]">
+                  <code
+                    class="font-mono rounded border border-black/10 bg-code px-[0.3em] py-[0.1em] text-[0.875em] dark:border-white/13 dark:bg-code-inverse"
+                    >refresh</code
+                  >
                 </dt>
-                <dd class="vbg-custom-frame-option-detail">
-                  <span class="vbg-mono">boolean | FrameRefreshOptions</span>
-                  <p class="vbg-custom-frame-prose">
+                <dd
+                  class="flex min-w-0 flex-1 flex-col gap-2 text-muted dark:text-muted-inverse wrap-anywhere @min-[52rem]/options:grid @min-[52rem]/options:grid-cols-[18rem_minmax(0,1fr)] @min-[52rem]/options:items-baseline @min-[52rem]/options:gap-x-6"
+                >
+                  <span class="font-mono">boolean | FrameRefreshOptions</span>
+                  <p
+                    class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere"
+                  >
                     Notification file and debounce settings, or
-                    <code class="vbg-mono">false</code>. Enabled by default.
+                    <code
+                      class="font-mono rounded border border-black/10 bg-code px-[0.3em] py-[0.1em] text-[0.875em] dark:border-white/13 dark:bg-code-inverse"
+                      >false</code
+                    >. Enabled by default.
                   </p>
                 </dd>
               </div>
-              <div class="vbg-custom-frame-option">
-                <dt class="vbg-custom-frame-option-name">
-                  <code class="vbg-mono">refresh.signal</code>
+              <div
+                class="flex min-w-0 flex-col gap-2 md:flex-row md:items-baseline md:gap-6"
+              >
+                <dt class="min-w-0 font-medium wrap-anywhere md:flex-[0_0_13rem]">
+                  <code
+                    class="font-mono rounded border border-black/10 bg-code px-[0.3em] py-[0.1em] text-[0.875em] dark:border-white/13 dark:bg-code-inverse"
+                    >refresh.signal</code
+                  >
                 </dt>
-                <dd class="vbg-custom-frame-option-detail">
-                  <span class="vbg-mono">string</span>
-                  <p class="vbg-custom-frame-prose">
-                    Shopify CLI <code class="vbg-mono">--notify</code> file relative to
-                    the Vite root. Defaults to
-                    <code class="vbg-mono">.frame/shopify-ready</code>.
+                <dd
+                  class="flex min-w-0 flex-1 flex-col gap-2 text-muted dark:text-muted-inverse wrap-anywhere @min-[52rem]/options:grid @min-[52rem]/options:grid-cols-[18rem_minmax(0,1fr)] @min-[52rem]/options:items-baseline @min-[52rem]/options:gap-x-6"
+                >
+                  <span class="font-mono">string</span>
+                  <p
+                    class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere"
+                  >
+                    Shopify CLI
+                    <code
+                      class="font-mono rounded border border-black/10 bg-code px-[0.3em] py-[0.1em] text-[0.875em] dark:border-white/13 dark:bg-code-inverse"
+                      >--notify</code
+                    >
+                    file relative to the Vite root. Defaults to
+                    <code
+                      class="font-mono rounded border border-black/10 bg-code px-[0.3em] py-[0.1em] text-[0.875em] dark:border-white/13 dark:bg-code-inverse"
+                      >.frame/shopify-ready</code
+                    >.
                   </p>
                 </dd>
               </div>
-              <div class="vbg-custom-frame-option">
-                <dt class="vbg-custom-frame-option-name">
-                  <code class="vbg-mono">refresh.delay</code>
+              <div
+                class="flex min-w-0 flex-col gap-2 md:flex-row md:items-baseline md:gap-6"
+              >
+                <dt class="min-w-0 font-medium wrap-anywhere md:flex-[0_0_13rem]">
+                  <code
+                    class="font-mono rounded border border-black/10 bg-code px-[0.3em] py-[0.1em] text-[0.875em] dark:border-white/13 dark:bg-code-inverse"
+                    >refresh.delay</code
+                  >
                 </dt>
-                <dd class="vbg-custom-frame-option-detail">
-                  <span class="vbg-mono">number</span>
-                  <p class="vbg-custom-frame-prose">
+                <dd
+                  class="flex min-w-0 flex-1 flex-col gap-2 text-muted dark:text-muted-inverse wrap-anywhere @min-[52rem]/options:grid @min-[52rem]/options:grid-cols-[18rem_minmax(0,1fr)] @min-[52rem]/options:items-baseline @min-[52rem]/options:gap-x-6"
+                >
+                  <span class="font-mono">number</span>
+                  <p
+                    class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere"
+                  >
                     Debounce delay in milliseconds. Defaults to
-                    <code class="vbg-mono">100</code>; must be an integer from
-                    <code class="vbg-mono">0</code> to
-                    <code class="vbg-mono">10000</code>.
+                    <code
+                      class="font-mono rounded border border-black/10 bg-code px-[0.3em] py-[0.1em] text-[0.875em] dark:border-white/13 dark:bg-code-inverse"
+                      >100</code
+                    >; must be an integer from
+                    <code
+                      class="font-mono rounded border border-black/10 bg-code px-[0.3em] py-[0.1em] text-[0.875em] dark:border-white/13 dark:bg-code-inverse"
+                      >0</code
+                    >
+                    to
+                    <code
+                      class="font-mono rounded border border-black/10 bg-code px-[0.3em] py-[0.1em] text-[0.875em] dark:border-white/13 dark:bg-code-inverse"
+                      >10000</code
+                    >.
                   </p>
                 </dd>
               </div>
@@ -790,86 +1108,125 @@ shopify theme push</code></pre>
           </section>
           <section
             id="integrations"
-            class="vbg-custom-frame-section"
+            class="flex scroll-mt-8 flex-col gap-5 [&+section]:mt-12 focus-visible:outline-2 focus-visible:outline-offset-4"
             tabindex="-1"
             aria-labelledby="integrations-title"
           >
-            <h2 id="integrations-title" class="vbg-heading-24">
+            <h2
+              id="integrations-title"
+              class="font-heading font-bold tracking-normal text-2xl/8"
+            >
               Bring the Vite ecosystem.
             </h2>
-            <p class="vbg-custom-frame-prose">
+            <p class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere">
               Frame does not wrap frontend frameworks. Add their official Vite plugins as
               usual.
             </p>
-            <ul class="vbg-custom-frame-peers">
-              <li class="vbg-custom-frame-group">
-                <h3 class="vbg-heading-16">Tailwind CSS</h3>
-                <p class="vbg-custom-frame-prose">Official Vite plugin</p>
+            <ul
+              class="flex list-none flex-wrap gap-x-8 gap-y-6 p-0 [&>*]:min-w-0 [&>*]:flex-[1_1_16rem]"
+            >
+              <li class="flex flex-col gap-2">
+                <h3 class="font-heading font-bold tracking-normal text-base/6">
+                  Tailwind CSS
+                </h3>
+                <p class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere">
+                  Official Vite plugin
+                </p>
               </li>
-              <li class="vbg-custom-frame-group">
-                <h3 class="vbg-heading-16">Alpine.js</h3>
-                <p class="vbg-custom-frame-prose">Standard entry import</p>
+              <li class="flex flex-col gap-2">
+                <h3 class="font-heading font-bold tracking-normal text-base/6">
+                  Alpine.js
+                </h3>
+                <p class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere">
+                  Standard entry import
+                </p>
               </li>
-              <li class="vbg-custom-frame-group">
-                <h3 class="vbg-heading-16">React</h3>
-                <p class="vbg-custom-frame-prose">Fast Refresh ready</p>
+              <li class="flex flex-col gap-2">
+                <h3 class="font-heading font-bold tracking-normal text-base/6">React</h3>
+                <p class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere">
+                  Fast Refresh ready
+                </p>
               </li>
-              <li class="vbg-custom-frame-group">
-                <h3 class="vbg-heading-16">Vue</h3>
-                <p class="vbg-custom-frame-prose">Single file components</p>
+              <li class="flex flex-col gap-2">
+                <h3 class="font-heading font-bold tracking-normal text-base/6">Vue</h3>
+                <p class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere">
+                  Single file components
+                </p>
               </li>
-              <li class="vbg-custom-frame-group">
-                <h3 class="vbg-heading-16">Sass</h3>
-                <p class="vbg-custom-frame-prose">Native Vite support</p>
+              <li class="flex flex-col gap-2">
+                <h3 class="font-heading font-bold tracking-normal text-base/6">Sass</h3>
+                <p class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere">
+                  Native Vite support
+                </p>
               </li>
-              <li class="vbg-custom-frame-group">
-                <h3 class="vbg-heading-16">PostCSS</h3>
-                <p class="vbg-custom-frame-prose">Native Vite config</p>
+              <li class="flex flex-col gap-2">
+                <h3 class="font-heading font-bold tracking-normal text-base/6">
+                  PostCSS
+                </h3>
+                <p class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere">
+                  Native Vite config
+                </p>
               </li>
             </ul>
-            <p class="vbg-custom-frame-prose">
+            <p class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere">
               React Fast Refresh requires
-              <code class="vbg-mono">@vitejs/plugin-react/preamble</code> because Frame
-              does not use an HTML entry. Framework code mounted inside sections should
-              handle Shopify Theme Editor section load and unload events.
+              <code
+                class="font-mono rounded border border-black/10 bg-code px-[0.3em] py-[0.1em] text-[0.875em] dark:border-white/13 dark:bg-code-inverse"
+                >@vitejs/plugin-react/preamble</code
+              >
+              because Frame does not use an HTML entry. Framework code mounted inside
+              sections should handle Shopify Theme Editor section load and unload events.
             </p>
           </section>
           <section
             id="safety"
-            class="vbg-custom-frame-section"
+            class="flex scroll-mt-8 flex-col gap-5 [&+section]:mt-12 focus-visible:outline-2 focus-visible:outline-offset-4"
             tabindex="-1"
             aria-labelledby="safety-title"
           >
-            <h2 id="safety-title" class="vbg-heading-24">
+            <h2
+              id="safety-title"
+              class="font-heading font-bold tracking-normal text-2xl/8"
+            >
               Built for a shared assets directory.
             </h2>
-            <p class="vbg-custom-frame-prose">
+            <p class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere">
               Shopify mixes generated assets and hand authored files in one directory.
               Frame cleans up without treating that directory like a disposable build
               folder.
             </p>
-            <ul class="vbg-custom-frame-peers">
-              <li class="vbg-custom-frame-group">
-                <h3 class="vbg-heading-16">Ownership ledger</h3>
-                <p class="vbg-custom-frame-prose">
+            <ul
+              class="flex list-none flex-wrap gap-x-8 gap-y-6 p-0 [&>*]:min-w-0 [&>*]:flex-[1_1_16rem]"
+            >
+              <li class="flex flex-col gap-2">
+                <h3 class="font-heading font-bold tracking-normal text-base/6">
+                  Ownership ledger
+                </h3>
+                <p class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere">
                   Only files recorded as Frame output can be removed as stale.
                 </p>
               </li>
-              <li class="vbg-custom-frame-group">
-                <h3 class="vbg-heading-16">Isolated staging</h3>
-                <p class="vbg-custom-frame-prose">
+              <li class="flex flex-col gap-2">
+                <h3 class="font-heading font-bold tracking-normal text-base/6">
+                  Isolated staging
+                </h3>
+                <p class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere">
                   Every build finishes away from the theme before publication.
                 </p>
               </li>
-              <li class="vbg-custom-frame-group">
-                <h3 class="vbg-heading-16">Protected writes</h3>
-                <p class="vbg-custom-frame-prose">
+              <li class="flex flex-col gap-2">
+                <h3 class="font-heading font-bold tracking-normal text-base/6">
+                  Protected writes
+                </h3>
+                <p class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere">
                   Unknown theme files are never silently overwritten.
                 </p>
               </li>
-              <li class="vbg-custom-frame-group">
-                <h3 class="vbg-heading-16">Recovery journal</h3>
-                <p class="vbg-custom-frame-prose">
+              <li class="flex flex-col gap-2">
+                <h3 class="font-heading font-bold tracking-normal text-base/6">
+                  Recovery journal
+                </h3>
+                <p class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere">
                   Interrupted publication is restored before the next build continues.
                 </p>
               </li>
@@ -877,61 +1234,68 @@ shopify theme push</code></pre>
           </section>
           <section
             id="examples"
-            class="vbg-custom-frame-section"
+            class="flex scroll-mt-8 flex-col gap-5 [&+section]:mt-12 focus-visible:outline-2 focus-visible:outline-offset-4"
             tabindex="-1"
             aria-labelledby="examples-title"
           >
-            <h2 id="examples-title" class="vbg-heading-24">See it in a real theme.</h2>
-            <p class="vbg-custom-frame-prose">
+            <h2
+              id="examples-title"
+              class="font-heading font-bold tracking-normal text-2xl/8"
+            >
+              See it in a real theme.
+            </h2>
+            <p class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere">
               Every example is independently runnable, checked in CI, and tested against a
               Shopify development store.
             </p>
-            <ul class="vbg-custom-frame-peers">
-              <li class="vbg-custom-frame-group">
-                <h3 class="vbg-heading-16">
+            <ul
+              class="flex list-none flex-wrap gap-x-8 gap-y-6 p-0 [&>*]:min-w-0 [&>*]:flex-[1_1_16rem]"
+            >
+              <li class="flex flex-col gap-2">
+                <h3 class="font-heading font-bold tracking-normal text-base/6">
                   <a
-                    class="vbg-custom-frame-link"
+                    class="text-inherit underline underline-offset-[0.2em] hover:text-ink dark:hover:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
                     href="https://github.com/BillyNoyes/Frame/tree/main/examples/vanilla"
                     >Vanilla</a
                   >
                 </h3>
-                <p class="vbg-custom-frame-prose">
+                <p class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere">
                   TypeScript, CSS, dynamic imports, fonts, and images
                 </p>
               </li>
-              <li class="vbg-custom-frame-group">
-                <h3 class="vbg-heading-16">
+              <li class="flex flex-col gap-2">
+                <h3 class="font-heading font-bold tracking-normal text-base/6">
                   <a
-                    class="vbg-custom-frame-link"
+                    class="text-inherit underline underline-offset-[0.2em] hover:text-ink dark:hover:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
                     href="https://github.com/BillyNoyes/Frame/tree/main/examples/alpine-tailwind"
                     >Alpine and Tailwind</a
                   >
                 </h3>
-                <p class="vbg-custom-frame-prose">
+                <p class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere">
                   Alpine.js with Tailwind CSS through Vite
                 </p>
               </li>
-              <li class="vbg-custom-frame-group">
-                <h3 class="vbg-heading-16">
+              <li class="flex flex-col gap-2">
+                <h3 class="font-heading font-bold tracking-normal text-base/6">
                   <a
-                    class="vbg-custom-frame-link"
+                    class="text-inherit underline underline-offset-[0.2em] hover:text-ink dark:hover:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
                     href="https://github.com/BillyNoyes/Frame/tree/main/examples/react"
                     >React</a
                   >
                 </h3>
-                <p class="vbg-custom-frame-prose">
+                <p class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere">
                   React components mounted inside Liquid sections
                 </p>
               </li>
-              <li class="vbg-custom-frame-group">
-                <h3 class="vbg-heading-16">
+              <li class="flex flex-col gap-2">
+                <h3 class="font-heading font-bold tracking-normal text-base/6">
                   <a
-                    class="vbg-custom-frame-link"
+                    class="text-inherit underline underline-offset-[0.2em] hover:text-ink dark:hover:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
                     href="https://github.com/BillyNoyes/Frame/tree/main/examples/vue"
                     >Vue</a
                   >
                 </h3>
-                <p class="vbg-custom-frame-prose">
+                <p class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere">
                   Vue single file components inside Liquid sections
                 </p>
               </li>
@@ -939,11 +1303,15 @@ shopify theme push</code></pre>
           </section>
         </div>
       </main>
-      <footer class="vbg-custom-frame-footer">
+      <footer
+        class="flex flex-col gap-5 py-6 text-[13px]/[18px] text-muted dark:text-muted-inverse md:flex-row md:items-center md:justify-between"
+      >
         <span>Frame</span>
         <span
           >Built by
-          <a href="https://billynoyes.co.uk/" class="vbg-custom-frame-link"
+          <a
+            href="https://billynoyes.co.uk/"
+            class="text-inherit underline underline-offset-[0.2em] hover:text-ink dark:hover:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
             >Billy Noyes</a
           ></span
         >
