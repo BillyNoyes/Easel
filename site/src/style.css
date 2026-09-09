@@ -21,10 +21,6 @@
 
   body {
     background-color: var(--color-canvas);
-    background-image:
-      linear-gradient(rgb(39 49 45 / 22%) 1px, transparent 1px),
-      linear-gradient(90deg, rgb(39 49 45 / 22%) 1px, transparent 1px);
-    background-size: 64px 64px;
     color: var(--color-ink);
     font-family: var(--font-sans);
     text-rendering: optimizeLegibility;
