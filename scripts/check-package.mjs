@@ -5,6 +5,7 @@ import {mkdtemp, mkdir, readFile, readdir, rm, writeFile} from 'node:fs/promises
 import {tmpdir} from 'node:os';
 import {join} from 'node:path';
 import {promisify} from 'node:util';
+import {validatePackageContents} from './package-contents.mjs';
 
 const execFileAsync = promisify(execFile);
 const root = process.cwd();
@@ -23,20 +24,7 @@ try {
   const tarball = join(temporary, tarballs[0]);
 
   const {stdout: tarballListing} = await execFileAsync('tar', ['-tzf', tarball]);
-  for (const required of [
-    'package/package.json',
-    'package/README.md',
-    'package/LICENSE',
-    'package/dist/index.js',
-    'package/dist/index.d.ts',
-  ]) {
-    if (!tarballListing.split('\n').includes(required)) {
-      throw new Error(`package tarball is missing ${required}`);
-    }
-  }
-  if (tarballListing.split('\n').some((file) => file.startsWith('package/src/'))) {
-    throw new Error('package tarball must not contain source files');
-  }
+  validatePackageContents(tarballListing);
 
   for (const directory of ['assets', 'layout', 'sections', 'snippets', 'src']) {
     await mkdir(join(consumer, directory), {recursive: true});
