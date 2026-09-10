@@ -243,13 +243,13 @@ test('Escape closes the native disclosure and returns focus to its summary', () 
   component.destroy();
 });
 
-test('section selection closes the disclosure and focuses the destination without motion', () => {
+test('section selection closes the disclosure and uses the CSS scroll preference', () => {
   const {component, menu, sections, document, flush} = navigation();
   component.navigate({currentTarget: {hash: '#quick-start'}});
   assert.equal(menu.open, false);
   flush();
   assert.equal(document.activeElement, sections[0]);
-  assert.deepEqual(sections[0].scrollOptions, {behavior: 'instant', block: 'start'});
+  assert.deepEqual(sections[0].scrollOptions, {behavior: 'auto', block: 'start'});
   component.destroy();
 });
 

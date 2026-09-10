@@ -34,7 +34,7 @@ for (const [route, html] of pages) {
   const ids = idsFor(html);
   assert.equal(new Set(ids).size, ids.length, `${route}: unique IDs`);
   assert.equal(tags(html, 'h1').length, 1, `${route}: one h1`);
-  assert.match(html, /<html lang="en"/);
+  assert.equal(attribute(tags(html, 'html')[0][0], 'lang'), 'en');
   assert.match(html, /<title>[^<]+<\/title>/);
   assert.match(html, /<meta\s+name="description"\s+content="[^"]+"/);
   assert.equal(tags(html, 'header').length, 1, `${route}: header landmark`);
@@ -127,6 +127,14 @@ for (const [route, html] of pages) {
     assert.match(html, /<h1[^>]*>\s*Vite Plugin for Shopify Liquid Themes\.\s*<\/h1>/);
     assert.match(html, /href="\/docs\/"[^>]*>\s*Get started/);
   } else {
+    const documentClasses = new Set(
+      attribute(tags(html, 'html')[0][0], 'class')?.split(/\s+/),
+    );
+    assert(documentClasses.has('scroll-smooth'), 'Docs anchors scroll smoothly');
+    assert(
+      documentClasses.has('motion-reduce:scroll-auto'),
+      'Docs respect reduced motion',
+    );
     assert.equal(runtimeScripts.length, 1, 'Docs has one runtime entry');
     assert.equal(attribute(runtimeScripts[0], 'type'), 'module');
     assert.equal(

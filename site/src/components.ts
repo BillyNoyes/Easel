@@ -72,7 +72,8 @@ export function createDocsNavigation(root: HTMLElement) {
       frame = requestAnimationFrame(() => {
         frame = undefined;
         target.focus({preventScroll: true});
-        target.scrollIntoView({behavior: 'instant', block: 'start'});
+        // CSS selects smooth or instant scrolling from the user's motion preference.
+        target.scrollIntoView({behavior: 'auto', block: 'start'});
       });
     },
     destroy() {
