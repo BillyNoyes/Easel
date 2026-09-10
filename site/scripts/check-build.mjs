@@ -72,7 +72,7 @@ for (const [route, html] of pages) {
   );
   assert.doesNotMatch(html, /fonts\.googleapis\.com|fonts\.gstatic\.com/);
   for (const font of [
-    'offbit-trial-bold.woff2',
+    'inter_n7.02711e6b374660cfc7915d1afc1c204e633421e4.woff2',
     'inter_n4.b2a3f24c19b4de56e8871f609e73ca7f6d2e2bb9.woff2',
   ]) {
     const preload = links.find(

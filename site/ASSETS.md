@@ -10,15 +10,14 @@ The outer container, header, and footer use Tailwind utilities to match [billyno
 
 ## Typography
 
-Font roles and token names match [billynoyes.co.uk](https://billynoyes.co.uk/) and its [theme font definitions](https://github.com/BillyNoyes/billynoyes.co.uk/blob/c7ac57869938842ba50154aa873fb741440c3299/snippets/theme-fonts.liquid):
+Frame uses Inter for readable headings and body text. Font role token names follow [billynoyes.co.uk's theme font definitions](https://github.com/BillyNoyes/billynoyes.co.uk/blob/c7ac57869938842ba50154aa873fb741440c3299/snippets/theme-fonts.liquid):
 
-- `--font-display-family` and `--font-heading-family`: `OffBit`, Inter, sans-serif; headings use weight 700 in Frame, while the wordmark uses weight 400.
+- `--font-display-family` and `--font-heading-family`: Inter, sans-serif; headings use weight 700, while the wordmark uses weight 400.
 - `--font-body-family`: Inter, sans-serif; body text uses weight 400.
 - `--font-mono`: `'Geist Mono', 'SF Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace`. This is a local-preference stack, not a downloaded webfont.
 
 Fonts in `public/fonts/` retain their source filenames and family names:
 
-- `offbit-trial-regular.woff2` and `offbit-trial-bold.woff2`: copied unchanged from the [source repository assets](https://github.com/BillyNoyes/billynoyes.co.uk/tree/c7ac57869938842ba50154aa873fb741440c3299/assets). The source identifies these as Power Type portfolio trial fonts. They are not covered by Frame's MIT license; confirm the applicable font license before reuse outside the licensed context.
 - `inter_n4.b2a3f24c19b4de56e8871f609e73ca7f6d2e2bb9.woff2` and `inter_n7.02711e6b374660cfc7915d1afc1c204e633421e4.woff2`: the regular and bold Inter faces served under `https://billynoyes.co.uk/cdn/fonts/inter/`. Inter's SIL Open Font License is included as `public/fonts/Inter-LICENSE.txt`.
 
-The bold heading and regular body fonts are preloaded; other faces load only when needed. All faces use `font-display: swap`. No Google Fonts, third-party JavaScript, or analytics requests are required.
+The bold and regular Inter faces are preloaded. All faces use `font-display: swap`. No Google Fonts, third-party JavaScript, or analytics requests are required.
