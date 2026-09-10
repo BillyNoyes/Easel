@@ -1,16 +1,16 @@
 import type {Plugin} from 'vite';
-import type {ResolvedFrameBundle} from './types.js';
+import type {ResolvedEaselBundle} from './types.js';
 
-const INTERNAL_PREFIX = '\0frame:';
-export const PUBLIC_PREFIX = '/@frame/';
+const INTERNAL_PREFIX = '\0easel:';
+export const PUBLIC_PREFIX = '/@easel/';
 
 export function virtualBundleId(name: string): string {
   return `${INTERNAL_PREFIX}${name}`;
 }
 
-export function frameBundleModules(getBundles: () => ResolvedFrameBundle[]): Plugin {
+export function easelBundleModules(getBundles: () => ResolvedEaselBundle[]): Plugin {
   return {
-    name: 'frame:bundle-modules',
+    name: 'easel:bundle-modules',
     enforce: 'pre',
     resolveId(id) {
       const bundles = getBundles();
@@ -34,7 +34,7 @@ export function frameBundleModules(getBundles: () => ResolvedFrameBundle[]): Plu
       const name = id.slice(INTERNAL_PREFIX.length);
       const bundle = getBundles().find((candidate) => candidate.name === name);
       if (bundle === undefined) {
-        throw new Error(`[frame] unknown virtual bundle "${name}"`);
+        throw new Error(`[easel] unknown virtual bundle "${name}"`);
       }
 
       return `${bundleInputs(bundle)
@@ -44,7 +44,7 @@ export function frameBundleModules(getBundles: () => ResolvedFrameBundle[]): Plu
   };
 }
 
-function bundleInputs(bundle: ResolvedFrameBundle): string[] {
+function bundleInputs(bundle: ResolvedEaselBundle): string[] {
   return [bundle.script, bundle.style].filter(
     (path): path is string => path !== undefined,
   );

@@ -1,11 +1,11 @@
 @font-face {
-  font-family: 'Frame Example';
+  font-family: 'Easel Example';
   src: local('Arial');
   font-display: swap;
 }
 
 :root {
-  font-family: 'Frame Example', sans-serif;
+  font-family: 'Easel Example', sans-serif;
   color: #171714;
   background: #f5f2eb;
 }

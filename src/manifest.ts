@@ -1,12 +1,12 @@
 import type {Manifest, ManifestChunk} from 'vite';
-import type {FrameManifest, FrameManifestEntry, ResolvedFrameBundle} from './types.js';
+import type {EaselManifest, EaselManifestEntry, ResolvedEaselBundle} from './types.js';
 
-export function createFrameManifest(
+export function createEaselManifest(
   viteManifest: Manifest,
-  bundles: ResolvedFrameBundle[],
+  bundles: ResolvedEaselBundle[],
   emittedFiles: string[] = [],
-): FrameManifest {
-  const entries: Record<string, FrameManifestEntry> = {};
+): EaselManifest {
+  const entries: Record<string, EaselManifestEntry> = {};
   const generated = new Set(emittedFiles);
 
   for (const bundle of bundles) {
@@ -41,7 +41,7 @@ function findEntry(manifest: Manifest, name: string): ManifestChunk {
     (candidate) => candidate.isEntry === true && candidate.name === name,
   );
   if (chunk === undefined) {
-    throw new Error(`[frame] Vite manifest does not contain bundle "${name}"`);
+    throw new Error(`[easel] Vite manifest does not contain bundle "${name}"`);
   }
   return chunk;
 }
@@ -94,7 +94,7 @@ function collectGeneratedFiles(
 function requiredChunk(manifest: Manifest, key: string): ManifestChunk {
   const chunk = manifest[key];
   if (chunk === undefined) {
-    throw new Error(`[frame] Vite manifest import is missing: ${key}`);
+    throw new Error(`[easel] Vite manifest import is missing: ${key}`);
   }
   return chunk;
 }

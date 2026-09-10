@@ -1,5 +1,5 @@
 {
-  "name": "frame-example-alpine-tailwind",
+  "name": "easel-example-alpine-tailwind",
   "private": true,
   "type": "module",
   "scripts": {

@@ -25,13 +25,13 @@ export function acquireCommitLock(lockPath: string): () => void {
     } catch (error) {
       if (!isAlreadyExistsError(error)) throw error;
       if (!isStaleLock(lockPath)) {
-        throw new Error(`[frame] another build is publishing this theme: ${lockPath}`);
+        throw new Error(`[easel] another build is publishing this theme: ${lockPath}`);
       }
       rmSync(lockPath, {recursive: true});
     }
   }
 
-  throw new Error(`[frame] could not acquire the theme commit lock: ${lockPath}`);
+  throw new Error(`[easel] could not acquire the theme commit lock: ${lockPath}`);
 }
 
 function createLock(lockPath: string, token: string): void {
@@ -56,7 +56,7 @@ function releaseLock(lockPath: string, token: string): void {
 function isStaleLock(lockPath: string): boolean {
   const metadata = lstatSync(lockPath);
   if (!metadata.isDirectory() || metadata.isSymbolicLink()) {
-    throw new Error(`[frame] commit lock must be a real directory: ${lockPath}`);
+    throw new Error(`[easel] commit lock must be a real directory: ${lockPath}`);
   }
   const owner = readLockOwner(lockPath);
   if (owner === undefined) {

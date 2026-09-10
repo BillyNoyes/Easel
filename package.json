@@ -1,15 +1,15 @@
 {
-  "name": "vite-plugin-shopify-frame",
+  "name": "vite-plugin-shopify-easel",
   "version": "0.1.0-beta.1",
   "description": "A Vite build adapter for Shopify Liquid themes",
   "type": "module",
   "sideEffects": false,
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/BillyNoyes/Frame.git"
+    "url": "git+https://github.com/BillyNoyes/Easel.git"
   },
-  "homepage": "https://frame.billynoyes.co.uk/",
-  "bugs": "https://github.com/BillyNoyes/Frame/issues",
+  "homepage": "https://easel.billynoyes.co.uk/",
+  "bugs": "https://github.com/BillyNoyes/Easel/issues",
   "keywords": [
     "shopify",
     "liquid",

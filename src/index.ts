@@ -1,2 +1,2 @@
-export {frame as default, frame} from './plugin.js';
-export type {FrameBundle, FrameOptions, FrameRefreshOptions} from './types.js';
+export {easel as default, easel} from './plugin.js';
+export type {EaselBundle, EaselOptions, EaselRefreshOptions} from './types.js';

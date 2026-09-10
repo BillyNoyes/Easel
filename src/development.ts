@@ -3,15 +3,15 @@ import {renderDevelopmentLiquid} from './liquid.js';
 import {projectRelative} from './options.js';
 import {assertDevelopmentLiquidWritable, writeDevelopmentLiquid} from './output.js';
 import {watchRefreshSignal} from './refresh.js';
-import type {ResolvedFrameOptions} from './types.js';
+import type {ResolvedEaselOptions} from './types.js';
 
 export function configureDevelopmentServer(
   server: ViteDevServer,
-  options: ResolvedFrameOptions,
+  options: ResolvedEaselOptions,
 ): void {
   if (server.httpServer === null) {
     throw new Error(
-      '[frame] Vite middleware mode is not supported; Frame requires the development server lifecycle',
+      '[easel] Vite middleware mode is not supported; Easel requires the development server lifecycle',
     );
   }
 
@@ -36,7 +36,7 @@ export function configureDevelopmentServer(
 
 function configureRefresh(
   server: ViteDevServer,
-  options: ResolvedFrameOptions,
+  options: ResolvedEaselOptions,
 ): (() => void) | undefined {
   if (!options.refresh.enabled) return undefined;
 
@@ -46,7 +46,7 @@ function configureRefresh(
     () => server.ws.send({type: 'full-reload', path: '*'}),
   );
   server.config.logger.info(
-    `[frame] Shopify refresh signal: ${projectRelative(
+    `[easel] Shopify refresh signal: ${projectRelative(
       options.refresh.signalPath,
       options.projectRoot,
     )}`,
@@ -61,7 +61,7 @@ function developmentOrigin(server: ViteDevServer): string {
     server.resolvedUrls?.network[0];
   if (origin === undefined) {
     throw new Error(
-      '[frame] Vite did not expose a development URL; set server.origin explicitly',
+      '[easel] Vite did not expose a development URL; set server.origin explicitly',
     );
   }
   return origin;

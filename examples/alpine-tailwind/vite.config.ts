@@ -1,8 +1,8 @@
 import tailwindcss from '@tailwindcss/vite';
 import {defineConfig} from 'vite';
-import frame from '../../src/index.js';
+import easel from '../../src/index.js';
 
 export default defineConfig({
   root: import.meta.dirname,
-  plugins: [tailwindcss(), frame()],
+  plugins: [tailwindcss(), easel()],
 });

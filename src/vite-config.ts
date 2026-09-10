@@ -1,19 +1,19 @@
 import type {ConfigEnv, ResolvedConfig, UserConfig} from 'vite';
-import {resolveFrameOptions} from './options.js';
-import type {FrameOptions, ResolvedFrameOptions} from './types.js';
+import {resolveEaselOptions} from './options.js';
+import type {EaselOptions, ResolvedEaselOptions} from './types.js';
 import {virtualBundleId} from './virtual.js';
 
 export interface PreparedViteConfig {
-  options: ResolvedFrameOptions;
+  options: ResolvedEaselOptions;
   config: UserConfig;
 }
 
 export function prepareViteConfig(
-  frameOptions: FrameOptions,
+  easelOptions: EaselOptions,
   userConfig: UserConfig,
   command: ConfigEnv['command'],
 ): PreparedViteConfig {
-  const options = resolveFrameOptions(frameOptions, userConfig.root ?? process.cwd());
+  const options = resolveEaselOptions(easelOptions, userConfig.root ?? process.cwd());
 
   switch (command) {
     case 'build':
@@ -31,7 +31,7 @@ export function prepareViteConfig(
 
 export function validateResolvedViteConfig(
   config: ResolvedConfig,
-  options: ResolvedFrameOptions,
+  options: ResolvedEaselOptions,
 ): void {
   switch (config.command) {
     case 'build':
@@ -45,11 +45,11 @@ export function validateResolvedViteConfig(
 
 function createViteConfig(
   config: UserConfig,
-  options: ResolvedFrameOptions,
+  options: ResolvedEaselOptions,
   command: ConfigEnv['command'],
 ): UserConfig {
   const stableCssEntryIds = new Set(
-    options.bundles.map((bundle) => `frame:${bundle.name}`),
+    options.bundles.map((bundle) => `easel:${bundle.name}`),
   );
   const input = Object.fromEntries(
     options.bundles.map((bundle) => [bundle.name, virtualBundleId(bundle.name)]),
@@ -82,7 +82,7 @@ function createViteConfig(
     server: {
       ...(config.server?.cors === undefined ? {cors: shopifyCorsPolicy()} : {}),
       fs: {
-        allow: frameFileSystemAllowList(config.server?.fs?.allow ?? [], options),
+        allow: easelFileSystemAllowList(config.server?.fs?.allow ?? [], options),
       },
     },
   };
@@ -108,9 +108,9 @@ function shopifyCorsPolicy(): {origin: RegExp[]} {
   };
 }
 
-function frameFileSystemAllowList(
+function easelFileSystemAllowList(
   configured: string[],
-  options: ResolvedFrameOptions,
+  options: ResolvedEaselOptions,
 ): string[] {
   const existing = new Set(configured);
   return unique([options.projectRoot, options.sourcePath]).filter(
@@ -127,55 +127,55 @@ function assertCompatibleBuildConfig(config: UserConfig): void {
     ],
     [
       build?.outDir !== undefined,
-      'build.outDir conflicts with Frame staging; configure the Shopify theme with frame({ theme }) instead',
+      'build.outDir conflicts with Easel staging; configure the Shopify theme with easel({ theme }) instead',
     ],
     [
       build?.emptyOutDir !== undefined,
-      'build.emptyOutDir is managed by Frame for safe staging',
+      'build.emptyOutDir is managed by Easel for safe staging',
     ],
     [
       build?.assetsDir !== undefined,
-      'build.assetsDir is managed by Frame for flat Shopify assets',
+      'build.assetsDir is managed by Easel for flat Shopify assets',
     ],
-    [build?.manifest !== undefined, 'build.manifest is managed by Frame'],
+    [build?.manifest !== undefined, 'build.manifest is managed by Easel'],
     [build?.write === false, 'build.write must remain enabled'],
     [
       build?.rollupOptions?.input !== undefined,
-      'build.rollupOptions.input conflicts with Frame bundles',
+      'build.rollupOptions.input conflicts with Easel bundles',
     ],
     [
       build?.rollupOptions?.output !== undefined,
-      'build.rollupOptions.output is managed by Frame',
+      'build.rollupOptions.output is managed by Easel',
     ],
   ]);
-  if (conflict !== undefined) throw new Error(`[frame] ${conflict}`);
+  if (conflict !== undefined) throw new Error(`[easel] ${conflict}`);
 }
 
 function assertResolvedBuildConfig(
   config: ResolvedConfig,
-  options: ResolvedFrameOptions,
+  options: ResolvedEaselOptions,
 ): void {
   const violation = firstViolation([
     [config.base !== './', 'resolved Vite base must be "./"'],
     [
       config.build.outDir !== options.stagingPath,
-      "another Vite plugin changed Frame's staging directory",
+      "another Vite plugin changed Easel's staging directory",
     ],
     [
       config.build.assetsDir !== '',
-      "another Vite plugin changed Frame's flat asset layout",
+      "another Vite plugin changed Easel's flat asset layout",
     ],
     [
       config.build.emptyOutDir !== true,
-      "another Vite plugin disabled Frame's staging cleanup",
+      "another Vite plugin disabled Easel's staging cleanup",
     ],
     [
       config.build.manifest !== true,
-      "another Vite plugin changed Frame's manifest setting",
+      "another Vite plugin changed Easel's manifest setting",
     ],
     [config.build.write === false, 'build.write must remain enabled'],
   ]);
-  if (violation !== undefined) throw new Error(`[frame] ${violation}`);
+  if (violation !== undefined) throw new Error(`[easel] ${violation}`);
 }
 
 function firstViolation(
@@ -185,15 +185,15 @@ function firstViolation(
 }
 
 function assertNoLaterPostBuildHooks(config: ResolvedConfig): void {
-  const frameIndex = config.plugins.findIndex(
-    (plugin) => plugin.name === 'frame:shopify-theme',
+  const easelIndex = config.plugins.findIndex(
+    (plugin) => plugin.name === 'easel:shopify-theme',
   );
-  const unsafe = config.plugins.slice(frameIndex + 1).filter(hasPostOutputHook);
+  const unsafe = config.plugins.slice(easelIndex + 1).filter(hasPostOutputHook);
   if (unsafe.length > 0) {
     throw new Error(
-      `[frame] Frame must run after plugins with post-order output hooks: ${unsafe
+      `[easel] Easel must run after plugins with post-order output hooks: ${unsafe
         .map((plugin) => plugin.name)
-        .join(', ')}. Move frame() after those plugins.`,
+        .join(', ')}. Move easel() after those plugins.`,
     );
   }
 }

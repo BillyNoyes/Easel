@@ -1,5 +1,5 @@
-const app = document.querySelector<HTMLElement>('[data-frame-app]');
+const app = document.querySelector<HTMLElement>('[data-easel-app]');
 
 if (app) {
-  app.textContent = 'Frame is ready.';
+  app.textContent = 'Easel is ready.';
 }

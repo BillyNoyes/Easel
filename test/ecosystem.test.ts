@@ -3,7 +3,7 @@ import {join} from 'node:path';
 import tailwindcss from '@tailwindcss/vite';
 import {build} from 'vite';
 import {afterEach, describe, expect, it} from 'vitest';
-import {frame} from '../src/index.js';
+import {easel} from '../src/index.js';
 
 const projects: string[] = [];
 
@@ -14,7 +14,7 @@ afterEach(() => {
 });
 
 function themeProject(): string {
-  const fixtures = join(process.cwd(), '.frame');
+  const fixtures = join(process.cwd(), '.easel');
   mkdirSync(fixtures, {recursive: true});
   const root = mkdtempSync(join(fixtures, 'ecosystem-'));
   projects.push(root);
@@ -23,7 +23,7 @@ function themeProject(): string {
   }
   writeFileSync(
     join(root, 'layout/theme.liquid'),
-    "{{ content_for_header }}{% render 'frame-assets' %}{{ content_for_layout }}",
+    "{{ content_for_header }}{% render 'easel-assets' %}{{ content_for_layout }}",
   );
   return root;
 }
@@ -67,7 +67,7 @@ describe('frontend ecosystem compatibility', () => {
       logLevel: 'silent',
       plugins: [
         tailwindcss(),
-        frame({
+        easel({
           bundles: {
             storefront: {
               script: 'storefront.ts',
@@ -78,14 +78,14 @@ describe('frontend ecosystem compatibility', () => {
       ],
     });
 
-    const javascript = readFileSync(join(root, 'assets/frame-storefront.js'), 'utf8');
-    const css = readFileSync(join(root, 'assets/frame-storefront.css'), 'utf8');
-    const liquid = readFileSync(join(root, 'snippets/frame-assets.liquid'), 'utf8');
+    const javascript = readFileSync(join(root, 'assets/easel-storefront.js'), 'utf8');
+    const css = readFileSync(join(root, 'assets/easel-storefront.css'), 'utf8');
+    const liquid = readFileSync(join(root, 'snippets/easel-assets.liquid'), 'utf8');
 
     expect(Buffer.byteLength(javascript)).toBeGreaterThan(10_000);
     expect(css).toMatch(/\.grid\s*\{[^}]*display:\s*grid/);
     expect(css).toMatch(/\.items-center\s*\{[^}]*align-items:\s*center/);
     expect(liquid).toContain("when 'storefront'");
-    expect(liquid).toContain("'frame-storefront.css' | asset_url");
+    expect(liquid).toContain("'easel-storefront.css' | asset_url");
   });
 });

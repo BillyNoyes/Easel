@@ -2,10 +2,10 @@ import {mkdirSync, mkdtempSync, realpathSync, symlinkSync, writeFileSync} from '
 import {tmpdir} from 'node:os';
 import {join} from 'node:path';
 import {describe, expect, it} from 'vitest';
-import {resolveFrameOptions} from '../src/options.js';
+import {resolveEaselOptions} from '../src/options.js';
 
 function project(files: Record<string, string>): string {
-  const root = mkdtempSync(join(tmpdir(), 'frame-options-'));
+  const root = mkdtempSync(join(tmpdir(), 'easel-options-'));
   for (const directory of ['assets', 'layout', 'snippets', 'src']) {
     mkdirSync(join(root, directory), {recursive: true});
   }
@@ -17,20 +17,20 @@ function project(files: Record<string, string>): string {
   return root;
 }
 
-describe('resolveFrameOptions', () => {
+describe('resolveEaselOptions', () => {
   it('uses a root-level Shopify theme and the TypeScript defaults', () => {
     const root = project({
       'src/main.ts': 'export const theme = true;',
       'src/style.css': ':root { color: black; }',
     });
 
-    const options = resolveFrameOptions({}, root);
+    const options = resolveEaselOptions({}, root);
 
     expect(options.themePath).toBe(realpathSync(root));
     expect(options.sourcePath).toBe(realpathSync(join(root, 'src')));
-    expect(options.namespace).toBe('frame');
-    expect(options.prefix).toBe('frame-');
-    expect(options.liquidFilename).toBe('frame-assets.liquid');
+    expect(options.namespace).toBe('easel');
+    expect(options.prefix).toBe('easel-');
+    expect(options.liquidFilename).toBe('easel-assets.liquid');
     expect(options.bundles).toEqual([
       {
         name: 'theme',
@@ -46,7 +46,7 @@ describe('resolveFrameOptions', () => {
       'src/style.css': ':root { color: black; }',
     });
 
-    const options = resolveFrameOptions({}, root);
+    const options = resolveEaselOptions({}, root);
 
     expect(options.bundles[0]?.script).toBe(realpathSync(join(root, 'src/main.js')));
   });
@@ -58,7 +58,7 @@ describe('resolveFrameOptions', () => {
       'frontend/product.css': '.product {}',
     });
 
-    const options = resolveFrameOptions(
+    const options = resolveEaselOptions(
       {
         source: 'frontend',
         bundles: {
@@ -81,7 +81,7 @@ describe('resolveFrameOptions', () => {
       'src/style.css': ':root {}',
     });
 
-    const options = resolveFrameOptions({namespace: 'studio-kit'}, root);
+    const options = resolveEaselOptions({namespace: 'studio-kit'}, root);
 
     expect(options.namespace).toBe('studio-kit');
     expect(options.prefix).toBe('studio-kit-');
@@ -94,7 +94,7 @@ describe('resolveFrameOptions', () => {
       'src/style.css': ':root {}',
     });
 
-    expect(() => resolveFrameOptions({namespace: '../studio'}, root)).toThrow(
+    expect(() => resolveEaselOptions({namespace: '../studio'}, root)).toThrow(
       'namespace must use lowercase letters',
     );
   });
@@ -103,7 +103,7 @@ describe('resolveFrameOptions', () => {
     const root = project({'src/shared.ts': 'export const shared = true;'});
 
     expect(() =>
-      resolveFrameOptions(
+      resolveEaselOptions(
         {
           bundles: {
             first: {script: 'shared.ts'},
@@ -122,38 +122,38 @@ describe('resolveFrameOptions', () => {
       'src/style.css': ':root {}',
     });
 
-    expect(() => resolveFrameOptions({}, root)).toThrow('both main.ts and main.js exist');
+    expect(() => resolveEaselOptions({}, root)).toThrow('both main.ts and main.js exist');
   });
 
-  it('rejects a symlinked Frame staging directory', () => {
+  it('rejects a symlinked Easel staging directory', () => {
     const root = project({
       'src/main.ts': 'export const theme = true;',
       'src/style.css': ':root {}',
     });
-    const external = mkdtempSync(join(tmpdir(), 'frame-external-state-'));
-    mkdirSync(join(root, '.frame'), {recursive: true});
+    const external = mkdtempSync(join(tmpdir(), 'easel-external-state-'));
+    mkdirSync(join(root, '.easel'), {recursive: true});
     symlinkSync(
       external,
-      join(root, '.frame/build'),
+      join(root, '.easel/build'),
       process.platform === 'win32' ? 'junction' : 'dir',
     );
 
-    expect(() => resolveFrameOptions({}, root)).toThrow(
+    expect(() => resolveEaselOptions({}, root)).toThrow(
       'state directory must be a real directory',
     );
   });
 
   it.skipIf(process.platform === 'win32')(
-    'rejects a dangling symlink in Frame state',
+    'rejects a dangling symlink in Easel state',
     () => {
       const root = project({
         'src/main.ts': 'export const theme = true;',
         'src/style.css': ':root {}',
       });
-      mkdirSync(join(root, '.frame'), {recursive: true});
-      symlinkSync(join(root, 'missing-state'), join(root, '.frame/build'), 'dir');
+      mkdirSync(join(root, '.easel'), {recursive: true});
+      symlinkSync(join(root, 'missing-state'), join(root, '.easel/build'), 'dir');
 
-      expect(() => resolveFrameOptions({}, root)).toThrow(
+      expect(() => resolveEaselOptions({}, root)).toThrow(
         'state directory must be a real directory',
       );
     },
@@ -162,7 +162,7 @@ describe('resolveFrameOptions', () => {
   it('allows a script-only bundle when configured explicitly', () => {
     const root = project({'src/main.ts': 'export const theme = true;'});
 
-    const options = resolveFrameOptions({bundles: {theme: {script: 'main.ts'}}}, root);
+    const options = resolveEaselOptions({bundles: {theme: {script: 'main.ts'}}}, root);
 
     expect(options.bundles[0]).toEqual({
       name: 'theme',

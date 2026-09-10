@@ -1,5 +1,5 @@
 node_modules/
-.frame/
+.easel/
 *.zip
-assets/frame-*
-snippets/frame-assets.liquid
+assets/easel-*
+snippets/easel-assets.liquid

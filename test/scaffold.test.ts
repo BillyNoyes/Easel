@@ -22,11 +22,11 @@ const shopifyDirectories = [
 
 describe('theme scaffolder', () => {
   it('creates and builds a framework-neutral Shopify theme', async () => {
-    const parent = mkdtempSync(join(repositoryRoot, '.frame-scaffold-test-'));
+    const parent = mkdtempSync(join(repositoryRoot, '.easel-scaffold-test-'));
     const target = join(parent, 'svelte');
 
     try {
-      execFileSync(process.execPath, [scriptPath, target, '--name', 'Frame Svelte']);
+      execFileSync(process.execPath, [scriptPath, target, '--name', 'Easel Svelte']);
 
       for (const directory of shopifyDirectories) {
         expect(existsSync(join(target, directory))).toBe(true);
@@ -34,11 +34,11 @@ describe('theme scaffolder', () => {
       expect(
         JSON.parse(readFileSync(join(target, 'package.json'), 'utf8')),
       ).toMatchObject({
-        name: 'frame-example-svelte',
+        name: 'easel-example-svelte',
         scripts: {build: 'vite build', dev: 'vite'},
       });
       expect(readFileSync(join(target, 'config/settings_schema.json'), 'utf8')).toContain(
-        'Frame Svelte',
+        'Easel Svelte',
       );
       expect(readFileSync(join(target, 'vite.config.ts'), 'utf8')).toContain(
         "src/index.js'",
@@ -49,19 +49,19 @@ describe('theme scaffolder', () => {
         const path = join(target, file);
         if (!existsSync(path) || !file.includes('.')) continue;
         const content = readFileSync(path, 'utf8');
-        expect(content).not.toMatch(/__(FRAME_IMPORT|PACKAGE_NAME|THEME_NAME)__/);
+        expect(content).not.toMatch(/__(EASEL_IMPORT|PACKAGE_NAME|THEME_NAME)__/);
       }
 
       await build({configFile: join(target, 'vite.config.ts'), logLevel: 'silent'});
-      expect(existsSync(join(target, 'assets/frame-theme.js'))).toBe(true);
-      expect(existsSync(join(target, 'assets/frame-theme.css'))).toBe(true);
+      expect(existsSync(join(target, 'assets/easel-theme.js'))).toBe(true);
+      expect(existsSync(join(target, 'assets/easel-theme.css'))).toBe(true);
     } finally {
       rmSync(parent, {recursive: true, force: true});
     }
   });
 
   it('refuses to overwrite an existing target', () => {
-    const target = mkdtempSync(join(tmpdir(), 'frame-scaffold-existing-'));
+    const target = mkdtempSync(join(tmpdir(), 'easel-scaffold-existing-'));
 
     expect(() =>
       execFileSync(process.execPath, [scriptPath, target], {stdio: 'pipe'}),

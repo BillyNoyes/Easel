@@ -3,7 +3,7 @@ import {exampleDirectories} from './example-directories.mjs';
 
 const pnpmScript = process.env.npm_execpath;
 if (pnpmScript === undefined) {
-  throw new Error('[frame] example checks must be run through pnpm');
+  throw new Error('[easel] example checks must be run through pnpm');
 }
 
 for (const directory of exampleDirectories()) {

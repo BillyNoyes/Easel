@@ -1,15 +1,15 @@
 import {describe, expect, it} from 'vitest';
 import {renderDevelopmentLiquid, renderProductionLiquid} from '../src/liquid.js';
-import type {FrameManifest} from '../src/types.js';
+import type {EaselManifest} from '../src/types.js';
 
-function manifest(overrides: Partial<FrameManifest> = {}): FrameManifest {
+function manifest(overrides: Partial<EaselManifest> = {}): EaselManifest {
   return {
     schemaVersion: 1,
     entries: {
       theme: {
-        script: 'frame-theme.js',
-        styles: ['frame-theme.css'],
-        imports: ['frame-shared-Ab_12.js'],
+        script: 'easel-theme.js',
+        styles: ['easel-theme.css'],
+        imports: ['easel-shared-Ab_12.js'],
       },
     },
     generated: [],
@@ -21,24 +21,24 @@ describe('generated Liquid', () => {
   it('uses Shopify filters and valid module resource markup', () => {
     const liquid = renderProductionLiquid(manifest());
 
-    expect(liquid).toContain("{{ 'frame-theme.css' | asset_url | stylesheet_tag }}");
+    expect(liquid).toContain("{{ 'easel-theme.css' | asset_url | stylesheet_tag }}");
     expect(liquid).toContain(
-      '<link rel="modulepreload" href="{{ \'frame-shared-Ab_12.js\' | asset_url }}">',
+      '<link rel="modulepreload" href="{{ \'easel-shared-Ab_12.js\' | asset_url }}">',
     );
     expect(liquid).toContain(
-      '<script src="{{ \'frame-theme.js\' | asset_url }}" type="module" defer></script>',
+      '<script src="{{ \'easel-theme.js\' | asset_url }}" type="module" defer></script>',
     );
     expect(liquid).toContain(
-      '<!-- [frame] Unknown bundle "{{ frame_entry | escape }}". -->',
+      '<!-- [easel] Unknown bundle "{{ easel_entry | escape }}". -->',
     );
   });
 
   it.each([
-    "frame-person's.js",
-    'frame-quoted"asset.js',
-    '../frame-theme.js',
-    'frame theme.js',
-    'frame-theme.css',
+    "easel-person's.js",
+    'easel-quoted"asset.js',
+    '../easel-theme.js',
+    'easel theme.js',
+    'easel-theme.css',
   ])('rejects an unsafe entry script filename: %s', (script) => {
     expect(() =>
       renderProductionLiquid(
@@ -52,7 +52,7 @@ describe('generated Liquid', () => {
       renderProductionLiquid(
         manifest({
           entries: {
-            theme: {styles: ["frame-person's.css"], imports: []},
+            theme: {styles: ["easel-person's.css"], imports: []},
           },
         }),
       ),
@@ -61,7 +61,7 @@ describe('generated Liquid', () => {
       renderProductionLiquid(
         manifest({
           entries: {
-            theme: {styles: [], imports: ['frame-shared.css']},
+            theme: {styles: [], imports: ['easel-shared.css']},
           },
         }),
       ),
@@ -105,7 +105,7 @@ describe('generated Liquid', () => {
       renderProductionLiquid({
         ...manifest(),
         schemaVersion: 2,
-      } as unknown as FrameManifest),
+      } as unknown as EaselManifest),
     ).toThrow('unsupported manifest schema version');
     expect(() =>
       renderDevelopmentLiquid(['a'.repeat(100_000)], 'http://localhost:5173'),

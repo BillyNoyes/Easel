@@ -6,7 +6,7 @@
     "header": {"name": "Header"},
     "hero": {
       "default_heading": "Alpine meets Tailwind",
-      "default_text": "<p>Lightweight interactions and utility-first styling, built through Frame.</p>",
+      "default_text": "<p>Lightweight interactions and utility-first styling, built through Easel.</p>",
       "heading": "Heading",
       "name": "Interactive hero",
       "text": "Text"

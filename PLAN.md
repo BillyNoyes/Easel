@@ -1,18 +1,18 @@
-# Frame
+# Easel
 
 ## Product plan for a Shopify Liquid theme build tool
 
-**Working name:** Frame
+**Working name:** Easel
 
 **Product family:** Blueprint
 
-**Proposed positioning:** Blueprint defines the theme architecture; Frame turns its source into production-ready Shopify assets.
+**Proposed positioning:** Blueprint defines the theme architecture; Easel turns its source into production-ready Shopify assets.
 
-> Frame is a Shopify-aware Vite adapter and asset development server. It compiles frontend source into a safe, deterministic Shopify theme asset graph while Shopify CLI remains an independent, first-class tool for theme development, synchronization, previews, deployment, and packaging.
+> Easel is a Shopify-aware Vite adapter and asset development server. It compiles frontend source into a safe, deterministic Shopify theme asset graph while Shopify CLI remains an independent, first-class tool for theme development, synchronization, previews, deployment, and packaging.
 
 ## Executive summary
 
-Frame should be built as a focused Vite plugin with a small optional CLI, not as a new JavaScript bundler, starter theme, storefront runtime, or Shopify CLI replacement.
+Easel should be built as a focused Vite plugin with a small optional CLI, not as a new JavaScript bundler, starter theme, storefront runtime, or Shopify CLI replacement.
 
 The Shopify theme tooling ecosystem has several recurring problems:
 
@@ -26,67 +26,67 @@ The Shopify theme tooling ecosystem has several recurring problems:
 - Broad tools duplicate Shopify CLI synchronization and inherit a large API, cache, authentication, and race-condition surface.
 - Starters solve onboarding but couple the build pipeline to a CSS framework, JavaScript framework, and specific theme architecture.
 
-Frame’s opportunity is to provide a narrow and dependable integration layer:
+Easel’s opportunity is to provide a narrow and dependable integration layer:
 
 1. Explicit multi-entry Vite builds.
 2. Stable entry assets with content-hashed shared and dynamic chunks.
 3. Compact generated Liquid based on a versioned output contract.
 4. Safe generated-file ownership and stale cleanup.
-5. Optional reload coordination through Shopify CLI’s public `--notify` mechanism without Frame launching or wrapping Shopify CLI.
-6. Diagnostics that explain exactly what Frame resolved and owns.
+5. Optional reload coordination through Shopify CLI’s public `--notify` mechanism without Easel launching or wrapping Shopify CLI.
+6. Diagnostics that explain exactly what Easel resolved and owns.
 7. No mandatory storefront runtime, framework, starter, or custom source layout.
 
 ## Confirmed technical decisions
 
 ### Shopify CLI remains independently runnable
 
-Frame will not launch, wrap, replace, or proxy Shopify CLI. Users retain the normal Shopify CLI commands and can run them directly alongside Frame.
+Easel will not launch, wrap, replace, or proxy Shopify CLI. Users retain the normal Shopify CLI commands and can run them directly alongside Easel.
 
 The intended workflows are:
 
-- Development terminal one: `npm run dev` runs Vite with the Frame plugin.
+- Development terminal one: `npm run dev` runs Vite with the Easel plugin.
 - Development terminal two: `shopify theme dev` runs Shopify’s theme synchronization and preview server.
-- Build and deployment: `npm run build` runs `vite build` with the Frame plugin, after which the user runs `shopify theme push`, `shopify theme package`, or another Shopify CLI command directly.
-- Project-level package scripts may compose these commands, but the Frame package itself will not spawn Shopify CLI.
+- Build and deployment: `npm run build` runs `vite build` with the Easel plugin, after which the user runs `shopify theme push`, `shopify theme package`, or another Shopify CLI command directly.
+- Project-level package scripts may compose these commands, but the Easel package itself will not spawn Shopify CLI.
 
-Frame will not implement custom `frame dev` or `frame build` commands. Vite remains the development server and build command. Future Frame-specific commands are reserved for capabilities Vite does not provide, such as `frame inspect`, `frame doctor`, `frame clean`, and `frame restore`.
+Easel will not implement custom `easel dev` or `easel build` commands. Vite remains the development server and build command. Future Easel-specific commands are reserved for capabilities Vite does not provide, such as `easel inspect`, `easel doctor`, `easel clean`, and `easel restore`.
 
-A built-in notification handshake is enabled by default at `.frame/shopify-ready`. The user passes that path to `shopify theme dev --notify`, and Frame observes the signal to reload after Shopify CLI finishes processing Liquid changes. The Frame watcher can be disabled or assigned another signal path and debounce delay. The workflow must also function without this handshake by relying on Shopify CLI’s normal live reload.
+A built-in notification handshake is enabled by default at `.easel/shopify-ready`. The user passes that path to `shopify theme dev --notify`, and Easel observes the signal to reload after Shopify CLI finishes processing Liquid changes. The Easel watcher can be disabled or assigned another signal path and debounce delay. The workflow must also function without this handshake by relying on Shopify CLI’s normal live reload.
 
-This boundary ensures that every Shopify CLI option, environment, authentication method, and future CLI release remains available without Frame needing to mirror or forward arguments.
+This boundary ensures that every Shopify CLI option, environment, authentication method, and future CLI release remains available without Easel needing to mirror or forward arguments.
 
 ### Generated Liquid is ignored build output
 
-`snippets/frame-assets.liquid` is generated by Frame and ignored by Git by default. The source-controlled layout contains the stable `{% render 'frame-assets' %}` integration point.
+`snippets/easel-assets.liquid` is generated by Easel and ignored by Git by default. The source-controlled layout contains the stable `{% render 'easel-assets' %}` integration point.
 
 - `npm run dev` writes the development form with the Vite client, development origin, and source entries.
 - `npm run build` writes and verifies the production form with Shopify `asset_url` references.
 - Users must run `npm run build` before `shopify theme push` or `shopify theme package`.
-- Frame records the last successful production form under `.frame/` and restores it after normal development shutdown where practical.
-- `frame doctor` and `frame restore` are planned recovery tools for interrupted sessions.
+- Easel records the last successful production form under `.easel/` and restores it after normal development shutdown where practical.
+- `easel doctor` and `easel restore` are planned recovery tools for interrupted sessions.
 - Shopify GitHub integration requires a compiled deployment branch or repository because it does not execute the Vite build.
 
 This removes normal dev/build changes from the Git working tree without attempting unreliable runtime environment detection in Liquid.
 
 ### Source layout and entries are user-configurable
 
-Frame does not prescribe a `src` directory. Users configure a source directory and an explicit named entry map. Entry paths resolve relative to the configured source directory, while the source directory resolves relative to Vite’s root. The Shopify theme defaults to the repository root and can optionally be in a nested directory through `theme`.
+Easel does not prescribe a `src` directory. Users configure a source directory and an explicit named entry map. Entry paths resolve relative to the configured source directory, while the source directory resolves relative to Vite’s root. The Shopify theme defaults to the repository root and can optionally be in a nested directory through `theme`.
 
-Frame does not create implicit `@` or `~` aliases. Users retain native Vite aliases. Frame only reserves its documented output namespace inside the theme.
+Easel does not create implicit `@` or `~` aliases. Users retain native Vite aliases. Easel only reserves its documented output namespace inside the theme.
 
 ### Volt companion-plugin capabilities
 
-Frame treats Volt’s three companion-plugin concerns differently:
+Easel treats Volt’s three companion-plugin concerns differently:
 
-- **Asset cleanup is core.** Frame stages builds and records a theme-specific ownership ledger. It removes only stale Frame-owned files after a successful replacement build and never empties the shared Shopify `assets/` directory.
-- **Page reload is a built-in development integration.** Vite HMR handles JavaScript and CSS in Frame’s module graph. Shopify CLI handles Liquid and standard theme-file uploads. Frame observes the file passed to `shopify theme dev --notify` and requests one full reload only after Shopify CLI reports idle; it does not add a competing broad Liquid-file watcher.
-- **Import maps are optional.** Standard Frame builds bundle bare imports and do not require browser import maps. Frame’s versioned manifest should make a separate import-map integration possible later without making import maps, shims, or a storefront loader part of the core runtime.
+- **Asset cleanup is core.** Easel stages builds and records a theme-specific ownership ledger. It removes only stale Easel-owned files after a successful replacement build and never empties the shared Shopify `assets/` directory.
+- **Page reload is a built-in development integration.** Vite HMR handles JavaScript and CSS in Easel’s module graph. Shopify CLI handles Liquid and standard theme-file uploads. Easel observes the file passed to `shopify theme dev --notify` and requests one full reload only after Shopify CLI reports idle; it does not add a competing broad Liquid-file watcher.
+- **Import maps are optional.** Standard Easel builds bundle bare imports and do not require browser import maps. Easel’s versioned manifest should make a separate import-map integration possible later without making import maps, shims, or a storefront loader part of the core runtime.
 
 ## Product principles
 
 ### 1. Vite-native
 
-Frame should use Vite and its normal plugin ecosystem for compilation. It should not reproduce module resolution, dependency graphs, HMR, CSS processing, static asset handling, code splitting, or framework integrations.
+Easel should use Vite and its normal plugin ecosystem for compilation. It should not reproduce module resolution, dependency graphs, HMR, CSS processing, static asset handling, code splitting, or framework integrations.
 
 ### 2. Shopify CLI-native
 
@@ -101,11 +101,11 @@ Shopify CLI should remain responsible for:
 - Packaging themes.
 - Theme Editor synchronization.
 
-Frame must not launch or wrap `shopify theme dev`. The user runs Shopify CLI independently alongside Frame. Frame provides a documented file-based handshake using Shopify CLI’s public `--notify` option.
+Easel must not launch or wrap `shopify theme dev`. The user runs Shopify CLI independently alongside Easel. Easel provides a documented file-based handshake using Shopify CLI’s public `--notify` option.
 
 ### 3. Safe by construction
 
-Frame must never broadly empty the Shopify `assets/` directory. It should only modify or remove files it can prove it generated.
+Easel must never broadly empty the Shopify `assets/` directory. It should only modify or remove files it can prove it generated.
 
 ### 4. Explicit over magical
 
@@ -113,7 +113,7 @@ Named entrypoints should be explicit. Automatic discovery can be added as an opt
 
 ### 5. Observable
 
-Frame should explain:
+Easel should explain:
 
 - Which theme it found.
 - Which entries it resolved.
@@ -125,15 +125,15 @@ Frame should explain:
 
 ### 6. Incrementally adoptable
 
-A developer should be able to add Frame to Dawn, Skeleton, an existing agency theme, or a commercial theme without moving the theme into a prescribed source tree.
+A developer should be able to add Easel to Dawn, Skeleton, an existing agency theme, or a commercial theme without moving the theme into a prescribed source tree.
 
 ### 7. No storefront runtime by default
 
-A theme built with Frame should not require a Frame browser runtime in production. Islands, import maps, and component runtimes can be optional integrations built on Frame’s manifest contract.
+A theme built with Easel should not require an Easel browser runtime in production. Islands, import maps, and component runtimes can be optional integrations built on Easel’s manifest contract.
 
 ## Scope
 
-### Frame should own
+### Easel should own
 
 - Vite-to-Shopify theme configuration.
 - Explicit entrypoint resolution.
@@ -146,7 +146,7 @@ A theme built with Frame should not require a Frame browser runtime in productio
 - Coordinating browser reloads with completed Shopify CLI theme updates.
 - Diagnostics and production-output verification.
 
-### Frame should not own
+### Easel should not own
 
 - Shopify authentication.
 - Direct Theme API uploads.
@@ -162,7 +162,7 @@ A theme built with Frame should not require a Frame browser runtime in productio
 - Git branch policy.
 - Git `skip-worktree` manipulation.
 - Automatic editing of user-owned Liquid files.
-- Deployment policy beyond validating Frame’s generated output.
+- Deployment policy beyond validating Easel’s generated output.
 
 ## Ecosystem map
 
@@ -177,7 +177,7 @@ The products commonly compared in this space actually belong to different catego
 | Focused extensions                      | Import-map, islands, cleanup, Ajax cart packages         | Add one specialized capability around the core workflow                       |
 | Official foundation                     | Shopify CLI, Theme Check, Liquid language tooling        | Preview, sync, deploy, validation, formatting, and editor intelligence        |
 
-Frame should compete with focused Vite adapters. It should use starters as fixtures and leave specialized behavior to extensions.
+Easel should compete with focused Vite adapters. It should use starters as fixtures and leave specialized behavior to extensions.
 
 ## Competitive analysis
 
@@ -243,7 +243,7 @@ Barrel provides a set of Vite plugins that:
 - Windows paths: <https://github.com/barrel/shopify-vite/issues/35>
 - CDN cache and version behavior: <https://github.com/barrel/shopify-vite/issues/25>, <https://github.com/barrel/shopify-vite/issues/36>, and <https://github.com/barrel/shopify-vite/issues/83>
 
-#### What Frame should copy
+#### What Easel should copy
 
 - Thin Vite adapter positioning.
 - Generated Liquid helpers.
@@ -253,7 +253,7 @@ Barrel provides a set of Vite plugins that:
 - Current-Vite compatibility and cross-platform CI.
 - Clear migration into an ordinary Shopify theme.
 
-#### What Frame should improve
+#### What Easel should improve
 
 - Require explicit entry maps in the initial API.
 - Detect configuration conflicts instead of silently replacing user settings.
@@ -312,7 +312,7 @@ This package combines a focused Vite adapter with a companion CLI. It includes:
 - Its direct bundle-metadata approach can couple it to Vite-specific internals.
 - Locking, Git restoration, deployment checks, process discovery, and CLI delegation create a large operational implementation relative to the plugin’s core responsibility.
 
-#### What Frame should copy
+#### What Easel should copy
 
 - Stable entries plus hashed chunks.
 - Generated-output ownership.
@@ -321,7 +321,7 @@ This package combines a focused Vite adapter with a companion CLI. It includes:
 - Staging, locking, and restoration principles.
 - Strong cross-platform integration testing.
 
-#### What Frame should avoid
+#### What Easel should avoid
 
 - Hidden Git state.
 - Branch conventions.
@@ -376,7 +376,7 @@ Syncify is a theme-aware compiler and synchronization environment. It supports:
 - Generated `dist/` conflicts: <https://github.com/panoply/syncify/issues/43>
 - Upload race producing 422 responses: <https://github.com/panoply/syncify/issues/41>
 
-#### Frame lesson
+#### Easel lesson
 
 Copy the explicit file-pipeline and diagnostics ideas. Do not copy the remote synchronization responsibility.
 
@@ -415,9 +415,9 @@ Melter implements a custom compiler with:
 - Current source contains asynchronous correctness risks where compilation and emission work is initiated without consistently being awaited.
 - Custom watchers, emitters, and path transforms increase cross-platform and incremental-build risk.
 
-#### Frame lesson
+#### Easel lesson
 
-Use the source/asset/target mental model, but express it through Vite’s plugin lifecycle and a public Frame manifest.
+Use the source/asset/target mental model, but express it through Vite’s plugin lifecycle and a public Easel manifest.
 
 ### Shopify Theme Lab
 
@@ -441,7 +441,7 @@ Use the source/asset/target mental model, but express it through Vite’s plugin
 - Open Shopify CLI compatibility issues have remained unresolved.
 - Generated and source theme states can be difficult to reconcile with Theme Editor changes.
 
-#### Frame lesson
+#### Easel lesson
 
 Copy onboarding quality and examples. Do not make a starter repository the product or upgrade mechanism.
 
@@ -467,9 +467,9 @@ Copy onboarding quality and examples. Do not make a starter repository the produ
 - Theme forks are difficult to upgrade.
 - Its own issue history includes Theme Editor glitches, first-run failures, Windows problems, and build cleanup deleting fonts.
 
-#### Frame lesson
+#### Easel lesson
 
-Use complete themes as integration fixtures but keep the Frame package independent of them.
+Use complete themes as integration fixtures but keep the Easel package independent of them.
 
 ### Slayed
 
@@ -490,7 +490,7 @@ Use complete themes as integration fixtures but keep the Frame package independe
 - Framework and store implementation decisions are mixed with workflow decisions.
 - The core build behavior still comes from Barrel Shopify Vite.
 
-#### Frame lesson
+#### Easel lesson
 
 The `--notify` integration is one of the most valuable ideas in the ecosystem. Treat Slayed as an end-to-end fixture and recipe.
 
@@ -513,9 +513,9 @@ The `--notify` integration is one of the most valuable ideas in the ecosystem. T
 - Requires developers to understand static class extraction and safelisting.
 - Dynamic Liquid-generated class names remain impossible to infer reliably.
 
-#### Frame lesson
+#### Easel lesson
 
-Document Tailwind as a recipe and integration test. Do not include it in Frame core.
+Document Tailwind as a recipe and integration test. Do not include it in Easel core.
 
 ### Trellis Dawn and Tailwind starter
 
@@ -535,9 +535,9 @@ Document Tailwind as a recipe and integration test. Do not include it in Frame c
 - Dawn upgrades and Tailwind changes must be merged into the starter.
 - Theme architecture and build-tool evaluation are mixed together.
 
-#### Frame lesson
+#### Easel lesson
 
-Use it to validate that Frame works with a large Dawn-derived theme and existing CI conventions.
+Use it to validate that Easel works with a large Dawn-derived theme and existing CI conventions.
 
 ### Slatest
 
@@ -557,7 +557,7 @@ Use it to validate that Frame works with a large Dawn-derived theme and existing
 - Reimplements behavior modern Vite provides directly.
 - Broad framework support makes the core difficult to update and test.
 
-#### Frame lesson
+#### Easel lesson
 
 Do not create another all-in-one frontend stack.
 
@@ -580,7 +580,7 @@ Do not create another all-in-one frontend stack.
 - Low public repository adoption despite package downloads.
 - Direct Shopify API dependencies expand maintenance and security responsibility.
 
-#### Frame lesson
+#### Easel lesson
 
 Typed helpers and advanced optimization should be separate packages or recipes built after the core contract stabilizes.
 
@@ -602,7 +602,7 @@ Typed helpers and advanced optimization should be separate packages or recipes b
 - Makes CSP, module preload, and browser support part of the contract.
 - Introduces a runtime loading policy beyond basic bundling.
 
-#### Frame lesson
+#### Easel lesson
 
 Publish a stable manifest API that an optional import-map plugin can consume.
 
@@ -625,9 +625,9 @@ Publish a stable manifest API that an optional import-map plugin can consume.
 - Must define serialization and hydration behavior.
 - Moves beyond a build adapter into an application architecture.
 
-#### Frame lesson
+#### Easel lesson
 
-Keep islands optional and build them against Frame’s public manifest and lifecycle documentation.
+Keep islands optional and build them against Easel’s public manifest and lifecycle documentation.
 
 ### Cleanup plugins
 
@@ -644,13 +644,13 @@ Keep islands optional and build them against Frame’s public manifest and lifec
 - Cleaning before a build succeeds can leave a theme broken.
 - Naming conventions alone can conflict with user files unless the namespace is reserved and documented.
 
-#### Frame lesson
+#### Easel lesson
 
 Cleanup belongs in core because it is inseparable from the output contract, but it must use an ownership ledger and occur only after a successful replacement build.
 
 ## Official Shopify foundation
 
-Frame should compose with the official stack rather than reproduce it.
+Easel should compose with the official stack rather than reproduce it.
 
 ### Shopify CLI
 
@@ -669,7 +669,7 @@ Relevant responsibilities and capabilities:
 - It supports `--theme-editor-sync` and reconciliation behavior.
 - Its `--notify` option updates a file or posts to a URL after file-change processing becomes idle.
 
-When the user opts into cross-process reload coordination, Frame should observe the destination passed by the user to Shopify CLI’s `--notify` option rather than guessing when a Liquid upload is complete. Frame must not spawn Shopify CLI to establish this handshake.
+When the user opts into cross-process reload coordination, Easel should observe the destination passed by the user to Shopify CLI’s `--notify` option rather than guessing when a Liquid upload is complete. Easel must not spawn Shopify CLI to establish this handshake.
 
 ### Theme Check and Liquid tooling
 
@@ -679,14 +679,14 @@ When the user opts into cross-process reload coordination, Frame should observe 
 - Parser: <https://www.npmjs.com/package/@shopify/liquid-html-parser>
 - Language server: <https://www.npmjs.com/package/@shopify/theme-language-server-node>
 
-Frame should not build its own Liquid parser, formatter, language server, or theme linter. It may invoke or recommend Theme Check during verification.
+Easel should not build its own Liquid parser, formatter, language server, or theme linter. It may invoke or recommend Theme Check during verification.
 
 ### Dawn and Skeleton Theme
 
 - Dawn: <https://github.com/Shopify/dawn>
 - Skeleton: <https://github.com/Shopify/skeleton-theme>
 
-Frame should use both as permanent integration fixtures:
+Easel should use both as permanent integration fixtures:
 
 - Skeleton for the smallest official theme architecture.
 - Dawn for a large, production-oriented theme with realistic assets and sections.
@@ -704,7 +704,7 @@ Consequences:
 - “One save behind” pages.
 - Confusion about which tool owns each reload.
 
-**Frame opportunity:** keep the two tools independent while supporting a `--notify` handshake. The user passes Frame’s signal-file path to `shopify theme dev`; Frame observes it and reloads only after Shopify CLI reports idle. Frame never launches Shopify CLI or owns its process lifecycle.
+**Easel opportunity:** keep the two tools independent while supporting a `--notify` handshake. The user passes Easel’s signal-file path to `shopify theme dev`; Easel observes it and reloads only after Shopify CLI reports idle. Easel never launches Shopify CLI or owns its process lifecycle.
 
 ### 2. Safe generated asset cleanup
 
@@ -716,31 +716,31 @@ Consequences:
 - Theme packages become larger.
 - Broad cleanup can destroy hand-authored assets.
 
-**Frame opportunity:** maintain an atomic generated-file ledger and remove only previously owned files after a successful new build.
+**Easel opportunity:** maintain an atomic generated-file ledger and remove only previously owned files after a successful new build.
 
 ### 3. Generated Liquid size
 
 A dispatcher with conditions for every discovered entry can exceed Shopify’s file limit.
 
-**Frame opportunity:** explicit entries, compact names, predictable stable entry filenames, a size check, and a future per-entry snippet strategy if needed.
+**Easel opportunity:** explicit entries, compact names, predictable stable entry filenames, a size check, and a future per-entry snippet strategy if needed.
 
 ### 4. Vite configuration ownership
 
 Plugins that silently replace `rollupOptions.input`, output naming, `manifest`, `publicDir`, aliases, or CORS can conflict with an existing application.
 
-**Frame opportunity:** merge only unambiguous settings, detect conflicts, and show a complete resolved configuration through `frame inspect`.
+**Easel opportunity:** merge only unambiguous settings, detect conflicts, and show a complete resolved configuration through `easel inspect`.
 
 ### 5. Theme Editor lifecycle
 
 The Theme Editor can re-render a section without reloading the full page. Global initialization can run twice, while section-specific initialization can fail to run after a replacement.
 
-**Frame opportunity:** keep core runtime-free, but publish a documented lifecycle recipe and optional helper for idempotent initialization and teardown. Do not disguise this as generic Vite HMR.
+**Easel opportunity:** keep core runtime-free, but publish a documented lifecycle recipe and optional helper for idempotent initialization and teardown. Do not disguise this as generic Vite HMR.
 
 ### 6. CORS, local network access, HTTPS, and tunnels
 
 The theme page is rendered on a Shopify or CLI origin while JavaScript and CSS may come from the Vite origin. Browsers increasingly restrict local-network access from remote pages.
 
-**Frame opportunity:**
+**Easel opportunity:**
 
 - Compute the actual bound Vite origin after the server listens.
 - Allow known Shopify storefront and Admin origins narrowly.
@@ -752,19 +752,19 @@ The theme page is rendered on a Shopify or CLI origin while JavaScript and CSS m
 
 Imported fonts, images, and CSS `url()` references need output names and relative URLs that survive Shopify’s flat asset CDN.
 
-**Frame opportunity:** include fonts and images in the ownership manifest, test CSS URL rewriting, and reject output paths Shopify cannot serve.
+**Easel opportunity:** include fonts and images in the ownership manifest, test CSS URL rewriting, and reject output paths Shopify cannot serve.
 
 ### 8. Cache invalidation
 
 Stripping Shopify asset version query parameters can leave stable entry files stale. Hashing every top-level entry forces Liquid to change on every build.
 
-**Frame opportunity:** use stable top-level entry names with Shopify’s `asset_url` query string and hashed shared/dynamic chunks.
+**Easel opportunity:** use stable top-level entry names with Shopify’s `asset_url` query string and hashed shared/dynamic chunks.
 
 ### 9. Source-controlled versus generated themes
 
 Some teams commit deployable assets; others build them in CI. Shopify’s GitHub theme integration does not run a Node build.
 
-**Frame opportunity:** explicitly support and document two workflows:
+**Easel opportunity:** explicitly support and document two workflows:
 
 - **Pipeline mode:** source branch ignores generated output; CI builds a package or distribution branch before Shopify deployment.
 - **Repository mode:** production outputs are committed; development temporarily writes tool-owned files and restores production state on exit.
@@ -773,32 +773,32 @@ Avoid silently selecting a Git policy.
 
 ## Proposed package design
 
-Start with one package named `vite-plugin-shopify-frame`, that exports the Vite plugin. Frame does not replace the native `vite` and `vite build` commands. A future `frame` executable is reserved for diagnostics and recovery tasks that Vite does not provide.
+Start with one package named `vite-plugin-shopify-easel`, that exports the Vite plugin. Easel does not replace the native `vite` and `vite build` commands. A future `easel` executable is reserved for diagnostics and recovery tasks that Vite does not provide.
 
 Possible later packages:
 
-- `vite-plugin-shopify-frame-islands`
-- `vite-plugin-shopify-frame-import-maps`
-- `vite-plugin-shopify-frame-sections`
-- `vite-plugin-shopify-frame-tailwind`
+- `vite-plugin-shopify-easel-islands`
+- `vite-plugin-shopify-easel-import-maps`
+- `vite-plugin-shopify-easel-sections`
+- `vite-plugin-shopify-easel-tailwind`
 
 Do not create these packages before the core manifest contract is stable and a real user requests them.
 
 ## Public API philosophy
 
-Keep the initial Frame-specific configuration small:
+Keep the initial Easel-specific configuration small:
 
 - `theme`: Shopify theme path, resolved relative to Vite’s root; defaults to the Vite root.
 - `source`: source-code path, resolved relative to Vite’s root; defaults to `src`.
-- `bundles`: explicit map of public bundle names to optional script and stylesheet entries. When omitted, Frame uses `src/main.ts` or `src/main.js` together with `src/style.css`.
-- `namespace`: base name for Frame-generated assets and the Liquid loader; defaults to `frame`, producing `assets/frame-*` and `snippets/frame-assets.liquid`.
+- `bundles`: explicit map of public bundle names to optional script and stylesheet entries. When omitted, Easel uses `src/main.ts` or `src/main.js` together with `src/style.css`.
+- `namespace`: base name for Easel-generated assets and the Liquid loader; defaults to `easel`, producing `assets/easel-*` and `snippets/easel-assets.liquid`.
 - `refresh`: Shopify CLI notification-file watching and debounce configuration; enabled by default.
 
 Development origins and other server behavior remain native Vite configuration through options such as `server.origin`, `server.cors`, and `server.allowedHosts`. Safe stale-output cleanup is an invariant rather than an option.
 
 Everything else should remain native Vite configuration.
 
-Do not include Frame options for:
+Do not include Easel options for:
 
 - Tailwind.
 - Sass.
@@ -816,15 +816,15 @@ Do not include Frame options for:
 
 ### Named entries
 
-Users can define a small, explicit map such as global theme, product, collection, cart, or account bundles. Frame validates that names are unique, filesystem-safe, resolve to files, and do not collide with existing user-owned theme assets.
+Users can define a small, explicit map such as global theme, product, collection, cart, or account bundles. Easel validates that names are unique, filesystem-safe, resolve to files, and do not collide with existing user-owned theme assets.
 
-JavaScript, TypeScript, JSX, TSX, CSS, and any other format supported by the user’s configured Vite plugins can be an entry. Frame does not infer application frameworks from file extensions.
+JavaScript, TypeScript, JSX, TSX, CSS, and any other format supported by the user’s configured Vite plugins can be an entry. Easel does not infer application frameworks from file extensions.
 
-`source` is a path-resolution convenience, not a required project architecture. It may point to a nested workspace location. Frame should allow source inputs outside the theme directory while strictly constraining every generated output to the validated theme and staging roots.
+`source` is a path-resolution convenience, not a required project architecture. It may point to a nested workspace location. Easel should allow source inputs outside the theme directory while strictly constraining every generated output to the validated theme and staging roots.
 
 ### Stable top-level entries
 
-Top-level entry files should use stable names within Frame’s namespace. Shopify’s `asset_url` should retain its version query for cache invalidation.
+Top-level entry files should use stable names within Easel’s namespace. Shopify’s `asset_url` should retain its version query for cache invalidation.
 
 ### Content-addressed chunks
 
@@ -832,7 +832,7 @@ Shared and dynamically imported chunks should include content hashes. Relative i
 
 ### CSS
 
-Frame should:
+Easel should:
 
 - Associate emitted CSS with its entry.
 - Render styles before the corresponding module script.
@@ -843,13 +843,13 @@ Frame should:
 
 ### Module preloads
 
-Frame should emit module-preload tags for static imports and avoid preloading dynamic imports unless a future explicit policy enables it.
+Easel should emit module-preload tags for static imports and avoid preloading dynamic imports unless a future explicit policy enables it.
 
 ### Internal manifest
 
-Frame generates a versioned machine-readable internal manifest containing the public bundle names, entry JavaScript, entry CSS, static imports, and complete generated-file set. It stores this manifest in the theme-specific Frame state directory and does not upload it to Shopify.
+Easel generates a versioned machine-readable internal manifest containing the public bundle names, entry JavaScript, entry CSS, static imports, and complete generated-file set. It stores this manifest in the theme-specific Easel state directory and does not upload it to Shopify.
 
-The initial internal schema supports Frame's generated Liquid and ownership workflow. Before exposing it as a stable extension API, add the Frame package version, source entries, dynamic imports, per-entry static assets, hashes, and sizes, then document a compatibility policy.
+The initial internal schema supports Easel's generated Liquid and ownership workflow. Before exposing it as a stable extension API, add the Easel package version, source entries, dynamic imports, per-entry static assets, hashes, and sizes, then document a compatibility policy.
 
 ### Generated Liquid
 
@@ -867,13 +867,13 @@ The initial release can use one compact explicit-entry dispatcher. If real proje
 
 ## Safe build algorithm
 
-1. Resolve and validate Frame configuration.
+1. Resolve and validate Easel configuration.
 2. Validate the Shopify theme target.
 3. Resolve explicit entries.
 4. Read the previous successful ownership ledger.
 5. Build into a temporary staging directory.
 6. Read Vite’s manifest and complete bundle metadata.
-7. Construct the Frame manifest.
+7. Construct the Easel manifest.
 8. Generate production Liquid in staging.
 9. Validate entry files, imports, CSS, aliases, paths, and generated Liquid size.
 10. Determine the exact set of previously owned stale files.
@@ -887,24 +887,24 @@ If any step before the commit phase fails, the previous successful output remain
 ## Development algorithm
 
 1. Resolve and validate the theme and entries.
-2. Start Frame’s Vite server and wait for the actual listening address.
+2. Start Easel’s Vite server and wait for the actual listening address.
 3. Resolve the selected local, network, or custom development origin.
 4. Generate the development Liquid only after the origin is known.
 5. Use Vite HMR for module JavaScript and CSS.
 6. Let the independently running Shopify CLI own Liquid, JSON, locale, template, config, and section uploads.
 7. By default, let Shopify CLI own reload behavior for theme-file changes.
 8. If notification integration is configured, observe the shared `--notify` file, debounce notifications, and send exactly one full browser reload after Shopify CLI reports idle.
-9. Ignore Frame’s generated snippet when processing reload notifications to avoid loops.
-10. On normal Frame shutdown, restore the last successful production snippet when repository mode requires it.
-11. On a Frame crash, leave enough state for `frame doctor` and `frame restore` to recover safely.
+9. Ignore Easel’s generated snippet when processing reload notifications to avoid loops.
+10. On normal Easel shutdown, restore the last successful production snippet when repository mode requires it.
+11. On an Easel crash, leave enough state for `easel doctor` and `easel restore` to recover safely.
 
-Frame does not start, stop, authenticate, configure, or forward arguments to Shopify CLI.
+Easel does not start, stop, authenticate, configure, or forward arguments to Shopify CLI.
 
 ## CLI plan
 
-Vite remains responsible for development and builds through the consuming project’s `npm run dev` and `npm run build` scripts. Frame does not provide `frame dev` or `frame build`.
+Vite remains responsible for development and builds through the consuming project’s `npm run dev` and `npm run build` scripts. Easel does not provide `easel dev` or `easel build`.
 
-### `frame inspect`
+### `easel inspect`
 
 Reports:
 
@@ -919,13 +919,13 @@ Reports:
 
 Support a machine-readable JSON form from the start.
 
-### `frame clean`
+### `easel clean`
 
 - Defaults to dry-run.
-- Lists stale Frame-owned files.
+- Lists stale Easel-owned files.
 - Requires an explicit confirmation flag to remove them outside a normal successful build.
 
-### `frame doctor`
+### `easel doctor`
 
 Checks:
 
@@ -940,19 +940,19 @@ Checks:
 - Ownership-ledger integrity.
 - Reachability of a selected development origin where practical.
 
-### `frame restore`
+### `easel restore`
 
 Restores the last known successful production generated state without manipulating Git’s skip-worktree index.
 
 ## Configuration conflict policy
 
-Frame must not silently override a user setting when doing so changes semantics.
+Easel must not silently override a user setting when doing so changes semantics.
 
 ### Merge where safe
 
 Examples:
 
-- Add Frame entries alongside an explicitly compatible input map.
+- Add Easel entries alongside an explicitly compatible input map.
 - Add narrowly scoped CORS origins to an existing explicit policy when requested.
 - Add aliases under a reserved namespace.
 
@@ -960,17 +960,17 @@ Examples:
 
 Examples:
 
-- A different `outDir` that bypasses Frame’s staging and ownership guarantees.
+- A different `outDir` that bypasses Easel’s staging and ownership guarantees.
 - `emptyOutDir: true` against a shared Shopify `assets/` directory.
 - Conflicting entry names.
 - Output filename patterns that make the ownership namespace unsafe.
-- A user manifest setting that prevents Frame from resolving CSS and imports.
+- A user manifest setting that prevents Easel from resolving CSS and imports.
 
-Every conflict message should explain what Frame requires, what the project currently defines, and the supported resolution.
+Every conflict message should explain what Easel requires, what the project currently defines, and the supported resolution.
 
 ## Theme Editor behavior
 
-Core Frame should not attempt to transform a Liquid theme into a single-page application.
+Core Easel should not attempt to transform a Liquid theme into a single-page application.
 
 Documentation should explain that Shopify can replace section markup dynamically and emit events including section load, unload, reorder, and block selection events. Application code should be idempotent and should clean up listeners and component instances before remounting.
 
@@ -982,7 +982,7 @@ A future optional helper may:
 - Remount only inside the affected section.
 - Remain independent of React, Vue, Alpine, or another framework.
 
-This helper should not be required to use Frame.
+This helper should not be required to use Easel.
 
 ## Security and supply-chain principles
 
@@ -1082,17 +1082,17 @@ Where credentials and a test store are available, test:
 - Liquid update after Shopify CLI notification.
 - One browser reload per completed update group.
 - Section replacement and application reinitialization.
-- Production push or package generated by Shopify CLI using Frame’s output.
+- Production push or package generated by Shopify CLI using Easel’s output.
 
 ## Non-negotiable safety invariants
 
-- Frame never deletes a file absent from its previous successful ownership ledger.
-- Frame never cleans old output before a replacement build succeeds.
+- Easel never deletes a file absent from its previous successful ownership ledger.
+- Easel never cleans old output before a replacement build succeeds.
 - A failed build leaves the previous production output usable.
-- Frame never emits `/@vite/client` into production Liquid.
-- Frame never emits unresolved local aliases into production JavaScript.
-- Frame never edits user-owned Liquid outside the explicitly configured generated file.
-- Frame never silently empties Shopify’s `assets/` directory.
+- Easel never emits `/@vite/client` into production Liquid.
+- Easel never emits unresolved local aliases into production JavaScript.
+- Easel never edits user-owned Liquid outside the explicitly configured generated file.
+- Easel never silently empties Shopify’s `assets/` directory.
 - Repeated identical builds produce identical output.
 - Unchanged generated snippets are not rewritten.
 - Development startup and shutdown do not depend on hidden Git index state.
@@ -1107,7 +1107,7 @@ Build one Dawn-derived fixture with:
 
 - Barrel Shopify Vite.
 - `woodawn/vite-plugin-shopify-theme`.
-- A minimal Frame prototype.
+- A minimal Easel prototype.
 
 Test:
 
@@ -1147,7 +1147,7 @@ Deliver:
 - Vite configuration adapter.
 - Stable entries and hashed chunks.
 - Internal Vite manifest handling.
-- Public Frame manifest.
+- Public Easel manifest.
 - Generated production Liquid.
 - CSS-only and JS-plus-CSS entry support.
 - Static import preloads.
@@ -1156,7 +1156,7 @@ Deliver:
 - Safe stale cleanup.
 - Configuration conflict validation.
 
-The phase is complete when `vite build` works safely without the Frame CLI.
+The phase is complete when `vite build` works safely without the Easel CLI.
 
 ### Phase 2: composable development
 
@@ -1170,7 +1170,7 @@ Deliver:
 - Vite HMR for JavaScript and CSS.
 - Built-in `shopify theme dev --notify` signal-file observation.
 - One reload after each completed Shopify CLI update group when the handshake is enabled.
-- Clear two-terminal documentation for running Frame and Shopify CLI independently.
+- Clear two-terminal documentation for running Easel and Shopify CLI independently.
 - Compatibility with ordinary Shopify CLI live reload when the handshake is disabled.
 - Local, LAN, and explicit external origins.
 
@@ -1182,10 +1182,10 @@ Do not include a managed tunnel provider initially.
 
 Deliver:
 
-- `frame inspect` with text and JSON output.
-- `frame doctor`.
-- `frame clean --dry-run`.
-- `frame restore`.
+- `easel inspect` with text and JSON output.
+- `easel doctor`.
+- `easel clean --dry-run`.
+- `easel restore`.
 - Development URL detection in production output.
 - Missing asset and unresolved alias checks.
 - Generated Liquid size checks.
@@ -1226,13 +1226,13 @@ Only pursue these after validating demand:
 
 ### Adoption
 
-- A developer can add Frame to an existing Shopify theme in under ten minutes.
+- A developer can add Easel to an existing Shopify theme in under ten minutes.
 - No mandatory source restructuring.
 - Migration from Barrel Shopify Vite has a documented mechanical path.
 
 ### Correctness
 
-- No stale Frame assets after an entry or chunk is removed.
+- No stale Easel assets after an entry or chunk is removed.
 - No user-owned asset is deleted.
 - No development URL appears in production output.
 - Multiple entries build without excessive generated Liquid.
@@ -1240,7 +1240,7 @@ Only pursue these after validating demand:
 
 ### Developer experience
 
-- Frame and Shopify CLI remain independently runnable and composable.
+- Easel and Shopify CLI remain independently runnable and composable.
 - JavaScript and CSS use normal Vite HMR.
 - With the optional notification handshake, Liquid reload occurs only after Shopify CLI reports idle.
 - One completed theme update produces one browser reload when notification coordination is enabled.
@@ -1271,13 +1271,13 @@ Validate Shopify cache behavior using `asset_url` version parameters and a real 
 
 **Recommendation:** make pipeline mode the cleanest documented workflow, with CI producing a deployable artifact or distribution branch. Support repository mode explicitly without hidden Git index manipulation.
 
-### 4. Frame CLI scope
+### 4. Easel CLI scope
 
-**Decision:** Vite owns development and builds through `vite` and `vite build`. Frame-specific commands are limited to inspect, doctor, clean, and restore. Frame will not launch or wrap any Shopify CLI command. Users run `shopify theme dev`, `shopify theme push`, and `shopify theme package` directly.
+**Decision:** Vite owns development and builds through `vite` and `vite build`. Easel-specific commands are limited to inspect, doctor, clean, and restore. Easel will not launch or wrap any Shopify CLI command. Users run `shopify theme dev`, `shopify theme push`, and `shopify theme package` directly.
 
 ### 5. Vite manifest versus direct bundle metadata
 
-**Recommendation:** use Vite’s official manifest internally for entry relationships and produce a versioned Frame manifest. Avoid making undocumented Vite metadata the public contract.
+**Recommendation:** use Vite’s official manifest internally for entry relationships and produce a versioned Easel manifest. Avoid making undocumented Vite metadata the public contract.
 
 ### 6. Tunnel support
 
@@ -1289,7 +1289,7 @@ Validate Shopify cache behavior using `asset_url` version parameters and a real 
 
 ## Recommended differentiators
 
-If Frame executes only five ideas exceptionally well, they should be:
+If Easel executes only five ideas exceptionally well, they should be:
 
 1. Optional Shopify CLI `--notify`-driven reload coordination without process coupling.
 2. Explicit multi-entry Vite builds with stable entries and hashed chunks.
@@ -1299,21 +1299,21 @@ If Frame executes only five ideas exceptionally well, they should be:
 
 ## Brand direction
 
-**Name:** Frame
+**Name:** Easel
 
-**Package:** `vite-plugin-shopify-frame`
+**Package:** `vite-plugin-shopify-easel`
 
 Product expressions:
 
-- Frame
-- `vite-plugin-shopify-frame`
-- `frame inspect`
+- Easel
+- `vite-plugin-shopify-easel`
+- `easel inspect`
 
 Possible taglines:
 
 - Modern assets for Liquid themes.
 - Vite for Shopify Liquid themes.
-- Frame your theme for production.
+- Easel your theme for production.
 - Build the structure behind your Shopify theme.
 
 ## Primary sources

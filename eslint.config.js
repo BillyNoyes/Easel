@@ -9,7 +9,7 @@ const typescriptFiles = [
 
 export default tseslint.config(
   {
-    ignores: ['**/dist/**', '.frame/**', '.pi-subagents/**', 'eslint.config.js'],
+    ignores: ['**/dist/**', '.easel/**', '.pi-subagents/**', 'eslint.config.js'],
   },
   ...tseslint.configs.recommendedTypeChecked.map((config) => ({
     ...config,

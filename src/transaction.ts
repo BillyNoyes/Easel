@@ -9,7 +9,7 @@ import {
   writeFileSync,
 } from 'node:fs';
 import {dirname, join, relative, resolve, sep} from 'node:path';
-import type {ResolvedFrameOptions} from './types.js';
+import type {ResolvedEaselOptions} from './types.js';
 import {SAFE_ASSET_FILENAME, SAFE_LIQUID_FILENAME} from './validation.js';
 
 interface TransactionEntry {
@@ -47,7 +47,7 @@ function restoreSnapshots(snapshots: FileSnapshots): void {
 }
 
 function writeTransactionJournal(
-  options: ResolvedFrameOptions,
+  options: ResolvedEaselOptions,
   snapshots: FileSnapshots,
 ): void {
   const temporary = `${options.transactionPath}-${randomUUID()}`;
@@ -82,7 +82,7 @@ function writeTransactionJournal(
 }
 
 export function runFileTransaction(
-  options: ResolvedFrameOptions,
+  options: ResolvedEaselOptions,
   paths: string[],
   action: () => void,
 ): void {
@@ -99,19 +99,19 @@ export function runFileTransaction(
     } catch (rollbackError) {
       throw new AggregateError(
         [error, rollbackError],
-        '[frame] output commit failed and could not be rolled back completely',
+        '[easel] output commit failed and could not be rolled back completely',
       );
     }
     throw error;
   }
 }
 
-export function recoverInterruptedCommit(options: ResolvedFrameOptions): void {
+export function recoverInterruptedCommit(options: ResolvedEaselOptions): void {
   if (!existsSync(options.transactionPath)) return;
   const metadata = lstatSync(options.transactionPath);
   if (!metadata.isDirectory() || metadata.isSymbolicLink()) {
     throw new Error(
-      `[frame] transaction journal must be a real directory: ${options.transactionPath}`,
+      `[easel] transaction journal must be a real directory: ${options.transactionPath}`,
     );
   }
 
@@ -122,12 +122,12 @@ export function recoverInterruptedCommit(options: ResolvedFrameOptions): void {
     ) as unknown;
   } catch {
     throw new Error(
-      `[frame] interrupted transaction journal is invalid: ${options.transactionPath}`,
+      `[easel] interrupted transaction journal is invalid: ${options.transactionPath}`,
     );
   }
   if (!isTransactionJournal(value) || value.themePath !== options.themePath) {
     throw new Error(
-      `[frame] interrupted transaction journal is invalid: ${options.transactionPath}`,
+      `[easel] interrupted transaction journal is invalid: ${options.transactionPath}`,
     );
   }
 
@@ -140,12 +140,12 @@ export function recoverInterruptedCommit(options: ResolvedFrameOptions): void {
     }
     if (entry.blob === undefined || !/^\d+\.bin$/.test(entry.blob)) {
       throw new Error(
-        `[frame] interrupted transaction journal is invalid: ${options.transactionPath}`,
+        `[easel] interrupted transaction journal is invalid: ${options.transactionPath}`,
       );
     }
     const blobPath = join(options.transactionPath, entry.blob);
     if (!existsSync(blobPath)) {
-      throw new Error(`[frame] interrupted transaction snapshot is missing: ${blobPath}`);
+      throw new Error(`[easel] interrupted transaction snapshot is missing: ${blobPath}`);
     }
     snapshots.set(path, readFileSync(blobPath));
   }
@@ -159,7 +159,7 @@ export function safeResolve(root: string, path: string): string {
   const result = resolve(base, path);
   const relativePath = relative(base, result);
   if (relativePath === '..' || relativePath.startsWith(`..${sep}`)) {
-    throw new Error(`[frame] output escapes its allowed root: ${path}`);
+    throw new Error(`[easel] output escapes its allowed root: ${path}`);
   }
   return result;
 }
@@ -168,7 +168,7 @@ export function writeIfChanged(path: string, content: string | Buffer): void {
   const next = Buffer.isBuffer(content) ? content : Buffer.from(content);
   if (existsSync(path) && readFileSync(path).equals(next)) return;
   mkdirSync(dirname(path), {recursive: true});
-  const temporary = `${path}.frame-${process.pid}-${Date.now()}`;
+  const temporary = `${path}.easel-${process.pid}-${Date.now()}`;
   writeFileSync(temporary, next);
   try {
     if (process.platform === 'win32' && existsSync(path)) {
@@ -182,7 +182,7 @@ export function writeIfChanged(path: string, content: string | Buffer): void {
 }
 
 function journalLocation(
-  options: ResolvedFrameOptions,
+  options: ResolvedEaselOptions,
   path: string,
 ): Pick<TransactionEntry, 'scope' | 'path'> {
   const statePath = relativeWithin(dirname(options.ledgerPath), path);
@@ -193,11 +193,11 @@ function journalLocation(
   if (themePath !== undefined) {
     return assertJournalLocation({scope: 'theme', path: themePath});
   }
-  throw new Error(`[frame] cannot journal output outside Frame's roots: ${path}`);
+  throw new Error(`[easel] cannot journal output outside Easel's roots: ${path}`);
 }
 
 function resolveJournalLocation(
-  options: ResolvedFrameOptions,
+  options: ResolvedEaselOptions,
   entry: TransactionEntry,
 ): string {
   assertJournalLocation(entry);
@@ -205,7 +205,7 @@ function resolveJournalLocation(
   const path = safeResolve(root, entry.path);
   if (relativeWithin(root, path) !== entry.path) {
     throw new Error(
-      `[frame] interrupted transaction journal contains an invalid path: ${entry.path}`,
+      `[easel] interrupted transaction journal contains an invalid path: ${entry.path}`,
     );
   }
   return path;
@@ -222,7 +222,7 @@ function assertJournalLocation<T extends Pick<TransactionEntry, 'scope' | 'path'
         );
   if (!valid) {
     throw new Error(
-      `[frame] transaction journal contains an invalid path: ${location.path}`,
+      `[easel] transaction journal contains an invalid path: ${location.path}`,
     );
   }
   return location;

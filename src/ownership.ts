@@ -1,6 +1,6 @@
 import {existsSync, readFileSync} from 'node:fs';
 import {sep} from 'node:path';
-import type {FrameOwnershipLedger, ResolvedFrameOptions} from './types.js';
+import type {EaselOwnershipLedger, ResolvedEaselOptions} from './types.js';
 import {
   SAFE_ASSET_FILENAME,
   SAFE_LIQUID_FILENAME,
@@ -8,8 +8,8 @@ import {
 } from './validation.js';
 
 export function readOwnershipLedger(
-  options: ResolvedFrameOptions,
-): FrameOwnershipLedger | undefined {
+  options: ResolvedEaselOptions,
+): EaselOwnershipLedger | undefined {
   const path = options.ledgerPath;
   if (!existsSync(path)) return undefined;
 
@@ -17,7 +17,7 @@ export function readOwnershipLedger(
   try {
     value = JSON.parse(readFileSync(path, 'utf8')) as unknown;
   } catch {
-    throw new Error(`[frame] ownership ledger is not valid JSON: ${path}`);
+    throw new Error(`[easel] ownership ledger is not valid JSON: ${path}`);
   }
   if (!isRecord(value) || value.themePath !== options.themePath) {
     throw invalidLedger(options);
@@ -38,14 +38,14 @@ export function readOwnershipLedger(
 }
 
 export function ownedAssetPath(
-  options: Pick<ResolvedFrameOptions, 'prefix'>,
+  options: Pick<ResolvedEaselOptions, 'prefix'>,
   file: string,
 ): string {
   return namespacedAssetPath(options.prefix, file);
 }
 
 export function ownedLiquidPath(
-  options: Pick<ResolvedFrameOptions, 'liquidFilename'>,
+  options: Pick<ResolvedEaselOptions, 'liquidFilename'>,
 ): string {
   return `snippets/${options.liquidFilename}`;
 }
@@ -62,7 +62,7 @@ export function assertAssetWritable(
     !readFileSync(destinationPath).equals(content)
   ) {
     throw new Error(
-      `[frame] refusing to overwrite a file Frame does not own: ${destinationPath}`,
+      `[easel] refusing to overwrite a file Easel does not own: ${destinationPath}`,
     );
   }
 }
@@ -75,26 +75,26 @@ export function assertLiquidWritable(
   if (!existsSync(absolutePath) || previousFiles.has(relativePath)) return;
   if (isGeneratedLiquid(readFileSync(absolutePath, 'utf8'))) return;
   throw new Error(
-    `[frame] refusing to overwrite a Liquid file Frame does not own: ${absolutePath}`,
+    `[easel] refusing to overwrite a Liquid file Easel does not own: ${absolutePath}`,
   );
 }
 
 export function isGeneratedLiquid(content: string): boolean {
   return (
-    content.startsWith('{% doc %}\nGenerated asset loader managed by Frame.\n') ||
+    content.startsWith('{% doc %}\nGenerated asset loader managed by Easel.\n') ||
     isDevelopmentLiquid(content)
   );
 }
 
 export function isDevelopmentLiquid(content: string): boolean {
   return content.startsWith(
-    '{% doc %}\nGenerated development asset loader managed by Frame.\n',
+    '{% doc %}\nGenerated development asset loader managed by Easel.\n',
   );
 }
 
 function isCurrentLedger(
   value: Record<string, unknown>,
-): value is FrameOwnershipLedger & Record<string, unknown> {
+): value is EaselOwnershipLedger & Record<string, unknown> {
   if (
     value.schemaVersion !== 2 ||
     typeof value.themePath !== 'string' ||
@@ -157,7 +157,7 @@ function namespacedAssetPath(prefix: string, file: string): string {
     !normalized.startsWith(prefix) ||
     normalized === prefix
   ) {
-    throw new Error(`[frame] generated asset is outside Frame's namespace: ${file}`);
+    throw new Error(`[easel] generated asset is outside Easel's namespace: ${file}`);
   }
   return `assets/${normalized}`;
 }
@@ -166,8 +166,8 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null;
 }
 
-function invalidLedger(options: ResolvedFrameOptions): Error {
+function invalidLedger(options: ResolvedEaselOptions): Error {
   return new Error(
-    `[frame] invalid ownership ledger for ${options.themePath}: ${options.ledgerPath}`,
+    `[easel] invalid ownership ledger for ${options.themePath}: ${options.ledgerPath}`,
   );
 }

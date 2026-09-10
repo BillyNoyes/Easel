@@ -1,8 +1,8 @@
 import type {Plugin, ResolvedConfig} from 'vite';
 import {finalizeProductionBuild} from './build.js';
 import {configureDevelopmentServer} from './development.js';
-import type {FrameOptions, ResolvedFrameOptions} from './types.js';
-import {frameBundleModules} from './virtual.js';
+import type {EaselOptions, ResolvedEaselOptions} from './types.js';
+import {easelBundleModules} from './virtual.js';
 import {prepareViteConfig, validateResolvedViteConfig} from './vite-config.js';
 
 interface BuildLifecycle {
@@ -10,23 +10,23 @@ interface BuildLifecycle {
   outputHooksCompleted: boolean;
 }
 
-export function frame(options: FrameOptions = {}): Plugin[] {
-  let resolvedOptions: ResolvedFrameOptions | undefined;
+export function easel(options: EaselOptions = {}): Plugin[] {
+  let resolvedOptions: ResolvedEaselOptions | undefined;
   let resolvedConfig: ResolvedConfig | undefined;
   const build: BuildLifecycle = {
     failed: false,
     outputHooksCompleted: false,
   };
 
-  const requireOptions = (): ResolvedFrameOptions => {
+  const requireOptions = (): ResolvedEaselOptions => {
     if (resolvedOptions === undefined) {
-      throw new Error('[frame] plugin options have not been resolved');
+      throw new Error('[easel] plugin options have not been resolved');
     }
     return resolvedOptions;
   };
 
   const integration: Plugin = {
-    name: 'frame:shopify-theme',
+    name: 'easel:shopify-theme',
     enforce: 'post',
     config(config, environment) {
       const prepared = prepareViteConfig(options, config, environment.command);
@@ -69,5 +69,5 @@ export function frame(options: FrameOptions = {}): Plugin[] {
     },
   };
 
-  return [frameBundleModules(() => requireOptions().bundles), integration];
+  return [easelBundleModules(() => requireOptions().bundles), integration];
 }

@@ -2,20 +2,20 @@ import {createHash, randomUUID} from 'node:crypto';
 import {existsSync, lstatSync, realpathSync, statSync} from 'node:fs';
 import {isAbsolute, join, relative, resolve, sep} from 'node:path';
 import type {
-  FrameBundle,
-  FrameOptions,
-  ResolvedFrameBundle,
-  ResolvedFrameOptions,
+  EaselBundle,
+  EaselOptions,
+  ResolvedEaselBundle,
+  ResolvedEaselOptions,
 } from './types.js';
 import {SAFE_OUTPUT_NAME} from './validation.js';
 
 const DEFAULT_SOURCE = 'src';
-const DEFAULT_NAMESPACE = 'frame';
-const DEFAULT_REFRESH_SIGNAL = '.frame/shopify-ready';
+const DEFAULT_NAMESPACE = 'easel';
+const DEFAULT_REFRESH_SIGNAL = '.easel/shopify-ready';
 const DEFAULT_REFRESH_DELAY = 100;
 
-type FrameStatePaths = Pick<
-  ResolvedFrameOptions,
+type EaselStatePaths = Pick<
+  ResolvedEaselOptions,
   | 'stagingPath'
   | 'ledgerPath'
   | 'commitLockPath'
@@ -24,10 +24,10 @@ type FrameStatePaths = Pick<
   | 'transactionPath'
 >;
 
-export function resolveFrameOptions(
-  options: FrameOptions,
+export function resolveEaselOptions(
+  options: EaselOptions,
   projectRoot: string,
-): ResolvedFrameOptions {
+): ResolvedEaselOptions {
   const root = realpathSync(resolve(projectRoot));
   const configuredThemePath = resolveFrom(root, options.theme ?? '.');
   assertTheme(configuredThemePath);
@@ -43,7 +43,7 @@ export function resolveFrameOptions(
   const refresh = resolveRefresh(options.refresh, root);
 
   const bundles = resolveBundles(options.bundles, sourcePath);
-  const statePaths = resolveFrameStatePaths(root, themePath);
+  const statePaths = resolveEaselStatePaths(root, themePath);
 
   return {
     projectRoot: root,
@@ -60,9 +60,9 @@ export function resolveFrameOptions(
 }
 
 function resolveRefresh(
-  configured: FrameOptions['refresh'],
+  configured: EaselOptions['refresh'],
   projectRoot: string,
-): ResolvedFrameOptions['refresh'] {
+): ResolvedEaselOptions['refresh'] {
   if (configured === false) {
     return {
       enabled: false,
@@ -75,7 +75,7 @@ function resolveRefresh(
   const delay = options.delay ?? DEFAULT_REFRESH_DELAY;
   if (!Number.isInteger(delay) || delay < 0 || delay > 10_000) {
     throw new Error(
-      '[frame] refresh.delay must be an integer from 0 to 10000 milliseconds',
+      '[easel] refresh.delay must be an integer from 0 to 10000 milliseconds',
     );
   }
 
@@ -87,24 +87,24 @@ function resolveRefresh(
 }
 
 function resolveBundles(
-  configured: Record<string, FrameBundle> | undefined,
+  configured: Record<string, EaselBundle> | undefined,
   sourcePath: string,
-): ResolvedFrameBundle[] {
+): ResolvedEaselBundle[] {
   const bundles = configured ?? {theme: resolveDefaultBundle(sourcePath)};
   const entries = Object.entries(bundles);
 
   if (entries.length === 0) {
-    throw new Error('[frame] bundles must contain at least one named bundle');
+    throw new Error('[easel] bundles must contain at least one named bundle');
   }
 
   const resolved = entries.map(([name, bundle]) => {
     if (!SAFE_OUTPUT_NAME.test(name)) {
       throw new Error(
-        `[frame] invalid bundle name "${name}"; use lowercase letters, numbers, and hyphens`,
+        `[easel] invalid bundle name "${name}"; use lowercase letters, numbers, and hyphens`,
       );
     }
     if (bundle.script === undefined && bundle.style === undefined) {
-      throw new Error(`[frame] bundle "${name}" needs a script, a style, or both`);
+      throw new Error(`[easel] bundle "${name}" needs a script, a style, or both`);
     }
 
     return {
@@ -119,7 +119,7 @@ function resolveBundles(
     const owner = scriptOwners.get(bundle.script);
     if (owner !== undefined) {
       throw new Error(
-        `[frame] bundles "${owner}" and "${bundle.name}" use the same script; each named bundle needs a distinct script entry`,
+        `[easel] bundles "${owner}" and "${bundle.name}" use the same script; each named bundle needs a distinct script entry`,
       );
     }
     scriptOwners.set(bundle.script, bundle.name);
@@ -128,7 +128,7 @@ function resolveBundles(
   return resolved;
 }
 
-function resolveDefaultBundle(sourcePath: string): FrameBundle {
+function resolveDefaultBundle(sourcePath: string): EaselBundle {
   const typescriptEntry = join(sourcePath, 'main.ts');
   const javascriptEntry = join(sourcePath, 'main.js');
   const styleEntry = join(sourcePath, 'style.css');
@@ -137,17 +137,17 @@ function resolveDefaultBundle(sourcePath: string): FrameBundle {
 
   if (hasTypescript && hasJavascript) {
     throw new Error(
-      `[frame] both main.ts and main.js exist in ${sourcePath}; configure bundles to choose one explicitly`,
+      `[easel] both main.ts and main.js exist in ${sourcePath}; configure bundles to choose one explicitly`,
     );
   }
   if (!hasTypescript && !hasJavascript) {
     throw new Error(
-      `[frame] expected main.ts or main.js in ${sourcePath}; configure source or bundles for a different layout`,
+      `[easel] expected main.ts or main.js in ${sourcePath}; configure source or bundles for a different layout`,
     );
   }
   if (!isFile(styleEntry)) {
     throw new Error(
-      `[frame] expected style.css in ${sourcePath}; configure bundles explicitly to build without a stylesheet`,
+      `[easel] expected style.css in ${sourcePath}; configure bundles explicitly to build without a stylesheet`,
     );
   }
 
@@ -159,10 +159,10 @@ function resolveDefaultBundle(sourcePath: string): FrameBundle {
 
 function resolveBundleFiles(
   name: string,
-  bundle: FrameBundle,
+  bundle: EaselBundle,
   sourcePath: string,
-): Omit<ResolvedFrameBundle, 'name'> {
-  const resolved: Omit<ResolvedFrameBundle, 'name'> = {};
+): Omit<ResolvedEaselBundle, 'name'> {
+  const resolved: Omit<ResolvedEaselBundle, 'name'> = {};
 
   if (bundle.script !== undefined) {
     resolved.script = resolveInput(name, 'script', bundle.script, sourcePath);
@@ -182,21 +182,21 @@ function resolveInput(
 ): string {
   const path = resolveFrom(sourcePath, input);
   if (!isFile(path)) {
-    throw new Error(`[frame] ${kind} for bundle "${bundleName}" does not exist: ${path}`);
+    throw new Error(`[easel] ${kind} for bundle "${bundleName}" does not exist: ${path}`);
   }
   return realpathSync(path);
 }
 
-function resolveFrameStatePaths(projectRoot: string, themePath: string): FrameStatePaths {
-  const framePath = join(projectRoot, '.frame');
+function resolveEaselStatePaths(projectRoot: string, themePath: string): EaselStatePaths {
+  const easelPath = join(projectRoot, '.easel');
   const themeId = createHash('sha256').update(themePath).digest('hex').slice(0, 16);
-  const stagingParent = join(framePath, 'build', themeId);
-  const themeStatePath = join(framePath, 'themes', themeId);
-  assertFrameStatePaths([
-    framePath,
-    join(framePath, 'build'),
+  const stagingParent = join(easelPath, 'build', themeId);
+  const themeStatePath = join(easelPath, 'themes', themeId);
+  assertEaselStatePaths([
+    easelPath,
+    join(easelPath, 'build'),
     stagingParent,
-    join(framePath, 'themes'),
+    join(easelPath, 'themes'),
     themeStatePath,
   ]);
 
@@ -216,37 +216,37 @@ function assertTheme(themePath: string): void {
     const metadata = lstatSync(path, {throwIfNoEntry: false});
     if (metadata?.isSymbolicLink()) {
       throw new Error(
-        `[frame] Shopify theme output directory cannot be a symbolic link: ${path}`,
+        `[easel] Shopify theme output directory cannot be a symbolic link: ${path}`,
       );
     }
     if (metadata === undefined || !metadata.isDirectory()) {
       throw new Error(
-        `[frame] invalid Shopify theme at ${themePath}: missing ${directory}/`,
+        `[easel] invalid Shopify theme at ${themePath}: missing ${directory}/`,
       );
     }
   }
 }
 
-function assertFrameStatePaths(paths: string[]): void {
+function assertEaselStatePaths(paths: string[]): void {
   for (const path of paths) {
     const metadata = lstatSync(path, {throwIfNoEntry: false});
     if (metadata === undefined) continue;
     if (metadata.isSymbolicLink() || !metadata.isDirectory()) {
-      throw new Error(`[frame] state directory must be a real directory: ${path}`);
+      throw new Error(`[easel] state directory must be a real directory: ${path}`);
     }
   }
 }
 
 function assertSource(sourcePath: string): void {
   if (!existsSync(sourcePath) || !statSync(sourcePath).isDirectory()) {
-    throw new Error(`[frame] source directory does not exist: ${sourcePath}`);
+    throw new Error(`[easel] source directory does not exist: ${sourcePath}`);
   }
 }
 
 function assertNamespace(namespace: string): void {
   if (!SAFE_OUTPUT_NAME.test(namespace)) {
     throw new Error(
-      '[frame] namespace must use lowercase letters, numbers, and single hyphens',
+      '[easel] namespace must use lowercase letters, numbers, and single hyphens',
     );
   }
 }

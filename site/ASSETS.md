@@ -2,7 +2,7 @@
 
 All page and component styling uses Tailwind utilities directly in the HTML, including automatic dark mode, responsive layouts, container queries, focus states, and Alpine's `x-cloak` visibility. `src/style.css` contains only the Tailwind import, font faces, and shared font/color tokens. JavaScript uses semantic elements and data attributes rather than styling classes.
 
-Vercel's design guidance informs the visual design; its stylesheet is not a runtime dependency. This is a Frame website by Billy Noyes, not an official Vercel website or an assertion of Vercel affiliation.
+Vercel's design guidance informs the visual design; its stylesheet is not a runtime dependency. This is an Easel website by Billy Noyes, not an official Vercel website or an assertion of Vercel affiliation.
 
 ## Page layout
 
@@ -10,7 +10,7 @@ The outer container, header, and footer use Tailwind utilities to match [billyno
 
 ## Typography
 
-Frame uses Inter for readable headings and body text. Font role token names follow [billynoyes.co.uk's theme font definitions](https://github.com/BillyNoyes/billynoyes.co.uk/blob/c7ac57869938842ba50154aa873fb741440c3299/snippets/theme-fonts.liquid):
+Easel uses Inter for readable headings and body text. Font role token names follow [billynoyes.co.uk's theme font definitions](https://github.com/BillyNoyes/billynoyes.co.uk/blob/c7ac57869938842ba50154aa873fb741440c3299/snippets/theme-fonts.liquid):
 
 - `--font-display-family` and `--font-heading-family`: Inter, sans-serif; headings use weight 700, while the wordmark uses weight 400.
 - `--font-body-family`: Inter, sans-serif; body text uses weight 400.

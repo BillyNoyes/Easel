@@ -11,7 +11,7 @@ const execFileAsync = promisify(execFile);
 const root = process.cwd();
 const pnpm = process.platform === 'win32' ? 'pnpm.cmd' : 'pnpm';
 const pnpmUsesShell = process.platform === 'win32';
-const temporary = await mkdtemp(join(tmpdir(), 'frame-package-'));
+const temporary = await mkdtemp(join(tmpdir(), 'easel-package-'));
 const consumer = join(temporary, 'consumer');
 
 try {
@@ -34,11 +34,11 @@ try {
       join(consumer, 'package.json'),
       `${JSON.stringify(
         {
-          name: 'frame-package-consumer',
+          name: 'easel-package-consumer',
           private: true,
           type: 'module',
           dependencies: {
-            'vite-plugin-shopify-frame': `file:../${tarballs[0]}`,
+            'vite-plugin-shopify-easel': `file:../${tarballs[0]}`,
             vite: '^8.0.0',
           },
         },
@@ -48,13 +48,13 @@ try {
     ),
     writeFile(
       join(consumer, 'vite.config.mjs'),
-      "import {defineConfig} from 'vite';\nimport frame from 'vite-plugin-shopify-frame';\n\nexport default defineConfig({plugins: [frame()]});\n",
+      "import {defineConfig} from 'vite';\nimport {easel} from 'vite-plugin-shopify-easel';\n\nexport default defineConfig({plugins: [easel()]});\n",
     ),
-    writeFile(join(consumer, 'src/main.ts'), "console.log('Frame package consumer');\n"),
+    writeFile(join(consumer, 'src/main.ts'), "console.log('Easel package consumer');\n"),
     writeFile(join(consumer, 'src/style.css'), 'body { color: rebeccapurple; }\n'),
     writeFile(
       join(consumer, 'layout/theme.liquid'),
-      "{% render 'frame-assets' %}{{ content_for_layout }}\n",
+      "{% render 'easel-assets' %}{{ content_for_layout }}\n",
     ),
   ]);
 
@@ -68,17 +68,17 @@ try {
   });
 
   const [javascript, stylesheet, liquid] = await Promise.all([
-    readFile(join(consumer, 'assets/frame-theme.js'), 'utf8'),
-    readFile(join(consumer, 'assets/frame-theme.css'), 'utf8'),
-    readFile(join(consumer, 'snippets/frame-assets.liquid'), 'utf8'),
+    readFile(join(consumer, 'assets/easel-theme.js'), 'utf8'),
+    readFile(join(consumer, 'assets/easel-theme.css'), 'utf8'),
+    readFile(join(consumer, 'snippets/easel-assets.liquid'), 'utf8'),
   ]);
-  if (!javascript.includes('Frame package consumer')) {
+  if (!javascript.includes('Easel package consumer')) {
     throw new Error('installed package did not build the consumer script');
   }
   if (!stylesheet.includes('body')) {
     throw new Error('installed package did not build the consumer stylesheet');
   }
-  if (!liquid.includes("'frame-theme.js' | asset_url")) {
+  if (!liquid.includes("'easel-theme.js' | asset_url")) {
     throw new Error('installed package did not generate the Liquid loader');
   }
 

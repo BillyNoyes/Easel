@@ -8,27 +8,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="Install and configure Frame, a Vite plugin for Shopify Liquid themes. Develop with Shopify CLI, build assets, and generate Liquid."
+      content="Install and configure Easel, a Vite plugin for Shopify Liquid themes. Develop with Shopify CLI, build assets, and generate Liquid."
     />
     <meta name="color-scheme" content="light dark" />
     <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)" />
-    <meta property="og:title" content="Frame documentation" />
+    <meta property="og:title" content="Easel documentation" />
     <meta
       property="og:description"
-      content="Install and configure Frame, a Vite plugin for Shopify Liquid themes. Develop with Shopify CLI, build assets, and generate Liquid."
+      content="Install and configure Easel, a Vite plugin for Shopify Liquid themes. Develop with Shopify CLI, build assets, and generate Liquid."
     />
     <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="Frame" />
-    <meta property="og:url" content="https://frame.billynoyes.co.uk/docs/" />
+    <meta property="og:site_name" content="Easel" />
+    <meta property="og:url" content="https://easel.billynoyes.co.uk/docs/" />
     <meta name="twitter:card" content="summary" />
-    <meta name="twitter:title" content="Frame documentation" />
+    <meta name="twitter:title" content="Easel documentation" />
     <meta
       name="twitter:description"
-      content="Install and configure Frame, a Vite plugin for Shopify Liquid themes. Develop with Shopify CLI, build assets, and generate Liquid."
+      content="Install and configure Easel, a Vite plugin for Shopify Liquid themes. Develop with Shopify CLI, build assets, and generate Liquid."
     />
-    <link rel="canonical" href="https://frame.billynoyes.co.uk/docs/" />
-    <link rel="icon" href="/frame.svg" type="image/svg+xml" />
+    <link rel="canonical" href="https://easel.billynoyes.co.uk/docs/" />
+    <link rel="icon" href="/easel.svg" type="image/svg+xml" />
     <link
       rel="preload"
       href="/fonts/inter_n7.02711e6b374660cfc7915d1afc1c204e633421e4.woff2"
@@ -44,14 +44,14 @@
       crossorigin
     />
     <link rel="stylesheet" href="/src/style.css" />
-    <title>Frame documentation</title>
+    <title>Easel documentation</title>
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
         "@type": "TechArticle",
-        "name": "Frame documentation",
-        "url": "https://frame.billynoyes.co.uk/docs/",
-        "description": "Install and configure Frame, a Vite plugin for Shopify Liquid themes. Develop with Shopify CLI, build assets, and generate Liquid.",
+        "name": "Easel documentation",
+        "url": "https://easel.billynoyes.co.uk/docs/",
+        "description": "Install and configure Easel, a Vite plugin for Shopify Liquid themes. Develop with Shopify CLI, build assets, and generate Liquid.",
         "inLanguage": "en",
         "author": {
           "@type": "Person",
@@ -77,11 +77,11 @@
           <a
             href="/"
             class="font-display text-xl/6 font-normal no-underline text-ink dark:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
-            >Frame</a
+            >Easel</a
           >
           <nav aria-label="Primary navigation">
             <a
-              href="https://github.com/BillyNoyes/Frame"
+              href="https://github.com/BillyNoyes/Easel"
               class="text-inherit underline underline-offset-[0.2em] hover:text-ink dark:hover:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
               >GitHub</a
             >
@@ -170,7 +170,7 @@
               >
               <a
                 class="text-inherit underline underline-offset-[0.2em] hover:text-ink dark:hover:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
-                href="https://github.com/BillyNoyes/Frame/tree/main/examples"
+                href="https://github.com/BillyNoyes/Easel/tree/main/examples"
                 >Examples on GitHub</a
               >
             </div>
@@ -249,10 +249,10 @@
               id="quick-start-title"
               class="font-heading font-bold tracking-normal text-2xl/8"
             >
-              Add Frame to Vite.
+              Add Easel to Vite.
             </h2>
             <p class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere">
-              Frame expects a Shopify theme at the Vite root and source files in
+              Easel expects a Shopify theme at the Vite root and source files in
               <code
                 class="font-mono rounded border border-black/10 bg-code px-[0.3em] py-[0.1em] text-[0.875em] dark:border-white/13 dark:bg-code-inverse"
                 >src</code
@@ -273,7 +273,7 @@
                   id="code-label-2"
                   class="text-[13px]/4 font-normal text-muted dark:text-muted-inverse"
                   data-code-label
-                  >Install Frame</span
+                  >Install Easel</span
                 >
                 <div
                   class="flex flex-wrap items-center gap-3 [&[x-cloak]]:hidden!"
@@ -301,7 +301,7 @@
                 tabindex="0"
                 role="region"
                 aria-labelledby="code-label-2"
-              ><code>pnpm add -D vite-plugin-shopify-frame vite</code></pre>
+              ><code>pnpm add -D vite-plugin-shopify-easel vite</code></pre>
             </div>
             <div
               class="min-w-0 rounded-md border border-black/8 dark:border-white/14 bg-panel dark:bg-panel-inverse"
@@ -341,10 +341,10 @@
                 role="region"
                 aria-labelledby="code-label-3"
               ><code>import {defineConfig} from 'vite';
-import frame from 'vite-plugin-shopify-frame';
+import easel from 'vite-plugin-shopify-easel';
 
 export default defineConfig({
-  plugins: [frame()],
+  plugins: [easel()],
 });</code></pre>
             </div>
             <p class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere">
@@ -435,7 +435,7 @@ export default defineConfig({
                 tabindex="0"
                 role="region"
                 aria-labelledby="code-label-5"
-              ><code>{% render 'frame-assets' %}</code></pre>
+              ><code>{% render 'easel-assets' %}</code></pre>
             </div>
             <div
               class="min-w-0 rounded-md border border-black/8 dark:border-white/14 bg-panel dark:bg-panel-inverse"
@@ -477,16 +477,16 @@ export default defineConfig({
                 tabindex="0"
                 role="region"
                 aria-labelledby="code-label-6"
-              ><code>.frame/
-assets/frame-*
-snippets/frame-assets.liquid</code></pre>
+              ><code>.easel/
+assets/easel-*
+snippets/easel-assets.liquid</code></pre>
             </div>
             <div class="flex flex-col gap-2">
               <h3 class="font-heading font-bold tracking-normal text-base/6">
                 Zero configuration entry
               </h3>
               <p class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere">
-                Frame creates a bundle named
+                Easel creates a bundle named
                 <code
                   class="font-mono rounded border border-black/10 bg-code px-[0.3em] py-[0.1em] text-[0.875em] dark:border-white/13 dark:bg-code-inverse"
                   >theme</code
@@ -607,10 +607,10 @@ snippets/frame-assets.liquid</code></pre>
                 role="region"
                 aria-labelledby="code-label-8"
               ><code>shopify theme dev \
-  --notify .frame/shopify-ready</code></pre>
+  --notify .easel/shopify-ready</code></pre>
             </div>
             <p class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere">
-              The notification lets Frame request a full page reload after Shopify CLI
+              The notification lets Easel request a full page reload after Shopify CLI
               finishes an update. It is optional. Vite HMR and Shopify CLI live reload
               continue to work without it.
             </p>
@@ -628,7 +628,7 @@ snippets/frame-assets.liquid</code></pre>
               Build, then deploy normally.
             </h2>
             <p class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere">
-              Frame publishes generated assets into the theme and replaces the development
+              Easel publishes generated assets into the theme and replaces the development
               loader with Shopify CDN asset tags.
             </p>
             <div
@@ -740,7 +740,7 @@ shopify theme push</code></pre>
                 tabindex="0"
                 role="region"
                 aria-labelledby="code-label-10"
-              ><code>frame({
+              ><code>easel({
   bundles: {
     theme: {script: 'main.ts', style: 'style.css'},
     product: {script: 'product.ts', style: 'product.css'},
@@ -784,10 +784,10 @@ shopify theme push</code></pre>
                 tabindex="0"
                 role="region"
                 aria-labelledby="code-label-11"
-              ><code>{% render 'frame-assets', entry: 'theme' %}
+              ><code>{% render 'easel-assets', entry: 'theme' %}
 
 {% if request.page_type == 'product' %}
-  {% render 'frame-assets', entry: 'product' %}
+  {% render 'easel-assets', entry: 'product' %}
 {% endif %}</code></pre>
             </div>
             <ul
@@ -826,7 +826,7 @@ shopify theme push</code></pre>
               Small API, explicit control.
             </h2>
             <p class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere">
-              Every Frame option is optional.
+              Every Easel option is optional.
             </p>
             <div
               class="min-w-0 rounded-md border border-black/8 dark:border-white/14 bg-panel dark:bg-panel-inverse"
@@ -865,7 +865,7 @@ shopify theme push</code></pre>
                 tabindex="0"
                 role="region"
                 aria-labelledby="code-label-12"
-              ><code>frame({
+              ><code>easel({
   <span class="text-muted dark:text-muted-inverse">// Theme directory relative to the Vite root.</span>
   theme: '.',
 
@@ -873,11 +873,11 @@ shopify theme push</code></pre>
   source: 'src',
 
   <span class="text-muted dark:text-muted-inverse">// Namespace for generated assets and Liquid.</span>
-  namespace: 'frame',
+  namespace: 'easel',
 
   <span class="text-muted dark:text-muted-inverse">// Set to false to disable coordinated reloads.</span>
   refresh: {
-    signal: '.frame/shopify-ready',
+    signal: '.easel/shopify-ready',
     delay: 100,
   },
 });</code></pre>
@@ -939,7 +939,7 @@ shopify theme push</code></pre>
                 <dd
                   class="flex min-w-0 flex-1 flex-col gap-2 text-muted dark:text-muted-inverse wrap-anywhere @min-[52rem]/options:grid @min-[52rem]/options:grid-cols-[18rem_minmax(0,1fr)] @min-[52rem]/options:items-baseline @min-[52rem]/options:gap-x-6"
                 >
-                  <span class="font-mono">Record&lt;string, FrameBundle&gt;</span>
+                  <span class="font-mono">Record&lt;string, EaselBundle&gt;</span>
                   <p
                     class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere"
                   >
@@ -1016,7 +1016,7 @@ shopify theme push</code></pre>
                     Generated asset and snippet namespace. Defaults to
                     <code
                       class="font-mono rounded border border-black/10 bg-code px-[0.3em] py-[0.1em] text-[0.875em] dark:border-white/13 dark:bg-code-inverse"
-                      >frame</code
+                      >easel</code
                     >.
                   </p>
                 </dd>
@@ -1033,7 +1033,7 @@ shopify theme push</code></pre>
                 <dd
                   class="flex min-w-0 flex-1 flex-col gap-2 text-muted dark:text-muted-inverse wrap-anywhere @min-[52rem]/options:grid @min-[52rem]/options:grid-cols-[18rem_minmax(0,1fr)] @min-[52rem]/options:items-baseline @min-[52rem]/options:gap-x-6"
                 >
-                  <span class="font-mono">boolean | FrameRefreshOptions</span>
+                  <span class="font-mono">boolean | EaselRefreshOptions</span>
                   <p
                     class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere"
                   >
@@ -1069,7 +1069,7 @@ shopify theme push</code></pre>
                     file relative to the Vite root. Defaults to
                     <code
                       class="font-mono rounded border border-black/10 bg-code px-[0.3em] py-[0.1em] text-[0.875em] dark:border-white/13 dark:bg-code-inverse"
-                      >.frame/shopify-ready</code
+                      >.easel/shopify-ready</code
                     >.
                   </p>
                 </dd>
@@ -1122,7 +1122,7 @@ shopify theme push</code></pre>
               Bring the Vite ecosystem.
             </h2>
             <p class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere">
-              Frame does not wrap frontend frameworks. Add their official Vite plugins as
+              Easel does not wrap frontend frameworks. Add their official Vite plugins as
               usual.
             </p>
             <ul
@@ -1177,7 +1177,7 @@ shopify theme push</code></pre>
                 class="font-mono rounded border border-black/10 bg-code px-[0.3em] py-[0.1em] text-[0.875em] dark:border-white/13 dark:bg-code-inverse"
                 >@vitejs/plugin-react/preamble</code
               >
-              because Frame does not use an HTML entry. Framework code mounted inside
+              because Easel does not use an HTML entry. Framework code mounted inside
               sections should handle Shopify Theme Editor section load and unload events.
             </p>
           </section>
@@ -1195,7 +1195,7 @@ shopify theme push</code></pre>
             </h2>
             <p class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere">
               Shopify mixes generated assets and hand authored files in one directory.
-              Frame cleans up without treating that directory like a disposable build
+              Easel cleans up without treating that directory like a disposable build
               folder.
             </p>
             <ul
@@ -1206,7 +1206,7 @@ shopify theme push</code></pre>
                   Ownership ledger
                 </h3>
                 <p class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere">
-                  Only files recorded as Frame output can be removed as stale.
+                  Only files recorded as Easel output can be removed as stale.
                 </p>
               </li>
               <li class="flex flex-col gap-2">
@@ -1258,7 +1258,7 @@ shopify theme push</code></pre>
                 <h3 class="font-heading font-bold tracking-normal text-base/6">
                   <a
                     class="text-inherit underline underline-offset-[0.2em] hover:text-ink dark:hover:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
-                    href="https://github.com/BillyNoyes/Frame/tree/main/examples/vanilla"
+                    href="https://github.com/BillyNoyes/Easel/tree/main/examples/vanilla"
                     >Vanilla</a
                   >
                 </h3>
@@ -1270,7 +1270,7 @@ shopify theme push</code></pre>
                 <h3 class="font-heading font-bold tracking-normal text-base/6">
                   <a
                     class="text-inherit underline underline-offset-[0.2em] hover:text-ink dark:hover:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
-                    href="https://github.com/BillyNoyes/Frame/tree/main/examples/alpine-tailwind"
+                    href="https://github.com/BillyNoyes/Easel/tree/main/examples/alpine-tailwind"
                     >Alpine and Tailwind</a
                   >
                 </h3>
@@ -1282,7 +1282,7 @@ shopify theme push</code></pre>
                 <h3 class="font-heading font-bold tracking-normal text-base/6">
                   <a
                     class="text-inherit underline underline-offset-[0.2em] hover:text-ink dark:hover:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
-                    href="https://github.com/BillyNoyes/Frame/tree/main/examples/react"
+                    href="https://github.com/BillyNoyes/Easel/tree/main/examples/react"
                     >React</a
                   >
                 </h3>
@@ -1294,7 +1294,7 @@ shopify theme push</code></pre>
                 <h3 class="font-heading font-bold tracking-normal text-base/6">
                   <a
                     class="text-inherit underline underline-offset-[0.2em] hover:text-ink dark:hover:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
-                    href="https://github.com/BillyNoyes/Frame/tree/main/examples/vue"
+                    href="https://github.com/BillyNoyes/Easel/tree/main/examples/vue"
                     >Vue</a
                   >
                 </h3>
@@ -1309,7 +1309,7 @@ shopify theme push</code></pre>
       <footer
         class="flex flex-col gap-5 py-6 text-[13px]/[18px] text-muted dark:text-muted-inverse md:flex-row md:items-center md:justify-between"
       >
-        <span>Frame</span>
+        <span>Easel</span>
         <span
           >Built by
           <a

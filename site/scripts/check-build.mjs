@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import {access, readFile, readdir} from 'node:fs/promises';
 import {resolve} from 'node:path';
 
-const origin = 'https://frame.billynoyes.co.uk';
+const origin = 'https://easel.billynoyes.co.uk';
 const sections = [
   'quick-start',
   'development',

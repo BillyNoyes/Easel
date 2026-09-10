@@ -31,7 +31,7 @@ export function scaffoldTheme(target, options = {}) {
   const themeName = options.name ?? displayNameFor(packageName);
   if (!/^[A-Za-z0-9][A-Za-z0-9 _-]*$/.test(themeName)) {
     throw new Error(
-      '[frame] scaffold name must use letters, numbers, spaces, underscores, or hyphens',
+      '[easel] scaffold name must use letters, numbers, spaces, underscores, or hyphens',
     );
   }
 
@@ -40,7 +40,7 @@ export function scaffoldTheme(target, options = {}) {
     mkdirSync(targetPath);
   } catch (error) {
     if (isAlreadyExistsError(error)) {
-      throw new Error(`[frame] scaffold target already exists: ${targetPath}`);
+      throw new Error(`[easel] scaffold target already exists: ${targetPath}`);
     }
     throw error;
   }
@@ -51,7 +51,7 @@ export function scaffoldTheme(target, options = {}) {
       mkdirSync(resolve(targetPath, directory), {recursive: true});
     }
     replaceTemplateTokens(targetPath, {
-      FRAME_IMPORT: modulePath(targetPath, resolve(REPOSITORY_ROOT, 'src/index.js')),
+      EASEL_IMPORT: modulePath(targetPath, resolve(REPOSITORY_ROOT, 'src/index.js')),
       PACKAGE_NAME: packageName,
       THEME_NAME: themeName,
     });
@@ -71,11 +71,11 @@ function replaceTemplateTokens(root, replacements) {
       continue;
     }
     if (!entry.isFile()) {
-      throw new Error(`[frame] unsupported scaffold template entry: ${path}`);
+      throw new Error(`[easel] unsupported scaffold template entry: ${path}`);
     }
 
     const content = readFileSync(path, 'utf8').replace(
-      /__(FRAME_IMPORT|PACKAGE_NAME|THEME_NAME)__/g,
+      /__(EASEL_IMPORT|PACKAGE_NAME|THEME_NAME)__/g,
       (_, token) => replacements[token],
     );
     writeFileSync(path, content);
@@ -88,12 +88,12 @@ function packageNameFor(targetPath) {
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '');
-  return `frame-example-${slug || 'theme'}`;
+  return `easel-example-${slug || 'theme'}`;
 }
 
 function displayNameFor(packageName) {
   return packageName
-    .replace(/^frame-example-/, '')
+    .replace(/^easel-example-/, '')
     .split('-')
     .filter(Boolean)
     .map((part) => part[0].toUpperCase() + part.slice(1))
@@ -122,19 +122,19 @@ function parseArguments(arguments_) {
     const argument = arguments_[index];
     if (argument === '--name') {
       name = arguments_[index + 1];
-      if (name === undefined) throw new Error('[frame] --name requires a value');
+      if (name === undefined) throw new Error('[easel] --name requires a value');
       index += 1;
     } else if (argument?.startsWith('-')) {
-      throw new Error(`[frame] unknown scaffold option: ${argument}`);
+      throw new Error(`[easel] unknown scaffold option: ${argument}`);
     } else if (target === undefined) {
       target = argument;
     } else {
-      throw new Error(`[frame] unexpected scaffold argument: ${argument}`);
+      throw new Error(`[easel] unexpected scaffold argument: ${argument}`);
     }
   }
 
   if (target === undefined) {
-    throw new Error('[frame] scaffold target is required');
+    throw new Error('[easel] scaffold target is required');
   }
   return {help: false, target, name};
 }
@@ -142,7 +142,7 @@ function parseArguments(arguments_) {
 function printUsage() {
   console.log(`Usage: pnpm scaffold:theme <target> [--name "Theme Name"]
 
-Creates a framework-neutral Shopify theme and Frame/Vite source entry points.
+Creates a framework-neutral Shopify theme and Easel/Vite source entry points.
 The target must not already exist.`);
 }
 
@@ -154,7 +154,7 @@ if (invokedPath === import.meta.url) {
       printUsage();
     } else {
       const targetPath = scaffoldTheme(arguments_.target, {name: arguments_.name});
-      console.log(`[frame] scaffolded Shopify theme at ${targetPath}`);
+      console.log(`[easel] scaffolded Shopify theme at ${targetPath}`);
     }
   } catch (error) {
     console.error(error instanceof Error ? error.message : String(error));

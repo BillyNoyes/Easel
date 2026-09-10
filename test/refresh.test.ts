@@ -7,8 +7,8 @@ import {watchRefreshSignal} from '../src/refresh.js';
 describe('watchRefreshSignal', () => {
   it('resets the debounce delay after repeated Shopify CLI notifications', async () => {
     vi.useFakeTimers();
-    const root = mkdtempSync(join(tmpdir(), 'frame-refresh-'));
-    const signal = join(root, '.frame/shopify-ready');
+    const root = mkdtempSync(join(tmpdir(), 'easel-refresh-'));
+    const signal = join(root, '.easel/shopify-ready');
     const refresh = vi.fn();
     const stop = watchRefreshSignal(signal, 100, refresh);
 

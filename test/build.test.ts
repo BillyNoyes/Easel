@@ -15,14 +15,14 @@ import {tmpdir} from 'node:os';
 import {dirname, join} from 'node:path';
 import {build, createServer} from 'vite';
 import {describe, expect, it} from 'vitest';
-import {frame} from '../src/index.js';
+import {easel} from '../src/index.js';
 import {renderDevelopmentLiquid} from '../src/liquid.js';
-import {resolveFrameOptions} from '../src/options.js';
+import {resolveEaselOptions} from '../src/options.js';
 import {commitProductionOutput, writeDevelopmentLiquid} from '../src/output.js';
-import type {FrameOptions} from '../src/types.js';
+import type {EaselOptions} from '../src/types.js';
 
 function themeProject(): string {
-  const root = mkdtempSync(join(tmpdir(), 'frame-build-'));
+  const root = mkdtempSync(join(tmpdir(), 'easel-build-'));
   for (const directory of [
     'assets',
     'blocks',
@@ -38,33 +38,33 @@ function themeProject(): string {
   }
   writeFileSync(
     join(root, 'layout/theme.liquid'),
-    "<!doctype html>\n<html><head>{{ content_for_header }}\n{% render 'frame-assets' %}\n</head><body>{{ content_for_layout }}</body></html>\n",
+    "<!doctype html>\n<html><head>{{ content_for_header }}\n{% render 'easel-assets' %}\n</head><body>{{ content_for_layout }}</body></html>\n",
   );
   return root;
 }
 
-async function buildTheme(root: string, options: FrameOptions = {}): Promise<void> {
+async function buildTheme(root: string, options: EaselOptions = {}): Promise<void> {
   await build({
     root,
     configFile: false,
     logLevel: 'silent',
-    plugins: [frame(options)],
+    plugins: [easel(options)],
   });
 }
 
 function ownershipLedger(root: string): {themePath: string; generated: string[]} {
-  const themesPath = join(root, '.frame/themes');
+  const themesPath = join(root, '.easel/themes');
   const themeDirectory = readdirSync(themesPath)[0];
-  if (themeDirectory === undefined) throw new Error('Missing Frame theme ledger');
+  if (themeDirectory === undefined) throw new Error('Missing Easel theme ledger');
   return JSON.parse(
     readFileSync(join(themesPath, themeDirectory, 'outputs.json'), 'utf8'),
   ) as {themePath: string; generated: string[]};
 }
 
-describe('Frame development server', () => {
+describe('Easel development server', () => {
   it('serves the default TypeScript and CSS bundle without changing the theme layout', async () => {
     const root = themeProject();
-    writeFileSync(join(root, 'src/main.ts'), "console.log('Frame dev');");
+    writeFileSync(join(root, 'src/main.ts'), "console.log('Easel dev');");
     writeFileSync(join(root, 'src/style.css'), 'body { color: rebeccapurple; }');
     const layoutBefore = readFileSync(join(root, 'layout/theme.liquid'), 'utf8');
 
@@ -73,40 +73,40 @@ describe('Frame development server', () => {
       configFile: false,
       logLevel: 'silent',
       server: {port: 0},
-      plugins: [frame()],
+      plugins: [easel()],
     });
 
     try {
       await server.listen();
       const origin = server.resolvedUrls?.local[0];
       expect(origin).toBeDefined();
-      const response = await fetch(`${origin}@frame/theme`);
+      const response = await fetch(`${origin}@easel/theme`);
       expect(response.ok).toBe(true);
       expect(await response.text()).toContain('src/main.ts');
 
-      const liquid = readFileSync(join(root, 'snippets/frame-assets.liquid'), 'utf8');
+      const liquid = readFileSync(join(root, 'snippets/easel-assets.liquid'), 'utf8');
       expect(liquid).toContain('/@vite/client');
-      expect(liquid).toContain('/@frame/theme');
+      expect(liquid).toContain('/@easel/theme');
       expect(readFileSync(join(root, 'layout/theme.liquid'), 'utf8')).toBe(layoutBefore);
     } finally {
       await server.close();
     }
 
-    expect(existsSync(join(root, 'snippets/frame-assets.liquid'))).toBe(false);
+    expect(existsSync(join(root, 'snippets/easel-assets.liquid'))).toBe(false);
 
     await buildTheme(root);
     const productionLiquid = readFileSync(
-      join(root, 'snippets/frame-assets.liquid'),
+      join(root, 'snippets/easel-assets.liquid'),
       'utf8',
     );
-    expect(productionLiquid).toContain("'frame-theme.js' | asset_url");
+    expect(productionLiquid).toContain("'easel-theme.js' | asset_url");
     expect(productionLiquid).not.toContain('/@vite/client');
   });
 
   it('preserves custom server configuration without duplicate merged values', async () => {
     const root = themeProject();
     const customAllowPath = join(root, 'shared');
-    writeFileSync(join(root, 'src/main.ts'), "console.log('Frame dev');");
+    writeFileSync(join(root, 'src/main.ts'), "console.log('Easel dev');");
     writeFileSync(join(root, 'src/style.css'), 'body {}');
     mkdirSync(customAllowPath);
 
@@ -118,7 +118,7 @@ describe('Frame development server', () => {
         cors: {origin: ['https://example.com']},
         fs: {allow: [customAllowPath]},
       },
-      plugins: [frame()],
+      plugins: [easel()],
     });
 
     try {
@@ -141,7 +141,7 @@ describe('Frame development server', () => {
 
   it('rejects Vite middleware mode before starting development resources', async () => {
     const root = themeProject();
-    writeFileSync(join(root, 'src/main.ts'), "console.log('Frame dev');");
+    writeFileSync(join(root, 'src/main.ts'), "console.log('Easel dev');");
     writeFileSync(join(root, 'src/style.css'), 'body {}');
 
     await expect(
@@ -150,18 +150,18 @@ describe('Frame development server', () => {
         configFile: false,
         logLevel: 'silent',
         server: {middlewareMode: true},
-        plugins: [frame()],
+        plugins: [easel()],
       }),
     ).rejects.toThrow('middleware mode is not supported');
-    expect(existsSync(join(root, '.frame/shopify-ready'))).toBe(false);
-    expect(existsSync(join(root, 'snippets/frame-assets.liquid'))).toBe(false);
+    expect(existsSync(join(root, '.easel/shopify-ready'))).toBe(false);
+    expect(existsSync(join(root, 'snippets/easel-assets.liquid'))).toBe(false);
   });
 });
 
-describe('Frame production build', () => {
+describe('Easel production build', () => {
   it('leaves configured script source unchanged for other Vite transforms', async () => {
     const root = themeProject();
-    const source = "'use client';\nconsole.log('Frame');\n";
+    const source = "'use client';\nconsole.log('Easel');\n";
     writeFileSync(join(root, 'src/main.ts'), source);
     writeFileSync(join(root, 'src/style.css'), 'body {}');
     let transformedSource: string | undefined;
@@ -171,9 +171,9 @@ describe('Frame production build', () => {
       configFile: false,
       logLevel: 'silent',
       plugins: [
-        frame(),
+        easel(),
         {
-          name: 'inspect-frame-entry',
+          name: 'inspect-easel-entry',
           enforce: 'pre',
           transform(code, id) {
             if (id.endsWith('/src/main.ts')) transformedSource = code;
@@ -191,7 +191,7 @@ describe('Frame production build', () => {
       join(root, 'src/main.ts'),
       "import {message} from './shared'; import('./lazy'); console.log(message);",
     );
-    writeFileSync(join(root, 'src/shared.ts'), "export const message = 'Frame';");
+    writeFileSync(join(root, 'src/shared.ts'), "export const message = 'Easel';");
     writeFileSync(join(root, 'src/lazy.ts'), "export const lazy = 'loaded';");
     writeFileSync(join(root, 'src/style.css'), 'body { color: rgb(1 2 3); }');
     writeFileSync(join(root, 'assets/merchant.css'), '.merchant {}');
@@ -199,19 +199,19 @@ describe('Frame production build', () => {
     await buildTheme(root);
 
     const assets = readdirSync(join(root, 'assets'));
-    expect(assets).toContain('frame-theme.js');
-    expect(assets).toContain('frame-theme.css');
+    expect(assets).toContain('easel-theme.js');
+    expect(assets).toContain('easel-theme.css');
     expect(assets).toContain('merchant.css');
-    expect(assets.some((file) => /^frame-lazy-.*\.js$/.test(file))).toBe(true);
+    expect(assets.some((file) => /^easel-lazy-.*\.js$/.test(file))).toBe(true);
 
-    const liquid = readFileSync(join(root, 'snippets/frame-assets.liquid'), 'utf8');
-    expect(liquid).toContain("'frame-theme.css' | asset_url | stylesheet_tag");
-    expect(liquid).toContain("'frame-theme.js' | asset_url");
+    const liquid = readFileSync(join(root, 'snippets/easel-assets.liquid'), 'utf8');
+    expect(liquid).toContain("'easel-theme.css' | asset_url | stylesheet_tag");
+    expect(liquid).toContain("'easel-theme.js' | asset_url");
     expect(liquid).not.toContain('/@vite/client');
 
     const ledger = ownershipLedger(root);
-    expect(ledger.generated).toContain('assets/frame-theme.js');
-    expect(ledger.generated).toContain('snippets/frame-assets.liquid');
+    expect(ledger.generated).toContain('assets/easel-theme.js');
+    expect(ledger.generated).toContain('snippets/easel-assets.liquid');
   });
 
   it('publishes source maps and imported static assets emitted by Vite', async () => {
@@ -234,52 +234,52 @@ describe('Frame production build', () => {
       configFile: false,
       logLevel: 'silent',
       build: {assetsInlineLimit: 0, sourcemap: true},
-      plugins: [frame()],
+      plugins: [easel()],
     });
 
     const assets = readdirSync(join(root, 'assets'));
-    const icon = assets.find((file) => /^frame-icon-.*\.svg$/.test(file));
+    const icon = assets.find((file) => /^easel-icon-.*\.svg$/.test(file));
     expect(icon).toBeDefined();
-    expect(assets).toContain('frame-theme.js.map');
-    expect(readFileSync(join(root, 'assets/frame-theme.js'), 'utf8')).toContain(
-      '//# sourceMappingURL=frame-theme.js.map',
+    expect(assets).toContain('easel-theme.js.map');
+    expect(readFileSync(join(root, 'assets/easel-theme.js'), 'utf8')).toContain(
+      '//# sourceMappingURL=easel-theme.js.map',
     );
     const ledger = ownershipLedger(root);
-    expect(ledger.generated).toContain('assets/frame-theme.js.map');
+    expect(ledger.generated).toContain('assets/easel-theme.js.map');
     expect(ledger.generated).toContain(`assets/${icon!}`);
   });
 
   it('restores the production Liquid snippet after development stops', async () => {
     const root = themeProject();
-    writeFileSync(join(root, 'src/main.ts'), "console.log('Frame');");
+    writeFileSync(join(root, 'src/main.ts'), "console.log('Easel');");
     writeFileSync(join(root, 'src/style.css'), 'body {}');
     await buildTheme(root);
-    const production = readFileSync(join(root, 'snippets/frame-assets.liquid'), 'utf8');
+    const production = readFileSync(join(root, 'snippets/easel-assets.liquid'), 'utf8');
 
     const server = await createServer({
       root,
       configFile: false,
       logLevel: 'silent',
       server: {port: 0},
-      plugins: [frame()],
+      plugins: [easel()],
     });
     await server.listen();
-    expect(readFileSync(join(root, 'snippets/frame-assets.liquid'), 'utf8')).toContain(
+    expect(readFileSync(join(root, 'snippets/easel-assets.liquid'), 'utf8')).toContain(
       '/@vite/client',
     );
     await server.close();
 
-    expect(readFileSync(join(root, 'snippets/frame-assets.liquid'), 'utf8')).toBe(
+    expect(readFileSync(join(root, 'snippets/easel-assets.liquid'), 'utf8')).toBe(
       production,
     );
   });
 
   it('migrates Liquid-suffixed production backups out of Theme Check scope', async () => {
     const root = themeProject();
-    writeFileSync(join(root, 'src/main.ts'), "console.log('Frame');");
+    writeFileSync(join(root, 'src/main.ts'), "console.log('Easel');");
     writeFileSync(join(root, 'src/style.css'), 'body {}');
     await buildTheme(root);
-    const options = resolveFrameOptions({}, root);
+    const options = resolveEaselOptions({}, root);
     const legacyPath = join(dirname(options.productionLiquidPath), 'production.liquid');
     renameSync(options.productionLiquidPath, legacyPath);
 
@@ -292,10 +292,10 @@ describe('Frame production build', () => {
 
   it('recovers the production Liquid snippet after an interrupted dev session', async () => {
     const root = themeProject();
-    writeFileSync(join(root, 'src/main.ts'), "console.log('Frame');");
+    writeFileSync(join(root, 'src/main.ts'), "console.log('Easel');");
     writeFileSync(join(root, 'src/style.css'), 'body {}');
     await buildTheme(root);
-    const options = resolveFrameOptions({}, root);
+    const options = resolveEaselOptions({}, root);
     const production = readFileSync(options.liquidPath, 'utf8');
     rmSync(options.productionLiquidPath);
     const development = renderDevelopmentLiquid(['theme'], 'http://localhost:5173');
@@ -312,8 +312,8 @@ describe('Frame production build', () => {
     writeFileSync(join(root, 'src/main.ts'), "console.log('old');");
     writeFileSync(join(root, 'src/style.css'), 'body {}');
     await buildTheme(root);
-    const options = resolveFrameOptions({}, root);
-    const assetPath = join(root, 'assets/frame-Theme.js');
+    const options = resolveEaselOptions({}, root);
+    const assetPath = join(root, 'assets/easel-Theme.js');
     const previous = Buffer.from('previous generated asset');
     writeFileSync(assetPath, previous);
     mkdirSync(options.transactionPath, {recursive: true});
@@ -326,7 +326,7 @@ describe('Frame production build', () => {
         entries: [
           {
             scope: 'theme',
-            path: 'assets/frame-Theme.js',
+            path: 'assets/easel-Theme.js',
             existed: true,
             blob: '0.bin',
           },
@@ -338,7 +338,7 @@ describe('Frame production build', () => {
     expect(() =>
       commitProductionOutput(
         options,
-        {schemaVersion: 1, entries: {}, generated: ['frame-missing.js']},
+        {schemaVersion: 1, entries: {}, generated: ['easel-missing.js']},
         'unused',
       ),
     ).toThrow('generated Vite asset is missing');
@@ -348,9 +348,9 @@ describe('Frame production build', () => {
 
   it('rejects an interrupted journal that targets source-controlled theme files', () => {
     const root = themeProject();
-    writeFileSync(join(root, 'src/main.ts'), "console.log('Frame');");
+    writeFileSync(join(root, 'src/main.ts'), "console.log('Easel');");
     writeFileSync(join(root, 'src/style.css'), 'body {}');
-    const options = resolveFrameOptions({}, root);
+    const options = resolveEaselOptions({}, root);
     mkdirSync(options.transactionPath, {recursive: true});
     writeFileSync(
       join(options.transactionPath, 'journal.json'),
@@ -377,7 +377,7 @@ describe('Frame production build', () => {
     expect(existsSync(join(root, 'layout/theme.liquid'))).toBe(true);
   });
 
-  it('removes only stale Frame-owned output', async () => {
+  it('removes only stale Easel-owned output', async () => {
     const root = themeProject();
     writeFileSync(join(root, 'src/main.ts'), "import('./lazy');");
     writeFileSync(join(root, 'src/lazy.ts'), "export const value = 'old';");
@@ -386,7 +386,7 @@ describe('Frame production build', () => {
 
     await buildTheme(root);
     const staleChunk = readdirSync(join(root, 'assets')).find((file) =>
-      /^frame-lazy-.*\.js$/.test(file),
+      /^easel-lazy-.*\.js$/.test(file),
     );
     expect(staleChunk).toBeDefined();
 
@@ -409,14 +409,14 @@ describe('Frame production build', () => {
 
     await buildTheme(root, {bundles});
     const first = readdirSync(join(root, 'assets')).find((file) =>
-      /^frame-product\d*-.*\.css$/.test(file),
+      /^easel-product\d*-.*\.css$/.test(file),
     );
     expect(first).toBeDefined();
 
     writeFileSync(join(root, 'src/product.css'), '.product { color: blue; }');
     await buildTheme(root, {bundles});
     const second = readdirSync(join(root, 'assets')).find((file) =>
-      /^frame-product\d*-.*\.css$/.test(file),
+      /^easel-product\d*-.*\.css$/.test(file),
     );
 
     expect(second).toBeDefined();
@@ -441,7 +441,7 @@ describe('Frame production build', () => {
       },
     });
 
-    const liquid = readFileSync(join(root, 'snippets/frame-assets.liquid'), 'utf8');
+    const liquid = readFileSync(join(root, 'snippets/easel-assets.liquid'), 'utf8');
     const branches = liquid.split(/\{% when '[^']+' %\}/).slice(1);
     expect(branches).toHaveLength(2);
     expect(branches.every((branch) => branch.includes('stylesheet_tag'))).toBe(true);
@@ -449,10 +449,10 @@ describe('Frame production build', () => {
 
   it('migrates legacy ownership metadata when the namespace changes', async () => {
     const root = themeProject();
-    writeFileSync(join(root, 'src/main.ts'), "console.log('Frame');");
+    writeFileSync(join(root, 'src/main.ts'), "console.log('Easel');");
     writeFileSync(join(root, 'src/style.css'), 'body {}');
     await buildTheme(root);
-    const themesPath = join(root, '.frame/themes');
+    const themesPath = join(root, '.easel/themes');
     const themeDirectory = readdirSync(themesPath)[0]!;
     const ledgerPath = join(themesPath, themeDirectory, 'outputs.json');
     const ledger = JSON.parse(readFileSync(ledgerPath, 'utf8')) as Record<
@@ -466,8 +466,8 @@ describe('Frame production build', () => {
 
     await buildTheme(root, {namespace: 'shop'});
 
-    expect(existsSync(join(root, 'assets/frame-theme.js'))).toBe(false);
-    expect(existsSync(join(root, 'snippets/frame-assets.liquid'))).toBe(false);
+    expect(existsSync(join(root, 'assets/easel-theme.js'))).toBe(false);
+    expect(existsSync(join(root, 'snippets/easel-assets.liquid'))).toBe(false);
     expect(existsSync(join(root, 'assets/shop-theme.js'))).toBe(true);
     expect(existsSync(join(root, 'snippets/shop-assets.liquid'))).toBe(true);
     expect(ownershipLedger(root).generated).toContain('assets/shop-theme.js');
@@ -475,14 +475,14 @@ describe('Frame production build', () => {
 
   it('migrates current ownership metadata when the namespace changes', async () => {
     const root = themeProject();
-    writeFileSync(join(root, 'src/main.ts'), "console.log('Frame');");
+    writeFileSync(join(root, 'src/main.ts'), "console.log('Easel');");
     writeFileSync(join(root, 'src/style.css'), 'body {}');
     await buildTheme(root);
 
     await buildTheme(root, {namespace: 'studio'});
 
-    expect(existsSync(join(root, 'assets/frame-theme.js'))).toBe(false);
-    expect(existsSync(join(root, 'snippets/frame-assets.liquid'))).toBe(false);
+    expect(existsSync(join(root, 'assets/easel-theme.js'))).toBe(false);
+    expect(existsSync(join(root, 'snippets/easel-assets.liquid'))).toBe(false);
     expect(existsSync(join(root, 'assets/studio-theme.js'))).toBe(true);
     expect(existsSync(join(root, 'snippets/studio-assets.liquid'))).toBe(true);
     expect(ownershipLedger(root)).toMatchObject({
@@ -492,9 +492,9 @@ describe('Frame production build', () => {
   });
 
   it('isolates ownership ledgers for multiple themes in one Vite project', async () => {
-    const root = mkdtempSync(join(tmpdir(), 'frame-multiple-themes-'));
+    const root = mkdtempSync(join(tmpdir(), 'easel-multiple-themes-'));
     mkdirSync(join(root, 'src'), {recursive: true});
-    writeFileSync(join(root, 'src/main.ts'), "console.log('Frame');");
+    writeFileSync(join(root, 'src/main.ts'), "console.log('Easel');");
     writeFileSync(join(root, 'src/style.css'), 'body {}');
 
     for (const name of ['theme-a', 'theme-b']) {
@@ -503,26 +503,26 @@ describe('Frame production build', () => {
       }
       writeFileSync(
         join(root, name, 'layout/theme.liquid'),
-        "{{ content_for_header }}{% render 'frame-assets' %}{{ content_for_layout }}",
+        "{{ content_for_header }}{% render 'easel-assets' %}{{ content_for_layout }}",
       );
     }
 
     await buildTheme(root, {theme: 'theme-a'});
-    writeFileSync(join(root, 'theme-b/assets/frame-theme.js'), 'merchant asset');
-    writeFileSync(join(root, 'theme-b/snippets/frame-assets.liquid'), 'merchant snippet');
+    writeFileSync(join(root, 'theme-b/assets/easel-theme.js'), 'merchant asset');
+    writeFileSync(join(root, 'theme-b/snippets/easel-assets.liquid'), 'merchant snippet');
 
     await expect(buildTheme(root, {theme: 'theme-b'})).rejects.toThrow(
-      'refusing to overwrite a file Frame does not own',
+      'refusing to overwrite a file Easel does not own',
     );
-    expect(readFileSync(join(root, 'theme-b/assets/frame-theme.js'), 'utf8')).toBe(
+    expect(readFileSync(join(root, 'theme-b/assets/easel-theme.js'), 'utf8')).toBe(
       'merchant asset',
     );
   });
 
   it('rejects a symlinked Shopify output directory', async () => {
     const root = themeProject();
-    const external = mkdtempSync(join(tmpdir(), 'frame-external-assets-'));
-    writeFileSync(join(root, 'src/main.ts'), "console.log('Frame');");
+    const external = mkdtempSync(join(tmpdir(), 'easel-external-assets-'));
+    writeFileSync(join(root, 'src/main.ts'), "console.log('Easel');");
     writeFileSync(join(root, 'src/style.css'), 'body {}');
     rmSync(join(root, 'assets'), {recursive: true});
     symlinkSync(
@@ -539,10 +539,10 @@ describe('Frame production build', () => {
 
   it('rejects a ledger that claims a user-owned theme file', async () => {
     const root = themeProject();
-    writeFileSync(join(root, 'src/main.ts'), "console.log('Frame');");
+    writeFileSync(join(root, 'src/main.ts'), "console.log('Easel');");
     writeFileSync(join(root, 'src/style.css'), 'body {}');
     await buildTheme(root);
-    const themesPath = join(root, '.frame/themes');
+    const themesPath = join(root, '.easel/themes');
     const themeDirectory = readdirSync(themesPath)[0]!;
     const ledgerPath = join(themesPath, themeDirectory, 'outputs.json');
     const ledger = JSON.parse(readFileSync(ledgerPath, 'utf8')) as {
@@ -560,7 +560,7 @@ describe('Frame production build', () => {
     writeFileSync(join(root, 'src/main.ts'), "console.log('old');");
     writeFileSync(join(root, 'src/style.css'), 'body {}');
     await buildTheme(root);
-    const assetPath = join(root, 'assets/frame-theme.js');
+    const assetPath = join(root, 'assets/easel-theme.js');
     const previous = readFileSync(assetPath);
     writeFileSync(join(root, 'src/main.ts'), "console.log('new');");
 
@@ -570,7 +570,7 @@ describe('Frame production build', () => {
         configFile: false,
         logLevel: 'silent',
         plugins: [
-          frame(),
+          easel(),
           {
             name: 'fail-after-build',
             closeBundle() {
@@ -588,7 +588,7 @@ describe('Frame production build', () => {
     writeFileSync(join(root, 'src/main.ts'), "console.log('old');");
     writeFileSync(join(root, 'src/style.css'), 'body {}');
     await buildTheme(root);
-    const assetPath = join(root, 'assets/frame-theme.js');
+    const assetPath = join(root, 'assets/easel-theme.js');
     const previous = readFileSync(assetPath);
     writeFileSync(join(root, 'src/main.ts'), "console.log('new');");
 
@@ -598,7 +598,7 @@ describe('Frame production build', () => {
         configFile: false,
         logLevel: 'silent',
         plugins: [
-          frame(),
+          easel(),
           {
             name: 'fail-output-write',
             writeBundle() {
@@ -611,12 +611,12 @@ describe('Frame production build', () => {
     expect(readFileSync(assetPath).equals(previous)).toBe(true);
   });
 
-  it('rejects post-order build hooks that would run after Frame commits', async () => {
+  it('rejects post-order build hooks that would run after Easel commits', async () => {
     const root = themeProject();
     writeFileSync(join(root, 'src/main.ts'), "console.log('old');");
     writeFileSync(join(root, 'src/style.css'), 'body {}');
     await buildTheme(root);
-    const assetPath = join(root, 'assets/frame-theme.js');
+    const assetPath = join(root, 'assets/easel-theme.js');
     const previous = readFileSync(assetPath);
     writeFileSync(join(root, 'src/main.ts'), "console.log('new');");
 
@@ -626,7 +626,7 @@ describe('Frame production build', () => {
         configFile: false,
         logLevel: 'silent',
         plugins: [
-          frame(),
+          easel(),
           {
             name: 'post-build-hook',
             enforce: 'post',
@@ -639,7 +639,7 @@ describe('Frame production build', () => {
           },
         ],
       }),
-    ).rejects.toThrow('Move frame() after those plugins');
+    ).rejects.toThrow('Move easel() after those plugins');
     expect(readFileSync(assetPath).equals(previous)).toBe(true);
 
     await expect(
@@ -658,7 +658,7 @@ describe('Frame production build', () => {
               },
             },
           },
-          frame(),
+          easel(),
         ],
       }),
     ).rejects.toThrow('post hook failed');
@@ -690,7 +690,7 @@ describe('Frame production build', () => {
             await waitToContinue;
           },
         },
-        frame(),
+        easel(),
       ],
     });
     await reachedWrite;
@@ -700,17 +700,17 @@ describe('Frame production build', () => {
     continueBuildA?.();
     await buildA;
 
-    const published = readFileSync(join(root, 'assets/frame-theme.js'), 'utf8');
+    const published = readFileSync(join(root, 'assets/easel-theme.js'), 'utf8');
     expect(published).toContain('build-a');
     expect(published).not.toContain('build-b');
   });
 
   it('does not rewrite identical production output', async () => {
     const root = themeProject();
-    writeFileSync(join(root, 'src/main.ts'), "console.log('Frame');");
+    writeFileSync(join(root, 'src/main.ts'), "console.log('Easel');");
     writeFileSync(join(root, 'src/style.css'), 'body {}');
     await buildTheme(root);
-    const snippet = join(root, 'snippets/frame-assets.liquid');
+    const snippet = join(root, 'snippets/easel-assets.liquid');
     const modified = statSync(snippet).mtimeMs;
     await new Promise((resolve) => setTimeout(resolve, 20));
 
@@ -719,40 +719,40 @@ describe('Frame production build', () => {
     expect(statSync(snippet).mtimeMs).toBe(modified);
   });
 
-  it('re-adopts identical generated output after local Frame state is cleared', async () => {
+  it('re-adopts identical generated output after local Easel state is cleared', async () => {
     const root = themeProject();
-    writeFileSync(join(root, 'src/main.ts'), "console.log('Frame');");
+    writeFileSync(join(root, 'src/main.ts'), "console.log('Easel');");
     writeFileSync(join(root, 'src/style.css'), 'body {}');
     await buildTheme(root);
-    rmSync(join(root, '.frame'), {recursive: true});
+    rmSync(join(root, '.easel'), {recursive: true});
 
     await buildTheme(root);
 
-    expect(existsSync(join(root, 'assets/frame-theme.js'))).toBe(true);
-    expect(ownershipLedger(root).generated).toContain('assets/frame-theme.js');
+    expect(existsSync(join(root, 'assets/easel-theme.js'))).toBe(true);
+    expect(ownershipLedger(root).generated).toContain('assets/easel-theme.js');
   });
 
   it('refuses to overwrite a pre-existing unowned asset', async () => {
     const root = themeProject();
-    writeFileSync(join(root, 'src/main.ts'), "console.log('Frame');");
+    writeFileSync(join(root, 'src/main.ts'), "console.log('Easel');");
     writeFileSync(join(root, 'src/style.css'), 'body {}');
-    writeFileSync(join(root, 'assets/frame-theme.js'), 'window.existing = true;');
+    writeFileSync(join(root, 'assets/easel-theme.js'), 'window.existing = true;');
 
     await expect(buildTheme(root)).rejects.toThrow(
-      'refusing to overwrite a file Frame does not own',
+      'refusing to overwrite a file Easel does not own',
     );
-    expect(readFileSync(join(root, 'assets/frame-theme.js'), 'utf8')).toBe(
+    expect(readFileSync(join(root, 'assets/easel-theme.js'), 'utf8')).toBe(
       'window.existing = true;',
     );
   });
 
   it('rejects an unowned Liquid snippet before the development server starts', async () => {
     const root = themeProject();
-    writeFileSync(join(root, 'src/main.ts'), "console.log('Frame');");
+    writeFileSync(join(root, 'src/main.ts'), "console.log('Easel');");
     writeFileSync(join(root, 'src/style.css'), 'body {}');
     writeFileSync(
-      join(root, 'snippets/frame-assets.liquid'),
-      '{% doc %}\nGenerated by a merchant and not managed by Frame.\n{% enddoc %}',
+      join(root, 'snippets/easel-assets.liquid'),
+      '{% doc %}\nGenerated by a merchant and not managed by Easel.\n{% enddoc %}',
     );
 
     await expect(
@@ -760,25 +760,25 @@ describe('Frame production build', () => {
         root,
         configFile: false,
         logLevel: 'silent',
-        plugins: [frame()],
+        plugins: [easel()],
       }),
-    ).rejects.toThrow('refusing to overwrite a Liquid file Frame does not own');
+    ).rejects.toThrow('refusing to overwrite a Liquid file Easel does not own');
   });
 
   it('refuses to overwrite an unowned Liquid snippet during development', () => {
     const root = themeProject();
-    writeFileSync(join(root, 'src/main.ts'), "console.log('Frame');");
+    writeFileSync(join(root, 'src/main.ts'), "console.log('Easel');");
     writeFileSync(join(root, 'src/style.css'), 'body {}');
-    writeFileSync(join(root, 'snippets/frame-assets.liquid'), 'merchant snippet');
-    const options = resolveFrameOptions({}, root);
+    writeFileSync(join(root, 'snippets/easel-assets.liquid'), 'merchant snippet');
+    const options = resolveEaselOptions({}, root);
 
     expect(() =>
       writeDevelopmentLiquid(
         options,
         renderDevelopmentLiquid(['theme'], 'http://localhost:5173'),
       ),
-    ).toThrow('refusing to overwrite a Liquid file Frame does not own');
-    expect(readFileSync(join(root, 'snippets/frame-assets.liquid'), 'utf8')).toBe(
+    ).toThrow('refusing to overwrite a Liquid file Easel does not own');
+    expect(readFileSync(join(root, 'snippets/easel-assets.liquid'), 'utf8')).toBe(
       'merchant snippet',
     );
   });
@@ -789,16 +789,16 @@ describe('Frame production build', () => {
 
     await buildTheme(root, {bundles: {styles: {style: 'styles.css'}}});
 
-    expect(readdirSync(join(root, 'assets'))).toContain('frame-styles.css');
-    expect(readdirSync(join(root, 'assets'))).not.toContain('frame-styles.js');
+    expect(readdirSync(join(root, 'assets'))).toContain('easel-styles.css');
+    expect(readdirSync(join(root, 'assets'))).not.toContain('easel-styles.js');
     expect(
-      readFileSync(join(root, 'snippets/frame-assets.liquid'), 'utf8'),
-    ).not.toContain('frame-styles.js');
+      readFileSync(join(root, 'snippets/easel-assets.liquid'), 'utf8'),
+    ).not.toContain('easel-styles.js');
   });
 
   it('rejects output names changed by a later Vite plugin', async () => {
     const root = themeProject();
-    writeFileSync(join(root, 'src/main.ts'), "console.log('Frame');");
+    writeFileSync(join(root, 'src/main.ts'), "console.log('Easel');");
     writeFileSync(join(root, 'src/style.css'), 'body {}');
 
     await expect(
@@ -807,9 +807,9 @@ describe('Frame production build', () => {
         configFile: false,
         logLevel: 'silent',
         plugins: [
-          frame(),
+          easel(),
           {
-            name: 'change-frame-output',
+            name: 'change-easel-output',
             enforce: 'post',
             config() {
               return {
@@ -826,13 +826,13 @@ describe('Frame production build', () => {
           },
         ],
       }),
-    ).rejects.toThrow("generated asset is outside Frame's namespace");
+    ).rejects.toThrow("generated asset is outside Easel's namespace");
     expect(readdirSync(join(root, 'assets'))).toEqual([]);
   });
 
   it('rejects unsafe namespaced output before changing theme files', async () => {
     const root = themeProject();
-    writeFileSync(join(root, 'src/main.ts'), "console.log('Frame');");
+    writeFileSync(join(root, 'src/main.ts'), "console.log('Easel');");
     writeFileSync(join(root, 'src/style.css'), 'body {}');
 
     await expect(
@@ -841,26 +841,26 @@ describe('Frame production build', () => {
         configFile: false,
         logLevel: 'silent',
         plugins: [
-          frame(),
+          easel(),
           {
-            name: 'unsafe-frame-output',
+            name: 'unsafe-easel-output',
             buildStart() {
               this.emitFile({
                 type: 'asset',
-                fileName: 'frame-bad name.svg',
+                fileName: 'easel-bad name.svg',
                 source: '<svg/>',
               });
             },
           },
         ],
       }),
-    ).rejects.toThrow("generated asset is outside Frame's namespace");
+    ).rejects.toThrow("generated asset is outside Easel's namespace");
     expect(readdirSync(join(root, 'assets'))).toEqual([]);
   });
 
-  it('rejects Vite output settings that conflict with Frame ownership', async () => {
+  it('rejects Vite output settings that conflict with Easel ownership', async () => {
     const root = themeProject();
-    writeFileSync(join(root, 'src/main.ts'), "console.log('Frame');");
+    writeFileSync(join(root, 'src/main.ts'), "console.log('Easel');");
     writeFileSync(join(root, 'src/style.css'), 'body {}');
 
     await expect(
@@ -869,9 +869,9 @@ describe('Frame production build', () => {
         configFile: false,
         logLevel: 'silent',
         build: {assetsDir: 'custom-assets'},
-        plugins: [frame()],
+        plugins: [easel()],
       }),
-    ).rejects.toThrow('build.assetsDir is managed by Frame');
+    ).rejects.toThrow('build.assetsDir is managed by Easel');
 
     await expect(
       build({
@@ -879,7 +879,7 @@ describe('Frame production build', () => {
         configFile: false,
         logLevel: 'silent',
         build: {write: false},
-        plugins: [frame()],
+        plugins: [easel()],
       }),
     ).rejects.toThrow('build.write must remain enabled');
   });

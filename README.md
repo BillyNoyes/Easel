@@ -1,18 +1,18 @@
-# Frame
+# Easel
 
-Frame is a Vite plugin for Shopify Liquid themes.
+Easel is a Vite plugin for Shopify Liquid themes.
 
 It builds JavaScript, TypeScript, and CSS into Shopify theme assets, generates the Liquid snippet that loads them, and safely replaces old build output. During development, it can coordinate Vite updates with Shopify CLI reloads. Shopify CLI still handles previews, syncing, and deployment.
 
-[Read the documentation](https://frame.billynoyes.co.uk/docs/)
+[Read the documentation](https://easel.billynoyes.co.uk/docs/)
 
 ## Install
 
 ```sh
-pnpm add -D vite-plugin-shopify-frame vite
+pnpm add -D vite-plugin-shopify-easel vite
 ```
 
-Frame requires Node.js 22.12 or newer and supports Vite 7 and 8.
+Easel requires Node.js 22.12 or newer and supports Vite 7 and 8.
 
 ## Start
 
@@ -35,25 +35,25 @@ vite.config.ts
 
 ```ts
 import {defineConfig} from 'vite';
-import frame from 'vite-plugin-shopify-frame';
+import easel from 'vite-plugin-shopify-easel';
 
 export default defineConfig({
-  plugins: [frame()],
+  plugins: [easel()],
 });
 ```
 
 Render the generated loader in `layout/theme.liquid`.
 
 ```liquid
-{% render 'frame-assets' %}
+{% render 'easel-assets' %}
 ```
 
 Ignore generated output.
 
 ```gitignore
-.frame/
-assets/frame-*
-snippets/frame-assets.liquid
+.easel/
+assets/easel-*
+snippets/easel-assets.liquid
 ```
 
 Run Vite and Shopify CLI in separate terminals.
@@ -63,7 +63,7 @@ npm run dev
 ```
 
 ```sh
-shopify theme dev --notify .frame/shopify-ready
+shopify theme dev --notify .easel/shopify-ready
 ```
 
 The notification is optional. Vite HMR and Shopify CLI live reload still work without it.
@@ -81,11 +81,11 @@ Load only the code each Liquid surface needs.
 
 ```ts
 import {defineConfig} from 'vite';
-import frame from 'vite-plugin-shopify-frame';
+import easel from 'vite-plugin-shopify-easel';
 
 export default defineConfig({
   plugins: [
-    frame({
+    easel({
       bundles: {
         theme: {script: 'main.ts', style: 'style.css'},
         product: {script: 'product.ts', style: 'product.css'},
@@ -97,7 +97,7 @@ export default defineConfig({
 ```
 
 ```liquid
-{% render 'frame-assets', entry: 'product' %}
+{% render 'easel-assets', entry: 'product' %}
 ```
 
 Bundle paths resolve from `src` by default. The first bundle is used when `entry` is omitted.
@@ -105,7 +105,7 @@ Bundle paths resolve from `src` by default. The first bundle is used when `entry
 ## Configuration
 
 ```ts
-frame({
+easel({
   // Shopify theme directory relative to the Vite root. Defaults to the Vite root.
   theme: '.',
 
@@ -117,13 +117,13 @@ frame({
     theme: {script: 'main.ts', style: 'style.css'},
   },
 
-  // Namespace used by generated assets and the Liquid snippet. Defaults to frame.
-  namespace: 'frame',
+  // Namespace used by generated assets and the Liquid snippet. Defaults to easel.
+  namespace: 'easel',
 
   // Shopify CLI reload coordination. Use false to disable it.
   refresh: {
     // Notification file relative to the Vite root.
-    signal: '.frame/shopify-ready',
+    signal: '.easel/shopify-ready',
 
     // Reload debounce in milliseconds. Defaults to 100.
     delay: 100,
@@ -131,11 +131,11 @@ frame({
 });
 ```
 
-Use Tailwind CSS, Alpine.js, React, Vue, Sass, PostCSS, and other tools through their normal Vite setup. React Fast Refresh requires `@vitejs/plugin-react/preamble` because Frame does not use an HTML entry.
+Use Tailwind CSS, Alpine.js, React, Vue, Sass, PostCSS, and other tools through their normal Vite setup. React Fast Refresh requires `@vitejs/plugin-react/preamble` because Easel does not use an HTML entry.
 
 ## Safe by default
 
-Frame never empties Shopify's shared `assets` directory. It tracks only its own files, refuses unsafe overwrites, stages builds in isolation, serializes publication, and rolls back interrupted commits.
+Easel never empties Shopify's shared `assets` directory. It tracks only its own files, refuses unsafe overwrites, stages builds in isolation, serializes publication, and rolls back interrupted commits.
 
 Production entries keep stable names. Shared chunks, dynamic chunks, imported CSS, images, fonts, and source maps retain Vite's cache safe output behavior.
 

@@ -6,7 +6,7 @@
     "header": {"name": "Header"},
     "hero": {
       "default_heading": "Vanilla, built for Shopify",
-      "default_text": "<p>Frame connects modern source code to a Liquid theme.</p>",
+      "default_text": "<p>Easel connects modern source code to a Liquid theme.</p>",
       "heading": "Heading",
       "name": "Interactive hero",
       "text": "Text"

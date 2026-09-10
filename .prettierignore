@@ -1,6 +1,6 @@
 dist/
-.frame/
+.easel/
 node_modules/
 **/node_modules/
-**/assets/frame-*
-**/snippets/frame-assets.liquid
+**/assets/easel-*
+**/snippets/easel-assets.liquid

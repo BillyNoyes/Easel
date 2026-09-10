@@ -1,6 +1,6 @@
 node_modules/
 dist/
-.frame/
+.easel/
 .pi-subagents/
 coverage/
 .DS_Store
