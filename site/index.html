@@ -61,7 +61,7 @@
   <body
     class="min-h-screen bg-white font-body text-base/6 font-normal text-ink antialiased dark:bg-black dark:text-ink-inverse"
   >
-    <div class="mx-auto w-full max-w-none px-3 md:px-5">
+    <div class="mx-auto flex min-h-svh w-full max-w-none flex-col px-3 md:px-5">
       <a
         class="fixed top-4 left-4 z-50 -translate-y-[200%] rounded-md bg-ink px-3 py-2 text-sm/5 font-medium text-white focus:translate-y-0 focus-visible:outline-2 focus-visible:outline-offset-4 dark:bg-ink-inverse dark:text-black"
         href="#main"
@@ -85,11 +85,11 @@
       </header>
       <main
         id="main"
-        class="flex max-w-[52rem] flex-col items-stretch gap-8 pt-8 pb-12 focus-visible:outline-2 focus-visible:outline-offset-4"
+        class="mx-auto my-auto flex w-full max-w-[52rem] flex-col items-stretch gap-8 py-12 md:py-16 focus-visible:outline-2 focus-visible:outline-offset-4"
         tabindex="-1"
       >
         <h1
-          class="max-w-[28ch] font-heading font-bold tracking-normal text-[2rem]/10 md:text-[2.5rem]/12"
+          class="mx-auto max-w-[28ch] text-center font-heading font-bold tracking-normal text-[2rem]/10 md:text-[2.5rem]/12"
         >
           Vite Plugin for Shopify Liquid Themes.
         </h1>
@@ -116,7 +116,7 @@ export default defineConfig({
   plugins: [frame()],
 });</code></pre>
         </div>
-        <div>
+        <div class="flex justify-center">
           <a
             class="inline-flex min-h-9 max-w-full cursor-pointer items-center justify-center gap-2 rounded-md border border-black/8 dark:border-white/14 bg-white px-4 py-[7px] text-sm/5 font-medium text-ink dark:text-ink-inverse no-underline hover:bg-neutral-100 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-black dark:hover:bg-neutral-900 focus-visible:outline-2 focus-visible:outline-offset-4"
             href="/docs/"
