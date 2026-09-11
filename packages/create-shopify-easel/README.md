@@ -50,7 +50,7 @@ Without an interactive terminal, or in CI, a directory is required, prompts are 
 - Existing directories are rejected, including empty directories and symlinks. There is no overwrite or force option.
 - All questions are answered before writing the theme. Cancelling a prompt exits with code 130 without creating it.
 - A generation error removes only the new target directory. Newly created parent directories can remain.
-- Installation failure or interruption keeps the theme and prints retry instructions. Failures return a nonzero exit code.
+- Installation failure or Ctrl+C during installation keeps the theme and prints retry instructions. Failures return a nonzero exit code.
 - The CLI does not authenticate with Shopify, create stores, push themes, initialize Git, or change global package-manager configuration.
 - The CLI invokes the selected package manager directly, without interpolating the destination into a shell command. pnpm installation uses `--ignore-workspace` to avoid installing into an unrelated ancestor workspace.
 
@@ -70,6 +70,6 @@ pnpm test:package
 
 The CLI is TypeScript bundled with tsup. One base theme is composed with small framework overlays; Tailwind changes the generated config and CSS. JavaScript templates are derived from the TypeScript sources at build time rather than maintained as duplicate themes. The Vue component uses runtime props declarations so both script languages share its implementation.
 
-`test/create.test.js` covers generation, validation, filesystem safety, automation, and installation failure. The package smoke test installs the actual tarball, exercises the npm executable, and installs and checks all 16 language/framework/styling combinations outside the repository. `pnpm test:theme-check` also validates the generated Liquid variants.
+The repository's `test/create.test.js` covers generation, validation, filesystem safety, automation, and installation outcomes. The package's `test/install.test.js` also checks signal-handler ordering and cleanup. The package smoke test installs the actual tarball, exercises the npm executable, and installs and checks all 16 language/framework/styling combinations outside the repository. `pnpm test:theme-check` also validates the generated Liquid variants.
 
 Publishing this package is separate from publishing the Vite plugin. No scaffolder release workflow or npm trusted publisher is configured yet; see the repository's `RELEASING.md` for the current release boundary.

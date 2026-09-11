@@ -1,4 +1,5 @@
 import spawn from 'cross-spawn';
+import type {ChildProcess} from 'node:child_process';
 import type {packageManagers} from './options.js';
 
 export type PackageManager = (typeof packageManagers)[number];
@@ -21,17 +22,28 @@ export function installDependencies(
   manager: PackageManager,
 ): Promise<void> {
   return new Promise((resolve, reject) => {
-    const child = spawn(manager, installArguments(manager), {
-      cwd: target,
-      stdio: 'inherit',
-    });
+    let child: ChildProcess | undefined;
     let interrupted = false;
     const interrupt = () => {
       interrupted = true;
-      child.kill('SIGINT');
+      child?.kill('SIGINT');
     };
+    // A child can write to inherited streams before spawn returns to the parent.
     process.on('SIGINT', interrupt);
     const cleanup = () => process.removeListener('SIGINT', interrupt);
+    try {
+      child = spawn(manager, installArguments(manager), {cwd: target, stdio: 'inherit'});
+    } catch (error) {
+      cleanup();
+      reject(
+        new InstallError(
+          `Could not run ${manager}: ${error instanceof Error ? error.message : String(error)}`,
+          interrupted,
+        ),
+      );
+      return;
+    }
+    if (interrupted) child.kill('SIGINT');
     child.on('error', (error) => {
       cleanup();
       reject(new InstallError(`Could not run ${manager}: ${error.message}`, interrupted));
