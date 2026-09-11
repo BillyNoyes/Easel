@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en" class="scheme-light dark:scheme-dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Easel is a Vite plugin for Shopify Liquid themes."
+    />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)" />
+    <meta property="og:title" content="Easel · Vite for Shopify themes" />
+    <meta
+      property="og:description"
+      content="Easel is a Vite plugin for Shopify Liquid themes."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Easel" />
+    <meta property="og:url" content="https://easel.billynoyes.co.uk/" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Easel · Vite for Shopify themes" />
+    <meta
+      name="twitter:description"
+      content="Easel is a Vite plugin for Shopify Liquid themes."
+    />
+    <link rel="canonical" href="https://easel.billynoyes.co.uk/" />
+    <link rel="icon" href="/easel.svg" type="image/svg+xml" />
+    <link
+      rel="preload"
+      href="/fonts/inter_n7.02711e6b374660cfc7915d1afc1c204e633421e4.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/fonts/inter_n4.b2a3f24c19b4de56e8871f609e73ca7f6d2e2bb9.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link rel="stylesheet" href="/src/style.css" />
+    <title>Easel · Vite for Shopify themes</title>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Easel",
+        "url": "https://easel.billynoyes.co.uk/",
+        "description": "Easel is a Vite plugin for Shopify Liquid themes.",
+        "inLanguage": "en",
+        "author": {
+          "@type": "Person",
+          "name": "Billy Noyes",
+          "url": "https://billynoyes.co.uk/"
+        }
+      }
+    </script>
+  </head>
+  <body
+    class="min-h-dvh bg-white font-body text-base/6 font-normal text-ink antialiased dark:bg-black dark:text-ink-inverse"
+  >
+    <div class="mx-auto flex min-h-dvh w-full max-w-none flex-col px-3 md:px-5">
+      <a
+        class="fixed top-4 left-4 z-50 -translate-y-[200%] rounded-md bg-ink px-3 py-2 text-sm/5 font-medium text-white focus:translate-y-0 focus-visible:outline-2 focus-visible:outline-offset-4 dark:bg-ink-inverse dark:text-black"
+        href="#main"
+        >Skip to content</a
+      >
+      <header class="py-4">
+        <div class="flex items-center justify-between gap-6">
+          <a
+            href="/"
+            class="inline-flex items-center gap-2.5 font-display text-xl/6 font-normal no-underline text-ink dark:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
+          >
+            <img src="/easel.svg" alt="" width="28" height="28" class="size-7 shrink-0" />
+            <span>Easel</span>
+          </a>
+          <nav aria-label="Primary navigation" class="text-[13px]/[18px]">
+            <a
+              href="https://github.com/BillyNoyes/Easel"
+              class="text-inherit underline underline-offset-[0.2em] hover:text-ink dark:hover:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
+              >GitHub</a
+            >
+          </nav>
+        </div>
+      </header>
+      <main
+        id="main"
+        class="mx-auto my-auto flex w-full max-w-6xl flex-col items-stretch gap-6 py-4 [@media(max-height:44rem)]:gap-4 [@media(max-height:44rem)]:py-3 focus-visible:outline-2 focus-visible:outline-offset-4"
+        tabindex="-1"
+      >
+        <div class="flex flex-col items-center gap-3 text-center">
+          <h1
+            class="max-w-[28ch] font-heading font-bold tracking-normal text-[2rem]/10 md:text-[2.5rem]/12 [@media(max-height:44rem)]:md:text-[2rem]/10"
+          >
+            Vite Plugin for Shopify Liquid Themes.
+          </h1>
+          <p class="max-w-[54ch] text-muted dark:text-muted-inverse">
+            Start a new theme, or bring the one you already have.
+          </p>
+        </div>
+        <div class="grid grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-8" data-home-examples>
+          <section class="flex min-w-0 flex-col gap-2" aria-labelledby="new-theme-title">
+            <h2
+              id="new-theme-title"
+              class="font-heading font-bold tracking-normal text-base/6"
+            >
+              Start a new theme.
+            </h2>
+            <div
+              class="flex min-w-0 flex-1 flex-col rounded-lg border border-black/8 bg-panel dark:border-white/14 dark:bg-panel-inverse"
+            >
+              <div
+                class="flex flex-wrap items-center justify-between gap-3 border-b border-black/8 px-4 py-2 text-[13px]/5 text-muted dark:border-white/14 dark:text-muted-inverse"
+              >
+                <div class="flex items-center gap-3">
+                  <span class="flex gap-1.5" aria-hidden="true">
+                    <span class="size-2 rounded-full bg-black/20 dark:bg-white/25"></span>
+                    <span class="size-2 rounded-full bg-black/20 dark:bg-white/25"></span>
+                    <span class="size-2 rounded-full bg-black/20 dark:bg-white/25"></span>
+                  </span>
+                  <span id="terminal-label" class="font-mono">Terminal</span>
+                </div>
+                <span>create-easel-theme</span>
+              </div>
+              <pre
+                class="min-w-0 max-w-full flex-1 overflow-x-auto p-4 font-mono text-sm/5 font-normal [tab-size:2] text-ink dark:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
+                tabindex="0"
+                role="region"
+                aria-labelledby="terminal-label"
+                aria-describedby="cli-preview-note"
+                data-terminal-preview
+              ><code><span aria-hidden="true" class="text-muted dark:text-muted-inverse">$ </span>npm create easel-theme@latest .
+
+<span aria-hidden="true" class="text-muted dark:text-muted-inverse">◇ </span><span class="text-muted dark:text-muted-inverse">Language              </span>TypeScript
+<span aria-hidden="true" class="text-muted dark:text-muted-inverse">◇ </span><span class="text-muted dark:text-muted-inverse">UI tools              </span>Alpine
+<span aria-hidden="true" class="text-muted dark:text-muted-inverse">◇ </span><span class="text-muted dark:text-muted-inverse">Tailwind CSS          </span>Yes
+<span aria-hidden="true" class="text-muted dark:text-muted-inverse">◇ </span><span class="text-muted dark:text-muted-inverse">Install dependencies  </span>Yes
+
+<span aria-hidden="true">✓ </span>Created in the current directory.
+<span aria-hidden="true" class="text-muted dark:text-muted-inverse">$ </span>npm run dev</code></pre>
+              <p
+                id="cli-preview-note"
+                class="border-t border-black/8 px-4 py-3 text-[13px]/5 text-muted dark:border-white/14 dark:text-muted-inverse"
+              >
+                <a
+                  href="https://www.npmjs.com/package/create-easel-theme"
+                  class="underline underline-offset-4 hover:text-ink dark:hover:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
+                  >create-easel-theme on npm <span aria-hidden="true">↗</span></a
+                >
+              </p>
+            </div>
+          </section>
+          <section
+            class="flex min-w-0 flex-col gap-2"
+            aria-labelledby="existing-theme-title"
+          >
+            <h2
+              id="existing-theme-title"
+              class="font-heading font-bold tracking-normal text-base/6"
+            >
+              Or add it to your theme.
+            </h2>
+            <div
+              class="flex min-w-0 flex-1 flex-col rounded-lg border border-black/8 bg-panel dark:border-white/14 dark:bg-panel-inverse"
+              data-code-block
+            >
+              <div
+                class="border-b border-black/8 px-4 py-2 text-[13px]/5 text-muted dark:border-white/14 dark:text-muted-inverse"
+              >
+                <span id="code-label-1" class="font-mono" data-code-label
+                  >vite.config.ts</span
+                >
+              </div>
+              <pre
+                class="min-w-0 max-w-full flex-1 overflow-x-auto p-4 font-mono text-sm/5 font-normal [tab-size:2] text-ink dark:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
+                tabindex="0"
+                role="region"
+                aria-labelledby="code-label-1"
+              ><code>import {defineConfig} from 'vite';
+import easel from 'vite-plugin-shopify-easel';
+
+export default defineConfig({
+  plugins: [easel()],
+});</code></pre>
+              <p
+                class="border-t border-black/8 px-4 py-3 text-[13px]/5 text-muted dark:border-white/14 dark:text-muted-inverse"
+              >
+                <a
+                  href="https://www.npmjs.com/package/vite-plugin-shopify-easel"
+                  class="underline underline-offset-4 hover:text-ink dark:hover:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
+                  >vite-plugin-shopify-easel on npm <span aria-hidden="true">↗</span></a
+                >
+              </p>
+            </div>
+          </section>
+        </div>
+        <div class="flex justify-center">
+          <a
+            class="inline-flex min-h-9 max-w-full cursor-pointer items-center justify-center gap-2 rounded-md border border-black/8 dark:border-white/14 bg-white px-4 py-[7px] text-sm/5 font-medium text-ink dark:text-ink-inverse no-underline hover:bg-neutral-100 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-black dark:hover:bg-neutral-900 focus-visible:outline-2 focus-visible:outline-offset-4"
+            href="/docs/"
+            >Get started <span aria-hidden="true">→</span></a
+          >
+        </div>
+      </main>
+      <footer
+        class="flex flex-col gap-5 py-6 [@media(max-height:44rem)]:py-3 text-[13px]/[18px] text-muted dark:text-muted-inverse md:flex-row md:items-center md:justify-between"
+      >
+        <span>Easel</span>
+        <span
+          >Built by
+          <a
+            href="https://billynoyes.co.uk/"
+            class="text-inherit underline underline-offset-[0.2em] hover:text-ink dark:hover:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
+            >Billy Noyes</a
+          >. An independent project with no Shopify sponsorship or endorsement.</span
+        >
+      </footer>
+    </div>
+  </body>
+</html>

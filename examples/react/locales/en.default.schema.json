@@ -1,0 +1,18 @@
+{
+  "blocks": {"text": {"name": "Text", "text": "Text"}},
+  "general": {"not_found_name": "404 page"},
+  "sections": {
+    "footer": {"name": "Footer"},
+    "header": {"name": "Header"},
+    "hero": {
+      "default_heading": "React inside Liquid",
+      "default_text": "<p>Mount React only where the storefront needs an interactive component.</p>",
+      "heading": "Heading",
+      "name": "Interactive hero",
+      "text": "Text"
+    }
+  },
+  "settings": {
+    "colors": {"background": "Background", "foreground": "Text", "name": "Colors"}
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "accessibility": {
+    "skip_to_content": "Skip to content"
+  },
+  "general": {
+    "not_found": "Page not found",
+    "return_home": "Return home"
+  }
+}

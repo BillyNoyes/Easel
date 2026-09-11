@@ -1,0 +1,75 @@
+name: CI
+
+on:
+  workflow_call:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  workflow-check:
+    name: Workflow validation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Validate GitHub Actions workflows
+        run: |
+          curl --fail --silent --show-error --location https://github.com/rhysd/actionlint/releases/download/v1.7.12/actionlint_1.7.12_linux_amd64.tar.gz --output "$RUNNER_TEMP/actionlint.tar.gz"
+          echo "8aca8db96f1b94770f1b0d72b6dddcb1ebb8123cb3712530b08cc387b349a3d8  $RUNNER_TEMP/actionlint.tar.gz" | sha256sum --check
+          tar -xzf "$RUNNER_TEMP/actionlint.tar.gz" -C "$RUNNER_TEMP" actionlint
+          "$RUNNER_TEMP/actionlint" -color
+
+  check:
+    name: ${{ matrix.os }} / Node ${{ matrix.node }} / Vite ${{ matrix.vite }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            node: 22.12.0
+            vite: 7
+          - os: ubuntu-latest
+            node: 24
+            vite: 8
+          - os: macos-latest
+            node: 24
+            vite: 8
+          # Node 24.16+ can abort inside Windows filesystem watchers.
+          # https://github.com/nodejs/node/issues/63638
+          - os: windows-latest
+            node: 24.15.0
+            vite: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm format:check
+      - if: matrix.node != '22.12.0'
+        run: pnpm lint
+      - run: pnpm add --workspace-root --save-dev vite@^${{ matrix.vite }}
+      - run: pnpm typecheck && pnpm test && pnpm test:examples && pnpm test:site && pnpm build && pnpm test:package
+
+  theme-check:
+    name: Shopify Theme Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm test:examples
+      - run: npm install --global @shopify/cli@4.6.1
+      - run: pnpm test:theme-check

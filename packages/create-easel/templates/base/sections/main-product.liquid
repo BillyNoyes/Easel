@@ -1,0 +1,25 @@
+<section class="page product">
+  <div class="product__media">
+    {% if product.featured_image %}
+      {{ product.featured_image | image_url: width: 1200 | image_tag: widths: '360, 540, 720, 960, 1200', sizes: '(min-width: 48rem) 50vw, 100vw', alt: product.featured_image.alt | default: product.title }}
+    {% endif %}
+  </div>
+  <div class="product__details">
+    <h1>{{ product.title | escape }}</h1>
+    <p>{{ product.selected_or_first_available_variant.price | money }}</p>
+    {% if product.description != blank %}<div class="rte">{{ product.description }}</div>{% endif %}
+    {% form 'product', product %}
+      <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+      <button type="submit" name="add"{% unless product.selected_or_first_available_variant.available %} disabled{% endunless %}>
+        {% if product.selected_or_first_available_variant.available %}{{ 'product.add_to_cart' | t }}{% else %}{{ 'product.sold_out' | t }}{% endif %}
+      </button>
+    {% endform %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "t:sections.main_product.name",
+  "settings": []
+}
+{% endschema %}

@@ -1,0 +1,31 @@
+<section class="page">
+  <h1>{{ 'cart.title' | t }}</h1>
+  {% if cart.item_count == 0 %}
+    <p>{{ 'cart.empty' | t }}</p>
+    <a href="{{ routes.all_products_collection_url }}">{{ 'cart.continue_shopping' | t }}</a>
+  {% else %}
+    {% form 'cart', cart %}
+      <ul class="cart-items" role="list">
+        {% for item in cart.items %}
+          <li class="cart-item">
+            <a href="{{ item.url }}">{{ item.product.title | escape }}</a>
+            {% unless item.product.has_only_default_variant %}<p>{{ item.variant.title | escape }}</p>{% endunless %}
+            <label for="CartQuantity-{{ forloop.index }}">{{ 'cart.quantity' | t }}</label>
+            <input id="CartQuantity-{{ forloop.index }}" type="number" name="updates[]" value="{{ item.quantity }}" min="0">
+            <p>{{ item.final_line_price | money }}</p>
+          </li>
+        {% endfor %}
+      </ul>
+      <p>{{ 'cart.subtotal' | t }}: {{ cart.total_price | money }}</p>
+      <button type="submit" name="update">{{ 'cart.update' | t }}</button>
+      <button type="submit" name="checkout">{{ 'cart.checkout' | t }}</button>
+    {% endform %}
+  {% endif %}
+</section>
+
+{% schema %}
+{
+  "name": "t:sections.main_cart.name",
+  "settings": []
+}
+{% endschema %}

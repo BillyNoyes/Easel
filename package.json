@@ -1,0 +1,76 @@
+{
+  "name": "vite-plugin-shopify-easel",
+  "version": "0.2.0",
+  "description": "A Vite build adapter for Shopify Liquid themes",
+  "type": "module",
+  "sideEffects": false,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BillyNoyes/Easel.git"
+  },
+  "homepage": "https://easel.billynoyes.co.uk/",
+  "bugs": "https://github.com/BillyNoyes/Easel/issues",
+  "keywords": [
+    "shopify",
+    "liquid",
+    "theme",
+    "vite"
+  ],
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "scripts": {
+    "build": "tsup src/index.ts --format esm --dts --sourcemap --clean",
+    "check": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test && pnpm test:examples && pnpm test:site && pnpm build && pnpm test:package",
+    "create:theme": "pnpm --dir packages/create-easel build && node packages/create-easel/bin/create-easel-theme.mjs",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lint": "eslint .",
+    "prepublishOnly": "pnpm check",
+    "scaffold:theme": "node scripts/scaffold-theme.mjs",
+    "test": "pnpm --dir packages/create-easel build && vitest run",
+    "test:example:alpine-tailwind": "pnpm --dir examples/alpine-tailwind check",
+    "test:example:named-bundles": "pnpm --dir examples/named-bundles check",
+    "test:example:react": "pnpm --dir examples/react check",
+    "test:example:vanilla": "pnpm --dir examples/vanilla check",
+    "test:example:vue": "pnpm --dir examples/vue check",
+    "test:examples": "node scripts/check-examples.mjs",
+    "test:package": "node scripts/check-package.mjs && node packages/create-easel/scripts/check-package.mjs",
+    "test:site": "pnpm --dir site check",
+    "test:theme-check": "node scripts/check-themes.mjs",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit && pnpm --dir packages/create-easel check"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "peerDependencies": {
+    "vite": "^7.0.0 || ^8.0.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "4.3.3",
+    "@types/node": "^24.0.0",
+    "alpinejs": "3.17.1",
+    "eslint": "^10.9.1",
+    "prettier": "^3.9.6",
+    "tailwindcss": "4.3.3",
+    "tsup": "^8.5.0",
+    "typescript": "^5.9.0",
+    "typescript-eslint": "^8.68.0",
+    "vite": "^8.0.0",
+    "vitest": "^4.0.0"
+  },
+  "license": "MIT",
+  "packageManager": "pnpm@10.28.0"
+}

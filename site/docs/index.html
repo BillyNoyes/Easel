@@ -1,0 +1,2104 @@
+<!doctype html>
+<html
+  lang="en"
+  class="scroll-smooth scheme-light motion-reduce:scroll-auto dark:scheme-dark"
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Install and configure Easel, a Vite plugin for Shopify Liquid themes. Develop with Shopify CLI, build assets, and generate Liquid."
+    />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)" />
+    <meta property="og:title" content="Easel documentation" />
+    <meta
+      property="og:description"
+      content="Install and configure Easel, a Vite plugin for Shopify Liquid themes. Develop with Shopify CLI, build assets, and generate Liquid."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Easel" />
+    <meta property="og:url" content="https://easel.billynoyes.co.uk/docs/" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Easel documentation" />
+    <meta
+      name="twitter:description"
+      content="Install and configure Easel, a Vite plugin for Shopify Liquid themes. Develop with Shopify CLI, build assets, and generate Liquid."
+    />
+    <link rel="canonical" href="https://easel.billynoyes.co.uk/docs/" />
+    <link rel="icon" href="/easel.svg" type="image/svg+xml" />
+    <link
+      rel="preload"
+      href="/fonts/inter_n7.02711e6b374660cfc7915d1afc1c204e633421e4.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/fonts/inter_n4.b2a3f24c19b4de56e8871f609e73ca7f6d2e2bb9.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link rel="stylesheet" href="/src/style.css" />
+    <title>Easel documentation</title>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "TechArticle",
+        "name": "Easel documentation",
+        "url": "https://easel.billynoyes.co.uk/docs/",
+        "description": "Install and configure Easel, a Vite plugin for Shopify Liquid themes. Develop with Shopify CLI, build assets, and generate Liquid.",
+        "inLanguage": "en",
+        "author": {
+          "@type": "Person",
+          "name": "Billy Noyes",
+          "url": "https://billynoyes.co.uk/"
+        }
+      }
+    </script>
+    <script type="module" src="/src/main.ts"></script>
+  </head>
+  <body
+    class="min-h-screen bg-white font-body text-base/6 font-normal text-ink antialiased dark:bg-black dark:text-ink-inverse"
+    x-data="docsNavigation($el)"
+  >
+    <div class="mx-auto w-full max-w-none px-3 md:px-5">
+      <a
+        class="fixed top-4 left-4 z-50 -translate-y-[200%] rounded-md bg-ink px-3 py-2 text-sm/5 font-medium text-white focus:translate-y-0 focus-visible:outline-2 focus-visible:outline-offset-4 dark:bg-ink-inverse dark:text-black"
+        href="#main"
+        >Skip to content</a
+      >
+      <header class="py-4">
+        <div class="flex items-center justify-between gap-6">
+          <a
+            href="/"
+            class="inline-flex items-center gap-2.5 font-display text-xl/6 font-normal no-underline text-ink dark:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
+          >
+            <img src="/easel.svg" alt="" width="28" height="28" class="size-7 shrink-0" />
+            <span>Easel</span>
+          </a>
+          <nav aria-label="Primary navigation" class="text-[13px]/[18px]">
+            <a
+              href="https://github.com/BillyNoyes/Easel"
+              class="text-inherit underline underline-offset-[0.2em] hover:text-ink dark:hover:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
+              >GitHub</a
+            >
+          </nav>
+        </div>
+      </header>
+      <main
+        id="main"
+        class="flex items-start gap-12 pt-6 pb-12 focus-visible:outline-2 focus-visible:outline-offset-4"
+        tabindex="-1"
+      >
+        <aside class="hidden min-w-0 lg:sticky lg:top-8 lg:block lg:flex-[0_0_13rem]">
+          <div class="lg:max-h-[calc(100dvh-4rem)] lg:overflow-y-auto">
+            <p class="text-[13px]/4 font-normal text-muted dark:text-muted-inverse">
+              Documentation
+            </p>
+            <nav
+              class="flex flex-col items-start py-2"
+              aria-label="Documentation sections"
+            >
+              <a
+                href="#quick-start"
+                class="block py-2 text-muted dark:text-muted-inverse no-underline hover:text-ink dark:hover:text-ink-inverse aria-[current=location]:text-ink aria-[current=location]:underline aria-[current=location]:underline-offset-4 dark:aria-[current=location]:text-ink-inverse focus-visible:outline-2 focus-visible:-outline-offset-2"
+                :aria-current="activeSection === 'quick-start' ? 'location' : null"
+                @click="navigate"
+                >Quick start</a
+              ><a
+                href="#development"
+                class="block py-2 text-muted dark:text-muted-inverse no-underline hover:text-ink dark:hover:text-ink-inverse aria-[current=location]:text-ink aria-[current=location]:underline aria-[current=location]:underline-offset-4 dark:aria-[current=location]:text-ink-inverse focus-visible:outline-2 focus-visible:-outline-offset-2"
+                :aria-current="activeSection === 'development' ? 'location' : null"
+                @click="navigate"
+                >Development</a
+              ><a
+                href="#production"
+                class="block py-2 text-muted dark:text-muted-inverse no-underline hover:text-ink dark:hover:text-ink-inverse aria-[current=location]:text-ink aria-[current=location]:underline aria-[current=location]:underline-offset-4 dark:aria-[current=location]:text-ink-inverse focus-visible:outline-2 focus-visible:-outline-offset-2"
+                :aria-current="activeSection === 'production' ? 'location' : null"
+                @click="navigate"
+                >Production</a
+              ><a
+                href="#bundles"
+                class="block py-2 text-muted dark:text-muted-inverse no-underline hover:text-ink dark:hover:text-ink-inverse aria-[current=location]:text-ink aria-[current=location]:underline aria-[current=location]:underline-offset-4 dark:aria-[current=location]:text-ink-inverse focus-visible:outline-2 focus-visible:-outline-offset-2"
+                :aria-current="activeSection === 'bundles' ? 'location' : null"
+                @click="navigate"
+                >Named bundles</a
+              ><a
+                href="#configuration"
+                class="block py-2 text-muted dark:text-muted-inverse no-underline hover:text-ink dark:hover:text-ink-inverse aria-[current=location]:text-ink aria-[current=location]:underline aria-[current=location]:underline-offset-4 dark:aria-[current=location]:text-ink-inverse focus-visible:outline-2 focus-visible:-outline-offset-2"
+                :aria-current="activeSection === 'configuration' ? 'location' : null"
+                @click="navigate"
+                >Configuration</a
+              ><a
+                href="#integrations"
+                class="block py-2 text-muted dark:text-muted-inverse no-underline hover:text-ink dark:hover:text-ink-inverse aria-[current=location]:text-ink aria-[current=location]:underline aria-[current=location]:underline-offset-4 dark:aria-[current=location]:text-ink-inverse focus-visible:outline-2 focus-visible:-outline-offset-2"
+                :aria-current="activeSection === 'integrations' ? 'location' : null"
+                @click="navigate"
+                >Integrations</a
+              ><a
+                href="#safety"
+                class="block py-2 text-muted dark:text-muted-inverse no-underline hover:text-ink dark:hover:text-ink-inverse aria-[current=location]:text-ink aria-[current=location]:underline aria-[current=location]:underline-offset-4 dark:aria-[current=location]:text-ink-inverse focus-visible:outline-2 focus-visible:-outline-offset-2"
+                :aria-current="activeSection === 'safety' ? 'location' : null"
+                @click="navigate"
+                >Output safety</a
+              ><a
+                href="#troubleshooting"
+                class="block py-2 text-muted dark:text-muted-inverse no-underline hover:text-ink dark:hover:text-ink-inverse aria-[current=location]:text-ink aria-[current=location]:underline aria-[current=location]:underline-offset-4 dark:aria-[current=location]:text-ink-inverse focus-visible:outline-2 focus-visible:-outline-offset-2"
+                :aria-current="activeSection === 'troubleshooting' ? 'location' : null"
+                @click="navigate"
+                >Troubleshooting</a
+              ><a
+                href="#examples"
+                class="block py-2 text-muted dark:text-muted-inverse no-underline hover:text-ink dark:hover:text-ink-inverse aria-[current=location]:text-ink aria-[current=location]:underline aria-[current=location]:underline-offset-4 dark:aria-[current=location]:text-ink-inverse focus-visible:outline-2 focus-visible:-outline-offset-2"
+                :aria-current="activeSection === 'examples' ? 'location' : null"
+                @click="navigate"
+                >Examples</a
+              >
+            </nav>
+          </div>
+        </aside>
+        <div class="min-w-0 flex-1">
+          <div class="flex flex-col gap-5 pb-10">
+            <h1
+              class="max-w-[28ch] font-heading font-bold tracking-normal text-[2rem]/10 md:text-[2.5rem]/12"
+            >
+              Documentation
+            </h1>
+            <div class="flex flex-wrap gap-5">
+              <a
+                class="text-inherit underline underline-offset-[0.2em] hover:text-ink dark:hover:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
+                href="#quick-start"
+                @click="navigate"
+                >Get started</a
+              >
+              <a
+                class="text-inherit underline underline-offset-[0.2em] hover:text-ink dark:hover:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
+                href="https://github.com/BillyNoyes/Easel/tree/main/examples"
+                >Examples on GitHub</a
+              >
+            </div>
+            <details
+              class="border-y border-black/8 dark:border-white/14 py-4 lg:hidden"
+              @keydown.escape.stop.prevent="closeMenu"
+            >
+              <summary
+                class="cursor-pointer py-4 font-medium focus-visible:outline-2 focus-visible:outline-offset-4"
+              >
+                On this page
+              </summary>
+              <nav
+                class="flex flex-col items-start py-2"
+                aria-label="Mobile documentation sections"
+              >
+                <a
+                  href="#quick-start"
+                  class="block py-2 text-muted dark:text-muted-inverse no-underline hover:text-ink dark:hover:text-ink-inverse aria-[current=location]:text-ink aria-[current=location]:underline aria-[current=location]:underline-offset-4 dark:aria-[current=location]:text-ink-inverse focus-visible:outline-2 focus-visible:-outline-offset-2"
+                  :aria-current="activeSection === 'quick-start' ? 'location' : null"
+                  @click="navigate"
+                  >Quick start</a
+                ><a
+                  href="#development"
+                  class="block py-2 text-muted dark:text-muted-inverse no-underline hover:text-ink dark:hover:text-ink-inverse aria-[current=location]:text-ink aria-[current=location]:underline aria-[current=location]:underline-offset-4 dark:aria-[current=location]:text-ink-inverse focus-visible:outline-2 focus-visible:-outline-offset-2"
+                  :aria-current="activeSection === 'development' ? 'location' : null"
+                  @click="navigate"
+                  >Development</a
+                ><a
+                  href="#production"
+                  class="block py-2 text-muted dark:text-muted-inverse no-underline hover:text-ink dark:hover:text-ink-inverse aria-[current=location]:text-ink aria-[current=location]:underline aria-[current=location]:underline-offset-4 dark:aria-[current=location]:text-ink-inverse focus-visible:outline-2 focus-visible:-outline-offset-2"
+                  :aria-current="activeSection === 'production' ? 'location' : null"
+                  @click="navigate"
+                  >Production</a
+                ><a
+                  href="#bundles"
+                  class="block py-2 text-muted dark:text-muted-inverse no-underline hover:text-ink dark:hover:text-ink-inverse aria-[current=location]:text-ink aria-[current=location]:underline aria-[current=location]:underline-offset-4 dark:aria-[current=location]:text-ink-inverse focus-visible:outline-2 focus-visible:-outline-offset-2"
+                  :aria-current="activeSection === 'bundles' ? 'location' : null"
+                  @click="navigate"
+                  >Named bundles</a
+                ><a
+                  href="#configuration"
+                  class="block py-2 text-muted dark:text-muted-inverse no-underline hover:text-ink dark:hover:text-ink-inverse aria-[current=location]:text-ink aria-[current=location]:underline aria-[current=location]:underline-offset-4 dark:aria-[current=location]:text-ink-inverse focus-visible:outline-2 focus-visible:-outline-offset-2"
+                  :aria-current="activeSection === 'configuration' ? 'location' : null"
+                  @click="navigate"
+                  >Configuration</a
+                ><a
+                  href="#integrations"
+                  class="block py-2 text-muted dark:text-muted-inverse no-underline hover:text-ink dark:hover:text-ink-inverse aria-[current=location]:text-ink aria-[current=location]:underline aria-[current=location]:underline-offset-4 dark:aria-[current=location]:text-ink-inverse focus-visible:outline-2 focus-visible:-outline-offset-2"
+                  :aria-current="activeSection === 'integrations' ? 'location' : null"
+                  @click="navigate"
+                  >Integrations</a
+                ><a
+                  href="#safety"
+                  class="block py-2 text-muted dark:text-muted-inverse no-underline hover:text-ink dark:hover:text-ink-inverse aria-[current=location]:text-ink aria-[current=location]:underline aria-[current=location]:underline-offset-4 dark:aria-[current=location]:text-ink-inverse focus-visible:outline-2 focus-visible:-outline-offset-2"
+                  :aria-current="activeSection === 'safety' ? 'location' : null"
+                  @click="navigate"
+                  >Output safety</a
+                ><a
+                  href="#troubleshooting"
+                  class="block py-2 text-muted dark:text-muted-inverse no-underline hover:text-ink dark:hover:text-ink-inverse aria-[current=location]:text-ink aria-[current=location]:underline aria-[current=location]:underline-offset-4 dark:aria-[current=location]:text-ink-inverse focus-visible:outline-2 focus-visible:-outline-offset-2"
+                  :aria-current="activeSection === 'troubleshooting' ? 'location' : null"
+                  @click="navigate"
+                  >Troubleshooting</a
+                ><a
+                  href="#examples"
+                  class="block py-2 text-muted dark:text-muted-inverse no-underline hover:text-ink dark:hover:text-ink-inverse aria-[current=location]:text-ink aria-[current=location]:underline aria-[current=location]:underline-offset-4 dark:aria-[current=location]:text-ink-inverse focus-visible:outline-2 focus-visible:-outline-offset-2"
+                  :aria-current="activeSection === 'examples' ? 'location' : null"
+                  @click="navigate"
+                  >Examples</a
+                >
+              </nav>
+            </details>
+          </div>
+          <section
+            id="quick-start"
+            class="flex scroll-mt-8 flex-col gap-5 [&+section]:mt-16 focus-visible:outline-2 focus-visible:outline-offset-4"
+            tabindex="-1"
+            aria-labelledby="quick-start-title"
+          >
+            <h2
+              id="quick-start-title"
+              class="font-heading font-bold tracking-normal text-2xl/8"
+            >
+              Start with Easel.
+            </h2>
+            <p class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere">
+              Easel requires Node.js 22.12 or newer. Generated themes use Vite 8; the
+              plugin supports Vite 7 and 8.
+            </p>
+            <div class="flex flex-col gap-2">
+              <h3 class="font-heading font-bold tracking-normal text-base/6">
+                Create a new theme
+              </h3>
+              <p class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere">
+                Run the published
+                <a
+                  class="underline underline-offset-4 hover:text-ink dark:hover:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
+                  href="https://www.npmjs.com/package/create-easel-theme"
+                  >create-easel-theme scaffolder</a
+                >
+                from an empty project directory:
+              </p>
+            </div>
+            <div
+              class="min-w-0 rounded-md border border-black/8 dark:border-white/14 bg-panel dark:bg-panel-inverse"
+              data-code-block
+              x-data="copyCode($el)"
+            >
+              <div
+                class="flex flex-wrap items-center justify-between gap-3 px-5 pt-4 text-muted dark:text-muted-inverse wrap-anywhere"
+              >
+                <span
+                  id="code-quick-start-create"
+                  class="text-[13px]/4 font-normal text-muted dark:text-muted-inverse"
+                  data-code-label
+                  >Create in the current directory</span
+                >
+                <div
+                  class="flex flex-wrap items-center gap-3 [&[x-cloak]]:hidden!"
+                  x-cloak
+                >
+                  <button
+                    type="button"
+                    class="inline-flex min-h-9 max-w-full cursor-pointer items-center justify-center gap-2 rounded-md border border-black/8 dark:border-white/14 bg-white px-4 py-[7px] text-sm/5 font-medium text-ink dark:text-ink-inverse no-underline hover:bg-neutral-100 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-black dark:hover:bg-neutral-900 focus-visible:outline-2 focus-visible:outline-offset-4"
+                    @click="copy"
+                    :disabled="pending"
+                    :aria-label="'Copy ' + label"
+                    x-text="pending ? 'Copying…' : 'Copy'"
+                  >
+                    Copy
+                  </button>
+                  <span
+                    class="max-w-[28ch] text-[13px]/[18px] text-muted dark:text-muted-inverse"
+                    role="status"
+                    x-text="status"
+                  ></span>
+                </div>
+              </div>
+              <pre
+                class="min-w-0 max-w-full overflow-x-auto p-5 font-mono text-sm/6 font-normal [tab-size:2] text-ink dark:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
+                tabindex="0"
+                role="region"
+                aria-labelledby="code-quick-start-create"
+              ><code>npm create easel-theme@latest .</code></pre>
+            </div>
+            <ul
+              class="grid max-w-4xl grid-cols-1 gap-x-8 gap-y-2 text-muted dark:text-muted-inverse sm:grid-cols-2"
+            >
+              <li>
+                <strong class="text-ink dark:text-ink-inverse">Language:</strong>
+                TypeScript or JavaScript.
+              </li>
+              <li>
+                <strong class="text-ink dark:text-ink-inverse">UI tools:</strong> none,
+                Alpine, React, or Vue.
+              </li>
+              <li>
+                <strong class="text-ink dark:text-ink-inverse">Styling:</strong> plain CSS
+                or Tailwind CSS.
+              </li>
+              <li>
+                <strong class="text-ink dark:text-ink-inverse">Install:</strong> npm,
+                pnpm, Yarn, or Bun.
+              </li>
+            </ul>
+            <p class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere">
+              The dot means “use this directory.” It must be empty apart from
+              <code
+                class="font-mono rounded border border-black/10 bg-code px-[0.3em] py-[0.1em] text-[0.875em] dark:border-white/13 dark:bg-code-inverse"
+                >.git</code
+              >
+              or
+              <code
+                class="font-mono rounded border border-black/10 bg-code px-[0.3em] py-[0.1em] text-[0.875em] dark:border-white/13 dark:bg-code-inverse"
+                >.DS_Store</code
+              >; existing project files are never overwritten. To create a new folder
+              instead, replace the dot with a name such as
+              <code
+                class="font-mono rounded border border-black/10 bg-code px-[0.3em] py-[0.1em] text-[0.875em] dark:border-white/13 dark:bg-code-inverse"
+                >my-theme</code
+              >. The generator adds Easel, Vite, the selected integrations, theme
+              settings, lifecycle-safe example code, and generic templates for products,
+              collections, cart, pages, contact, blogs, articles, search, password access,
+              gift cards, and 404 responses. Shopify CLI installation and authentication
+              remain separate.
+            </p>
+            <div class="flex flex-col gap-2">
+              <h3 class="font-heading font-bold tracking-normal text-base/6">
+                Add Easel to an existing theme
+              </h3>
+              <p class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere">
+                Keep the Shopify theme at the Vite root and source files in
+                <code
+                  class="font-mono rounded border border-black/10 bg-code px-[0.3em] py-[0.1em] text-[0.875em] dark:border-white/13 dark:bg-code-inverse"
+                  >src</code
+                >. JavaScript works in place of TypeScript.
+              </p>
+            </div>
+            <div
+              class="min-w-0 rounded-md border border-black/8 dark:border-white/14 bg-panel dark:bg-panel-inverse"
+              data-code-block
+              x-data="copyCode($el)"
+            >
+              <div
+                class="flex flex-wrap items-center justify-between gap-3 px-5 pt-4 text-muted dark:text-muted-inverse wrap-anywhere"
+              >
+                <a
+                  id="code-label-2"
+                  href="https://www.npmjs.com/package/vite-plugin-shopify-easel"
+                  class="text-[13px]/4 font-normal text-muted underline underline-offset-4 hover:text-ink dark:text-muted-inverse dark:hover:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
+                  data-code-label
+                  >Install vite-plugin-shopify-easel <span aria-hidden="true">↗</span></a
+                >
+                <div
+                  class="flex flex-wrap items-center gap-3 [&[x-cloak]]:hidden!"
+                  x-cloak
+                >
+                  <button
+                    type="button"
+                    class="inline-flex min-h-9 max-w-full cursor-pointer items-center justify-center gap-2 rounded-md border border-black/8 dark:border-white/14 bg-white px-4 py-[7px] text-sm/5 font-medium text-ink dark:text-ink-inverse no-underline hover:bg-neutral-100 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-black dark:hover:bg-neutral-900 focus-visible:outline-2 focus-visible:outline-offset-4"
+                    @click="copy"
+                    :disabled="pending"
+                    :aria-label="'Copy ' + label"
+                    x-text="pending ? 'Copying…' : 'Copy'"
+                  >
+                    Copy
+                  </button>
+                  <span
+                    class="max-w-[28ch] text-[13px]/[18px] text-muted dark:text-muted-inverse"
+                    role="status"
+                    x-text="status"
+                  ></span>
+                </div>
+              </div>
+              <pre
+                class="min-w-0 max-w-full overflow-x-auto p-5 font-mono text-sm/6 font-normal [tab-size:2] text-ink dark:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
+                tabindex="0"
+                role="region"
+                aria-labelledby="code-label-2"
+              ><code>pnpm add -D vite-plugin-shopify-easel vite</code></pre>
+            </div>
+            <div
+              class="min-w-0 rounded-md border border-black/8 dark:border-white/14 bg-panel dark:bg-panel-inverse"
+              data-code-block
+              x-data="copyCode($el)"
+            >
+              <div
+                class="flex flex-wrap items-center justify-between gap-3 px-5 pt-4 text-muted dark:text-muted-inverse wrap-anywhere"
+              >
+                <span id="code-label-3" class="font-mono" data-code-label
+                  >vite.config.ts</span
+                >
+                <div
+                  class="flex flex-wrap items-center gap-3 [&[x-cloak]]:hidden!"
+                  x-cloak
+                >
+                  <button
+                    type="button"
+                    class="inline-flex min-h-9 max-w-full cursor-pointer items-center justify-center gap-2 rounded-md border border-black/8 dark:border-white/14 bg-white px-4 py-[7px] text-sm/5 font-medium text-ink dark:text-ink-inverse no-underline hover:bg-neutral-100 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-black dark:hover:bg-neutral-900 focus-visible:outline-2 focus-visible:outline-offset-4"
+                    @click="copy"
+                    :disabled="pending"
+                    :aria-label="'Copy ' + label"
+                    x-text="pending ? 'Copying…' : 'Copy'"
+                  >
+                    Copy
+                  </button>
+                  <span
+                    class="max-w-[28ch] text-[13px]/[18px] text-muted dark:text-muted-inverse"
+                    role="status"
+                    x-text="status"
+                  ></span>
+                </div>
+              </div>
+              <pre
+                class="min-w-0 max-w-full overflow-x-auto p-5 font-mono text-sm/6 font-normal [tab-size:2] text-ink dark:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
+                tabindex="0"
+                role="region"
+                aria-labelledby="code-label-3"
+              ><code>import {defineConfig} from 'vite';
+import easel from 'vite-plugin-shopify-easel';
+
+export default defineConfig({
+  plugins: [easel()],
+});</code></pre>
+            </div>
+            <p class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere">
+              Add these scripts to your
+              <code
+                class="font-mono rounded border border-black/10 bg-code px-[0.3em] py-[0.1em] text-[0.875em] dark:border-white/13 dark:bg-code-inverse"
+                >package.json</code
+              >:
+            </p>
+            <div
+              class="min-w-0 rounded-md border border-black/8 dark:border-white/14 bg-panel dark:bg-panel-inverse"
+              data-code-block
+              x-data="copyCode($el)"
+            >
+              <div
+                class="flex flex-wrap items-center justify-between gap-3 px-5 pt-4 text-muted dark:text-muted-inverse wrap-anywhere"
+              >
+                <span id="code-label-4" class="font-mono" data-code-label
+                  >package.json</span
+                >
+                <div
+                  class="flex flex-wrap items-center gap-3 [&[x-cloak]]:hidden!"
+                  x-cloak
+                >
+                  <button
+                    type="button"
+                    class="inline-flex min-h-9 max-w-full cursor-pointer items-center justify-center gap-2 rounded-md border border-black/8 dark:border-white/14 bg-white px-4 py-[7px] text-sm/5 font-medium text-ink dark:text-ink-inverse no-underline hover:bg-neutral-100 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-black dark:hover:bg-neutral-900 focus-visible:outline-2 focus-visible:outline-offset-4"
+                    @click="copy"
+                    :disabled="pending"
+                    :aria-label="'Copy ' + label"
+                    x-text="pending ? 'Copying…' : 'Copy'"
+                  >
+                    Copy
+                  </button>
+                  <span
+                    class="max-w-[28ch] text-[13px]/[18px] text-muted dark:text-muted-inverse"
+                    role="status"
+                    x-text="status"
+                  ></span>
+                </div>
+              </div>
+              <pre
+                class="min-w-0 max-w-full overflow-x-auto p-5 font-mono text-sm/6 font-normal [tab-size:2] text-ink dark:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
+                tabindex="0"
+                role="region"
+                aria-labelledby="code-label-4"
+              ><code>{
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  }
+}</code></pre>
+            </div>
+            <div
+              class="min-w-0 rounded-md border border-black/8 dark:border-white/14 bg-panel dark:bg-panel-inverse"
+              data-code-block
+              x-data="copyCode($el)"
+            >
+              <div
+                class="flex flex-wrap items-center justify-between gap-3 px-5 pt-4 text-muted dark:text-muted-inverse wrap-anywhere"
+              >
+                <span id="code-label-5" class="font-mono" data-code-label
+                  >layout/theme.liquid</span
+                >
+                <div
+                  class="flex flex-wrap items-center gap-3 [&[x-cloak]]:hidden!"
+                  x-cloak
+                >
+                  <button
+                    type="button"
+                    class="inline-flex min-h-9 max-w-full cursor-pointer items-center justify-center gap-2 rounded-md border border-black/8 dark:border-white/14 bg-white px-4 py-[7px] text-sm/5 font-medium text-ink dark:text-ink-inverse no-underline hover:bg-neutral-100 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-black dark:hover:bg-neutral-900 focus-visible:outline-2 focus-visible:outline-offset-4"
+                    @click="copy"
+                    :disabled="pending"
+                    :aria-label="'Copy ' + label"
+                    x-text="pending ? 'Copying…' : 'Copy'"
+                  >
+                    Copy
+                  </button>
+                  <span
+                    class="max-w-[28ch] text-[13px]/[18px] text-muted dark:text-muted-inverse"
+                    role="status"
+                    x-text="status"
+                  ></span>
+                </div>
+              </div>
+              <pre
+                class="min-w-0 max-w-full overflow-x-auto p-5 font-mono text-sm/6 font-normal [tab-size:2] text-ink dark:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
+                tabindex="0"
+                role="region"
+                aria-labelledby="code-label-5"
+              ><code>{% render 'easel-assets' %}</code></pre>
+            </div>
+            <div
+              class="min-w-0 rounded-md border border-black/8 dark:border-white/14 bg-panel dark:bg-panel-inverse"
+              data-code-block
+              x-data="copyCode($el)"
+            >
+              <div
+                class="flex flex-wrap items-center justify-between gap-3 px-5 pt-4 text-muted dark:text-muted-inverse wrap-anywhere"
+              >
+                <span
+                  id="code-label-6"
+                  class="text-[13px]/4 font-normal text-muted dark:text-muted-inverse"
+                  data-code-label
+                  >Generated output ignores</span
+                >
+                <div
+                  class="flex flex-wrap items-center gap-3 [&[x-cloak]]:hidden!"
+                  x-cloak
+                >
+                  <button
+                    type="button"
+                    class="inline-flex min-h-9 max-w-full cursor-pointer items-center justify-center gap-2 rounded-md border border-black/8 dark:border-white/14 bg-white px-4 py-[7px] text-sm/5 font-medium text-ink dark:text-ink-inverse no-underline hover:bg-neutral-100 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-black dark:hover:bg-neutral-900 focus-visible:outline-2 focus-visible:outline-offset-4"
+                    @click="copy"
+                    :disabled="pending"
+                    :aria-label="'Copy ' + label"
+                    x-text="pending ? 'Copying…' : 'Copy'"
+                  >
+                    Copy
+                  </button>
+                  <span
+                    class="max-w-[28ch] text-[13px]/[18px] text-muted dark:text-muted-inverse"
+                    role="status"
+                    x-text="status"
+                  ></span>
+                </div>
+              </div>
+              <pre
+                class="min-w-0 max-w-full overflow-x-auto p-5 font-mono text-sm/6 font-normal [tab-size:2] text-ink dark:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
+                tabindex="0"
+                role="region"
+                aria-labelledby="code-label-6"
+              ><code>.easel/
+assets/easel-*
+snippets/easel-assets.liquid</code></pre>
+            </div>
+            <div class="flex flex-col gap-2">
+              <h3 class="font-heading font-bold tracking-normal text-base/6">
+                Zero configuration entry
+              </h3>
+              <p class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere">
+                Easel creates a bundle named
+                <code
+                  class="font-mono rounded border border-black/10 bg-code px-[0.3em] py-[0.1em] text-[0.875em] dark:border-white/13 dark:bg-code-inverse"
+                  >theme</code
+                >
+                from
+                <code
+                  class="font-mono rounded border border-black/10 bg-code px-[0.3em] py-[0.1em] text-[0.875em] dark:border-white/13 dark:bg-code-inverse"
+                  >src/main.ts</code
+                >
+                or
+                <code
+                  class="font-mono rounded border border-black/10 bg-code px-[0.3em] py-[0.1em] text-[0.875em] dark:border-white/13 dark:bg-code-inverse"
+                  >src/main.js</code
+                >, plus
+                <code
+                  class="font-mono rounded border border-black/10 bg-code px-[0.3em] py-[0.1em] text-[0.875em] dark:border-white/13 dark:bg-code-inverse"
+                  >src/style.css</code
+                >.
+              </p>
+            </div>
+          </section>
+          <section
+            id="development"
+            class="flex scroll-mt-8 flex-col gap-5 [&+section]:mt-16 focus-visible:outline-2 focus-visible:outline-offset-4"
+            tabindex="-1"
+            aria-labelledby="development-title"
+          >
+            <h2
+              id="development-title"
+              class="font-heading font-bold tracking-normal text-2xl/8"
+            >
+              Two tools, one workflow.
+            </h2>
+            <p class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere">
+              Run Vite and Shopify CLI independently. Vite serves frontend assets while
+              Shopify CLI synchronizes the theme.
+            </p>
+            <div
+              class="min-w-0 rounded-md border border-black/8 dark:border-white/14 bg-panel dark:bg-panel-inverse"
+              data-code-block
+              x-data="copyCode($el)"
+            >
+              <div
+                class="flex flex-wrap items-center justify-between gap-3 px-5 pt-4 text-muted dark:text-muted-inverse wrap-anywhere"
+              >
+                <span
+                  id="code-label-7"
+                  class="text-[13px]/4 font-normal text-muted dark:text-muted-inverse"
+                  data-code-label
+                  >Terminal one</span
+                >
+                <div
+                  class="flex flex-wrap items-center gap-3 [&[x-cloak]]:hidden!"
+                  x-cloak
+                >
+                  <button
+                    type="button"
+                    class="inline-flex min-h-9 max-w-full cursor-pointer items-center justify-center gap-2 rounded-md border border-black/8 dark:border-white/14 bg-white px-4 py-[7px] text-sm/5 font-medium text-ink dark:text-ink-inverse no-underline hover:bg-neutral-100 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-black dark:hover:bg-neutral-900 focus-visible:outline-2 focus-visible:outline-offset-4"
+                    @click="copy"
+                    :disabled="pending"
+                    :aria-label="'Copy ' + label"
+                    x-text="pending ? 'Copying…' : 'Copy'"
+                  >
+                    Copy
+                  </button>
+                  <span
+                    class="max-w-[28ch] text-[13px]/[18px] text-muted dark:text-muted-inverse"
+                    role="status"
+                    x-text="status"
+                  ></span>
+                </div>
+              </div>
+              <pre
+                class="min-w-0 max-w-full overflow-x-auto p-5 font-mono text-sm/6 font-normal [tab-size:2] text-ink dark:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
+                tabindex="0"
+                role="region"
+                aria-labelledby="code-label-7"
+              ><code>npm run dev</code></pre>
+            </div>
+            <div
+              class="min-w-0 rounded-md border border-black/8 dark:border-white/14 bg-panel dark:bg-panel-inverse"
+              data-code-block
+              x-data="copyCode($el)"
+            >
+              <div
+                class="flex flex-wrap items-center justify-between gap-3 px-5 pt-4 text-muted dark:text-muted-inverse wrap-anywhere"
+              >
+                <span
+                  id="code-label-8"
+                  class="text-[13px]/4 font-normal text-muted dark:text-muted-inverse"
+                  data-code-label
+                  >Terminal two</span
+                >
+                <div
+                  class="flex flex-wrap items-center gap-3 [&[x-cloak]]:hidden!"
+                  x-cloak
+                >
+                  <button
+                    type="button"
+                    class="inline-flex min-h-9 max-w-full cursor-pointer items-center justify-center gap-2 rounded-md border border-black/8 dark:border-white/14 bg-white px-4 py-[7px] text-sm/5 font-medium text-ink dark:text-ink-inverse no-underline hover:bg-neutral-100 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-black dark:hover:bg-neutral-900 focus-visible:outline-2 focus-visible:outline-offset-4"
+                    @click="copy"
+                    :disabled="pending"
+                    :aria-label="'Copy ' + label"
+                    x-text="pending ? 'Copying…' : 'Copy'"
+                  >
+                    Copy
+                  </button>
+                  <span
+                    class="max-w-[28ch] text-[13px]/[18px] text-muted dark:text-muted-inverse"
+                    role="status"
+                    x-text="status"
+                  ></span>
+                </div>
+              </div>
+              <pre
+                class="min-w-0 max-w-full overflow-x-auto p-5 font-mono text-sm/6 font-normal [tab-size:2] text-ink dark:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
+                tabindex="0"
+                role="region"
+                aria-labelledby="code-label-8"
+              ><code>shopify theme dev --notify .easel/shopify-ready</code></pre>
+            </div>
+            <p class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere">
+              The notification lets Easel request a full page reload after Shopify CLI
+              finishes an update. It is optional. Vite HMR and Shopify CLI live reload
+              continue to work without it.
+            </p>
+            <div class="flex flex-col gap-2">
+              <h3 class="font-heading font-bold tracking-normal text-base/6">
+                Use one terminal (optional)
+              </h3>
+              <p class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere">
+                A process runner can start both tools without making Easel responsible for
+                Shopify CLI. Install
+                <a
+                  class="underline underline-offset-4 hover:text-ink dark:hover:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
+                  href="https://www.npmjs.com/package/concurrently"
+                  >concurrently</a
+                >:
+              </p>
+            </div>
+            <div
+              class="min-w-0 rounded-md border border-black/8 dark:border-white/14 bg-panel dark:bg-panel-inverse"
+              data-code-block
+              x-data="copyCode($el)"
+            >
+              <div
+                class="flex flex-wrap items-center justify-between gap-3 px-5 pt-4 text-muted dark:text-muted-inverse wrap-anywhere"
+              >
+                <span
+                  id="code-development-concurrently-install"
+                  class="text-[13px]/4 font-normal text-muted dark:text-muted-inverse"
+                  data-code-label
+                  >Install the process runner</span
+                >
+                <div
+                  class="flex flex-wrap items-center gap-3 [&[x-cloak]]:hidden!"
+                  x-cloak
+                >
+                  <button
+                    type="button"
+                    class="inline-flex min-h-9 max-w-full cursor-pointer items-center justify-center gap-2 rounded-md border border-black/8 dark:border-white/14 bg-white px-4 py-[7px] text-sm/5 font-medium text-ink dark:text-ink-inverse no-underline hover:bg-neutral-100 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-black dark:hover:bg-neutral-900 focus-visible:outline-2 focus-visible:outline-offset-4"
+                    @click="copy"
+                    :disabled="pending"
+                    :aria-label="'Copy ' + label"
+                    x-text="pending ? 'Copying…' : 'Copy'"
+                  >
+                    Copy
+                  </button>
+                  <span
+                    class="max-w-[28ch] text-[13px]/[18px] text-muted dark:text-muted-inverse"
+                    role="status"
+                    x-text="status"
+                  ></span>
+                </div>
+              </div>
+              <pre
+                class="min-w-0 max-w-full overflow-x-auto p-5 font-mono text-sm/6 font-normal [tab-size:2] text-ink dark:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
+                tabindex="0"
+                role="region"
+                aria-labelledby="code-development-concurrently-install"
+              ><code>npm install --save-dev concurrently</code></pre>
+            </div>
+            <p class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere">
+              Keep the independent commands and add a third script that supervises both:
+            </p>
+            <div
+              class="min-w-0 rounded-md border border-black/8 dark:border-white/14 bg-panel dark:bg-panel-inverse"
+              data-code-block
+              x-data="copyCode($el)"
+            >
+              <div
+                class="flex flex-wrap items-center justify-between gap-3 px-5 pt-4 text-muted dark:text-muted-inverse wrap-anywhere"
+              >
+                <span
+                  id="code-development-concurrently-config"
+                  class="font-mono"
+                  data-code-label
+                  >package.json</span
+                >
+                <div
+                  class="flex flex-wrap items-center gap-3 [&[x-cloak]]:hidden!"
+                  x-cloak
+                >
+                  <button
+                    type="button"
+                    class="inline-flex min-h-9 max-w-full cursor-pointer items-center justify-center gap-2 rounded-md border border-black/8 dark:border-white/14 bg-white px-4 py-[7px] text-sm/5 font-medium text-ink dark:text-ink-inverse no-underline hover:bg-neutral-100 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-black dark:hover:bg-neutral-900 focus-visible:outline-2 focus-visible:outline-offset-4"
+                    @click="copy"
+                    :disabled="pending"
+                    :aria-label="'Copy ' + label"
+                    x-text="pending ? 'Copying…' : 'Copy'"
+                  >
+                    Copy
+                  </button>
+                  <span
+                    class="max-w-[28ch] text-[13px]/[18px] text-muted dark:text-muted-inverse"
+                    role="status"
+                    x-text="status"
+                  ></span>
+                </div>
+              </div>
+              <pre
+                class="min-w-0 max-w-full overflow-x-auto p-5 font-mono text-sm/6 font-normal [tab-size:2] text-ink dark:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
+                tabindex="0"
+                role="region"
+                aria-labelledby="code-development-concurrently-config"
+              ><code>{
+  "scripts": {
+    "dev": "vite",
+    "dev:shopify": "shopify theme dev --notify .easel/shopify-ready",
+    "dev:theme": "concurrently --kill-others --names vite,shopify \"npm:dev\" \"npm:dev:shopify\""
+  }
+}</code></pre>
+            </div>
+            <p class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere">
+              Run
+              <code
+                class="font-mono rounded border border-black/10 bg-code px-[0.3em] py-[0.1em] text-[0.875em] dark:border-white/13 dark:bg-code-inverse"
+                >npm run dev:theme</code
+              >
+              to see prefixed Vite and Shopify output together. Pressing
+              <kbd
+                class="font-mono rounded border border-black/10 bg-code px-[0.3em] py-[0.1em] text-[0.875em] dark:border-white/13 dark:bg-code-inverse"
+                >Ctrl+C</kbd
+              >
+              stops the group. Run Shopify CLI directly for initial authentication or
+              interactive troubleshooting; the original
+              <code
+                class="font-mono rounded border border-black/10 bg-code px-[0.3em] py-[0.1em] text-[0.875em] dark:border-white/13 dark:bg-code-inverse"
+                >dev</code
+              >
+              and
+              <code
+                class="font-mono rounded border border-black/10 bg-code px-[0.3em] py-[0.1em] text-[0.875em] dark:border-white/13 dark:bg-code-inverse"
+                >dev:shopify</code
+              >
+              scripts remain independently usable.
+            </p>
+          </section>
+          <section
+            id="production"
+            class="flex scroll-mt-8 flex-col gap-5 [&+section]:mt-16 focus-visible:outline-2 focus-visible:outline-offset-4"
+            tabindex="-1"
+            aria-labelledby="production-title"
+          >
+            <h2
+              id="production-title"
+              class="font-heading font-bold tracking-normal text-2xl/8"
+            >
+              Build, then deploy normally.
+            </h2>
+            <p class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere">
+              Easel publishes generated assets into the theme and replaces the development
+              loader with Shopify CDN asset tags.
+            </p>
+            <div
+              class="min-w-0 rounded-md border border-black/8 dark:border-white/14 bg-panel dark:bg-panel-inverse"
+              data-code-block
+              x-data="copyCode($el)"
+            >
+              <div
+                class="flex flex-wrap items-center justify-between gap-3 px-5 pt-4 text-muted dark:text-muted-inverse wrap-anywhere"
+              >
+                <span
+                  id="code-label-9"
+                  class="text-[13px]/4 font-normal text-muted dark:text-muted-inverse"
+                  data-code-label
+                  >Build and push</span
+                >
+                <div
+                  class="flex flex-wrap items-center gap-3 [&[x-cloak]]:hidden!"
+                  x-cloak
+                >
+                  <button
+                    type="button"
+                    class="inline-flex min-h-9 max-w-full cursor-pointer items-center justify-center gap-2 rounded-md border border-black/8 dark:border-white/14 bg-white px-4 py-[7px] text-sm/5 font-medium text-ink dark:text-ink-inverse no-underline hover:bg-neutral-100 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-black dark:hover:bg-neutral-900 focus-visible:outline-2 focus-visible:outline-offset-4"
+                    @click="copy"
+                    :disabled="pending"
+                    :aria-label="'Copy ' + label"
+                    x-text="pending ? 'Copying…' : 'Copy'"
+                  >
+                    Copy
+                  </button>
+                  <span
+                    class="max-w-[28ch] text-[13px]/[18px] text-muted dark:text-muted-inverse"
+                    role="status"
+                    x-text="status"
+                  ></span>
+                </div>
+              </div>
+              <pre
+                class="min-w-0 max-w-full overflow-x-auto p-5 font-mono text-sm/6 font-normal [tab-size:2] text-ink dark:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
+                tabindex="0"
+                role="region"
+                aria-labelledby="code-label-9"
+              ><code>npm run build
+shopify theme push</code></pre>
+            </div>
+            <p class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere">
+              Run the build before
+              <code
+                class="font-mono rounded border border-black/10 bg-code px-[0.3em] py-[0.1em] text-[0.875em] dark:border-white/13 dark:bg-code-inverse"
+                >shopify theme push</code
+              >
+              or
+              <code
+                class="font-mono rounded border border-black/10 bg-code px-[0.3em] py-[0.1em] text-[0.875em] dark:border-white/13 dark:bg-code-inverse"
+                >shopify theme package</code
+              >. Shopify CLI remains responsible for deployment.
+            </p>
+          </section>
+          <section
+            id="bundles"
+            class="flex scroll-mt-8 flex-col gap-5 [&+section]:mt-16 focus-visible:outline-2 focus-visible:outline-offset-4"
+            tabindex="-1"
+            aria-labelledby="bundles-title"
+          >
+            <h2
+              id="bundles-title"
+              class="font-heading font-bold tracking-normal text-2xl/8"
+            >
+              Load code where it belongs.
+            </h2>
+            <p class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere">
+              Start with the default bundle. Add named bundles when a substantial feature
+              should only load on selected Liquid surfaces.
+            </p>
+            <div
+              class="min-w-0 rounded-md border border-black/8 dark:border-white/14 bg-panel dark:bg-panel-inverse"
+              data-code-block
+              x-data="copyCode($el)"
+            >
+              <div
+                class="flex flex-wrap items-center justify-between gap-3 px-5 pt-4 text-muted dark:text-muted-inverse wrap-anywhere"
+              >
+                <span id="code-label-10" class="font-mono" data-code-label
+                  >vite.config.ts</span
+                >
+                <div
+                  class="flex flex-wrap items-center gap-3 [&[x-cloak]]:hidden!"
+                  x-cloak
+                >
+                  <button
+                    type="button"
+                    class="inline-flex min-h-9 max-w-full cursor-pointer items-center justify-center gap-2 rounded-md border border-black/8 dark:border-white/14 bg-white px-4 py-[7px] text-sm/5 font-medium text-ink dark:text-ink-inverse no-underline hover:bg-neutral-100 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-black dark:hover:bg-neutral-900 focus-visible:outline-2 focus-visible:outline-offset-4"
+                    @click="copy"
+                    :disabled="pending"
+                    :aria-label="'Copy ' + label"
+                    x-text="pending ? 'Copying…' : 'Copy'"
+                  >
+                    Copy
+                  </button>
+                  <span
+                    class="max-w-[28ch] text-[13px]/[18px] text-muted dark:text-muted-inverse"
+                    role="status"
+                    x-text="status"
+                  ></span>
+                </div>
+              </div>
+              <pre
+                class="min-w-0 max-w-full overflow-x-auto p-5 font-mono text-sm/6 font-normal [tab-size:2] text-ink dark:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
+                tabindex="0"
+                role="region"
+                aria-labelledby="code-label-10"
+              ><code>easel({
+  bundles: {
+    theme: {script: 'main.ts', style: 'style.css'},
+    product: {script: 'product.ts', style: 'product.css'},
+  },
+});</code></pre>
+            </div>
+            <div
+              class="min-w-0 rounded-md border border-black/8 dark:border-white/14 bg-panel dark:bg-panel-inverse"
+              data-code-block
+              x-data="copyCode($el)"
+            >
+              <div
+                class="flex flex-wrap items-center justify-between gap-3 px-5 pt-4 text-muted dark:text-muted-inverse wrap-anywhere"
+              >
+                <span id="code-label-11" class="font-mono" data-code-label
+                  >layout/theme.liquid</span
+                >
+                <div
+                  class="flex flex-wrap items-center gap-3 [&[x-cloak]]:hidden!"
+                  x-cloak
+                >
+                  <button
+                    type="button"
+                    class="inline-flex min-h-9 max-w-full cursor-pointer items-center justify-center gap-2 rounded-md border border-black/8 dark:border-white/14 bg-white px-4 py-[7px] text-sm/5 font-medium text-ink dark:text-ink-inverse no-underline hover:bg-neutral-100 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-black dark:hover:bg-neutral-900 focus-visible:outline-2 focus-visible:outline-offset-4"
+                    @click="copy"
+                    :disabled="pending"
+                    :aria-label="'Copy ' + label"
+                    x-text="pending ? 'Copying…' : 'Copy'"
+                  >
+                    Copy
+                  </button>
+                  <span
+                    class="max-w-[28ch] text-[13px]/[18px] text-muted dark:text-muted-inverse"
+                    role="status"
+                    x-text="status"
+                  ></span>
+                </div>
+              </div>
+              <pre
+                class="min-w-0 max-w-full overflow-x-auto p-5 font-mono text-sm/6 font-normal [tab-size:2] text-ink dark:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
+                tabindex="0"
+                role="region"
+                aria-labelledby="code-label-11"
+              ><code>{% render 'easel-assets', entry: 'theme' %}
+
+{% if request.page_type == 'product' %}
+  {% render 'easel-assets', entry: 'product' %}
+{% endif %}</code></pre>
+            </div>
+            <ul
+              class="flex list-none flex-wrap gap-x-8 gap-y-6 p-0 [&>*]:min-w-0 [&>*]:flex-[1_1_16rem]"
+            >
+              <li class="flex flex-col gap-2">
+                <h3 class="font-heading font-bold tracking-normal text-base/6">
+                  Use dynamic imports first
+                </h3>
+                <p class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere">
+                  They keep one entry architecture while Vite loads optional features on
+                  demand.
+                </p>
+              </li>
+              <li class="flex flex-col gap-2">
+                <h3 class="font-heading font-bold tracking-normal text-base/6">
+                  Use bundles for clear boundaries
+                </h3>
+                <p class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere">
+                  Product configurators, account areas, and store locators are good
+                  candidates.
+                </p>
+              </li>
+            </ul>
+          </section>
+          <section
+            id="configuration"
+            class="flex scroll-mt-8 flex-col gap-5 [&+section]:mt-16 focus-visible:outline-2 focus-visible:outline-offset-4"
+            tabindex="-1"
+            aria-labelledby="configuration-title"
+          >
+            <h2
+              id="configuration-title"
+              class="font-heading font-bold tracking-normal text-2xl/8"
+            >
+              Small API, explicit control.
+            </h2>
+            <p class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere">
+              Every Easel option is optional.
+            </p>
+            <div
+              class="min-w-0 rounded-md border border-black/8 dark:border-white/14 bg-panel dark:bg-panel-inverse"
+              data-code-block
+              x-data="copyCode($el)"
+            >
+              <div
+                class="flex flex-wrap items-center justify-between gap-3 px-5 pt-4 text-muted dark:text-muted-inverse wrap-anywhere"
+              >
+                <span id="code-label-12" class="font-mono" data-code-label
+                  >vite.config.ts</span
+                >
+                <div
+                  class="flex flex-wrap items-center gap-3 [&[x-cloak]]:hidden!"
+                  x-cloak
+                >
+                  <button
+                    type="button"
+                    class="inline-flex min-h-9 max-w-full cursor-pointer items-center justify-center gap-2 rounded-md border border-black/8 dark:border-white/14 bg-white px-4 py-[7px] text-sm/5 font-medium text-ink dark:text-ink-inverse no-underline hover:bg-neutral-100 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-black dark:hover:bg-neutral-900 focus-visible:outline-2 focus-visible:outline-offset-4"
+                    @click="copy"
+                    :disabled="pending"
+                    :aria-label="'Copy ' + label"
+                    x-text="pending ? 'Copying…' : 'Copy'"
+                  >
+                    Copy
+                  </button>
+                  <span
+                    class="max-w-[28ch] text-[13px]/[18px] text-muted dark:text-muted-inverse"
+                    role="status"
+                    x-text="status"
+                  ></span>
+                </div>
+              </div>
+              <pre
+                class="min-w-0 max-w-full overflow-x-auto p-5 font-mono text-sm/6 font-normal [tab-size:2] text-ink dark:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
+                tabindex="0"
+                role="region"
+                aria-labelledby="code-label-12"
+              ><code>easel({
+  <span class="text-muted dark:text-muted-inverse">// Theme directory relative to the Vite root.</span>
+  theme: '.',
+
+  <span class="text-muted dark:text-muted-inverse">// Source directory relative to the Vite root.</span>
+  source: 'src',
+
+  <span class="text-muted dark:text-muted-inverse">// Namespace for generated assets and Liquid.</span>
+  namespace: 'easel',
+
+  <span class="text-muted dark:text-muted-inverse">// Set to false to disable coordinated reloads.</span>
+  refresh: {
+    signal: '.easel/shopify-ready',
+    delay: 100,
+  },
+});</code></pre>
+            </div>
+            <dl class="@container/options flex flex-col gap-6">
+              <div
+                class="flex min-w-0 flex-col gap-2 md:flex-row md:items-baseline md:gap-6"
+              >
+                <dt class="min-w-0 font-medium wrap-anywhere md:flex-[0_0_13rem]">
+                  <code
+                    class="font-mono rounded border border-black/10 bg-code px-[0.3em] py-[0.1em] text-[0.875em] dark:border-white/13 dark:bg-code-inverse"
+                    >theme</code
+                  >
+                </dt>
+                <dd
+                  class="flex min-w-0 flex-1 flex-col gap-2 text-muted dark:text-muted-inverse wrap-anywhere @min-[52rem]/options:grid @min-[52rem]/options:grid-cols-[18rem_minmax(0,1fr)] @min-[52rem]/options:items-baseline @min-[52rem]/options:gap-x-6"
+                >
+                  <span class="font-mono">string</span>
+                  <p
+                    class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere"
+                  >
+                    Shopify theme directory. Defaults to the Vite root.
+                  </p>
+                </dd>
+              </div>
+              <div
+                class="flex min-w-0 flex-col gap-2 md:flex-row md:items-baseline md:gap-6"
+              >
+                <dt class="min-w-0 font-medium wrap-anywhere md:flex-[0_0_13rem]">
+                  <code
+                    class="font-mono rounded border border-black/10 bg-code px-[0.3em] py-[0.1em] text-[0.875em] dark:border-white/13 dark:bg-code-inverse"
+                    >source</code
+                  >
+                </dt>
+                <dd
+                  class="flex min-w-0 flex-1 flex-col gap-2 text-muted dark:text-muted-inverse wrap-anywhere @min-[52rem]/options:grid @min-[52rem]/options:grid-cols-[18rem_minmax(0,1fr)] @min-[52rem]/options:items-baseline @min-[52rem]/options:gap-x-6"
+                >
+                  <span class="font-mono">string</span>
+                  <p
+                    class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere"
+                  >
+                    Source directory. Defaults to
+                    <code
+                      class="font-mono rounded border border-black/10 bg-code px-[0.3em] py-[0.1em] text-[0.875em] dark:border-white/13 dark:bg-code-inverse"
+                      >src</code
+                    >.
+                  </p>
+                </dd>
+              </div>
+              <div
+                class="flex min-w-0 flex-col gap-2 md:flex-row md:items-baseline md:gap-6"
+              >
+                <dt class="min-w-0 font-medium wrap-anywhere md:flex-[0_0_13rem]">
+                  <code
+                    class="font-mono rounded border border-black/10 bg-code px-[0.3em] py-[0.1em] text-[0.875em] dark:border-white/13 dark:bg-code-inverse"
+                    >bundles</code
+                  >
+                </dt>
+                <dd
+                  class="flex min-w-0 flex-1 flex-col gap-2 text-muted dark:text-muted-inverse wrap-anywhere @min-[52rem]/options:grid @min-[52rem]/options:grid-cols-[18rem_minmax(0,1fr)] @min-[52rem]/options:items-baseline @min-[52rem]/options:gap-x-6"
+                >
+                  <span class="font-mono">Record&lt;string, EaselBundle&gt;</span>
+                  <p
+                    class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere"
+                  >
+                    Named script and stylesheet entry definitions. Each bundle needs a
+                    script, a style, or both.
+                  </p>
+                </dd>
+              </div>
+              <div
+                class="flex min-w-0 flex-col gap-2 md:flex-row md:items-baseline md:gap-6"
+              >
+                <dt class="min-w-0 font-medium wrap-anywhere md:flex-[0_0_13rem]">
+                  <code
+                    class="font-mono rounded border border-black/10 bg-code px-[0.3em] py-[0.1em] text-[0.875em] dark:border-white/13 dark:bg-code-inverse"
+                    >bundles[name].script</code
+                  >
+                </dt>
+                <dd
+                  class="flex min-w-0 flex-1 flex-col gap-2 text-muted dark:text-muted-inverse wrap-anywhere @min-[52rem]/options:grid @min-[52rem]/options:grid-cols-[18rem_minmax(0,1fr)] @min-[52rem]/options:items-baseline @min-[52rem]/options:gap-x-6"
+                >
+                  <span class="font-mono">string</span>
+                  <p
+                    class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere"
+                  >
+                    Optional script entry, relative to
+                    <code
+                      class="font-mono rounded border border-black/10 bg-code px-[0.3em] py-[0.1em] text-[0.875em] dark:border-white/13 dark:bg-code-inverse"
+                      >source</code
+                    >. When provided, script entries must be distinct across named
+                    bundles.
+                  </p>
+                </dd>
+              </div>
+              <div
+                class="flex min-w-0 flex-col gap-2 md:flex-row md:items-baseline md:gap-6"
+              >
+                <dt class="min-w-0 font-medium wrap-anywhere md:flex-[0_0_13rem]">
+                  <code
+                    class="font-mono rounded border border-black/10 bg-code px-[0.3em] py-[0.1em] text-[0.875em] dark:border-white/13 dark:bg-code-inverse"
+                    >bundles[name].style</code
+                  >
+                </dt>
+                <dd
+                  class="flex min-w-0 flex-1 flex-col gap-2 text-muted dark:text-muted-inverse wrap-anywhere @min-[52rem]/options:grid @min-[52rem]/options:grid-cols-[18rem_minmax(0,1fr)] @min-[52rem]/options:items-baseline @min-[52rem]/options:gap-x-6"
+                >
+                  <span class="font-mono">string</span>
+                  <p
+                    class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere"
+                  >
+                    Optional stylesheet entry, relative to
+                    <code
+                      class="font-mono rounded border border-black/10 bg-code px-[0.3em] py-[0.1em] text-[0.875em] dark:border-white/13 dark:bg-code-inverse"
+                      >source</code
+                    >.
+                  </p>
+                </dd>
+              </div>
+              <div
+                class="flex min-w-0 flex-col gap-2 md:flex-row md:items-baseline md:gap-6"
+              >
+                <dt class="min-w-0 font-medium wrap-anywhere md:flex-[0_0_13rem]">
+                  <code
+                    class="font-mono rounded border border-black/10 bg-code px-[0.3em] py-[0.1em] text-[0.875em] dark:border-white/13 dark:bg-code-inverse"
+                    >namespace</code
+                  >
+                </dt>
+                <dd
+                  class="flex min-w-0 flex-1 flex-col gap-2 text-muted dark:text-muted-inverse wrap-anywhere @min-[52rem]/options:grid @min-[52rem]/options:grid-cols-[18rem_minmax(0,1fr)] @min-[52rem]/options:items-baseline @min-[52rem]/options:gap-x-6"
+                >
+                  <span class="font-mono">string</span>
+                  <p
+                    class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere"
+                  >
+                    Generated asset and snippet namespace. Defaults to
+                    <code
+                      class="font-mono rounded border border-black/10 bg-code px-[0.3em] py-[0.1em] text-[0.875em] dark:border-white/13 dark:bg-code-inverse"
+                      >easel</code
+                    >.
+                  </p>
+                </dd>
+              </div>
+              <div
+                class="flex min-w-0 flex-col gap-2 md:flex-row md:items-baseline md:gap-6"
+              >
+                <dt class="min-w-0 font-medium wrap-anywhere md:flex-[0_0_13rem]">
+                  <code
+                    class="font-mono rounded border border-black/10 bg-code px-[0.3em] py-[0.1em] text-[0.875em] dark:border-white/13 dark:bg-code-inverse"
+                    >refresh</code
+                  >
+                </dt>
+                <dd
+                  class="flex min-w-0 flex-1 flex-col gap-2 text-muted dark:text-muted-inverse wrap-anywhere @min-[52rem]/options:grid @min-[52rem]/options:grid-cols-[18rem_minmax(0,1fr)] @min-[52rem]/options:items-baseline @min-[52rem]/options:gap-x-6"
+                >
+                  <span class="font-mono">boolean | EaselRefreshOptions</span>
+                  <p
+                    class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere"
+                  >
+                    Notification file and debounce settings, or
+                    <code
+                      class="font-mono rounded border border-black/10 bg-code px-[0.3em] py-[0.1em] text-[0.875em] dark:border-white/13 dark:bg-code-inverse"
+                      >false</code
+                    >. Enabled by default.
+                  </p>
+                </dd>
+              </div>
+              <div
+                class="flex min-w-0 flex-col gap-2 md:flex-row md:items-baseline md:gap-6"
+              >
+                <dt class="min-w-0 font-medium wrap-anywhere md:flex-[0_0_13rem]">
+                  <code
+                    class="font-mono rounded border border-black/10 bg-code px-[0.3em] py-[0.1em] text-[0.875em] dark:border-white/13 dark:bg-code-inverse"
+                    >refresh.signal</code
+                  >
+                </dt>
+                <dd
+                  class="flex min-w-0 flex-1 flex-col gap-2 text-muted dark:text-muted-inverse wrap-anywhere @min-[52rem]/options:grid @min-[52rem]/options:grid-cols-[18rem_minmax(0,1fr)] @min-[52rem]/options:items-baseline @min-[52rem]/options:gap-x-6"
+                >
+                  <span class="font-mono">string</span>
+                  <p
+                    class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere"
+                  >
+                    Shopify CLI
+                    <code
+                      class="font-mono rounded border border-black/10 bg-code px-[0.3em] py-[0.1em] text-[0.875em] dark:border-white/13 dark:bg-code-inverse"
+                      >--notify</code
+                    >
+                    file relative to the Vite root. Defaults to
+                    <code
+                      class="font-mono rounded border border-black/10 bg-code px-[0.3em] py-[0.1em] text-[0.875em] dark:border-white/13 dark:bg-code-inverse"
+                      >.easel/shopify-ready</code
+                    >.
+                  </p>
+                </dd>
+              </div>
+              <div
+                class="flex min-w-0 flex-col gap-2 md:flex-row md:items-baseline md:gap-6"
+              >
+                <dt class="min-w-0 font-medium wrap-anywhere md:flex-[0_0_13rem]">
+                  <code
+                    class="font-mono rounded border border-black/10 bg-code px-[0.3em] py-[0.1em] text-[0.875em] dark:border-white/13 dark:bg-code-inverse"
+                    >refresh.delay</code
+                  >
+                </dt>
+                <dd
+                  class="flex min-w-0 flex-1 flex-col gap-2 text-muted dark:text-muted-inverse wrap-anywhere @min-[52rem]/options:grid @min-[52rem]/options:grid-cols-[18rem_minmax(0,1fr)] @min-[52rem]/options:items-baseline @min-[52rem]/options:gap-x-6"
+                >
+                  <span class="font-mono">number</span>
+                  <p
+                    class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere"
+                  >
+                    Debounce delay in milliseconds. Defaults to
+                    <code
+                      class="font-mono rounded border border-black/10 bg-code px-[0.3em] py-[0.1em] text-[0.875em] dark:border-white/13 dark:bg-code-inverse"
+                      >100</code
+                    >; must be an integer from
+                    <code
+                      class="font-mono rounded border border-black/10 bg-code px-[0.3em] py-[0.1em] text-[0.875em] dark:border-white/13 dark:bg-code-inverse"
+                      >0</code
+                    >
+                    to
+                    <code
+                      class="font-mono rounded border border-black/10 bg-code px-[0.3em] py-[0.1em] text-[0.875em] dark:border-white/13 dark:bg-code-inverse"
+                      >10000</code
+                    >.
+                  </p>
+                </dd>
+              </div>
+            </dl>
+          </section>
+          <section
+            id="integrations"
+            class="flex scroll-mt-8 flex-col gap-5 [&+section]:mt-16 focus-visible:outline-2 focus-visible:outline-offset-4"
+            tabindex="-1"
+            aria-labelledby="integrations-title"
+          >
+            <h2
+              id="integrations-title"
+              class="font-heading font-bold tracking-normal text-2xl/8"
+            >
+              Bring the Vite ecosystem.
+            </h2>
+            <p class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere">
+              Easel does not wrap frontend frameworks. Add their official Vite plugins as
+              usual.
+            </p>
+            <ul
+              class="flex list-none flex-wrap gap-x-8 gap-y-6 p-0 [&>*]:min-w-0 [&>*]:flex-[1_1_16rem]"
+            >
+              <li class="flex flex-col gap-2">
+                <h3 class="font-heading font-bold tracking-normal text-base/6">
+                  Tailwind CSS
+                </h3>
+                <p class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere">
+                  Official Vite plugin
+                </p>
+              </li>
+              <li class="flex flex-col gap-2">
+                <h3 class="font-heading font-bold tracking-normal text-base/6">
+                  Alpine.js
+                </h3>
+                <p class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere">
+                  Standard entry import
+                </p>
+              </li>
+              <li class="flex flex-col gap-2">
+                <h3 class="font-heading font-bold tracking-normal text-base/6">React</h3>
+                <p class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere">
+                  Fast Refresh ready
+                </p>
+              </li>
+              <li class="flex flex-col gap-2">
+                <h3 class="font-heading font-bold tracking-normal text-base/6">Vue</h3>
+                <p class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere">
+                  Single file components
+                </p>
+              </li>
+              <li class="flex flex-col gap-2">
+                <h3 class="font-heading font-bold tracking-normal text-base/6">Sass</h3>
+                <p class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere">
+                  Native Vite support
+                </p>
+              </li>
+              <li class="flex flex-col gap-2">
+                <h3 class="font-heading font-bold tracking-normal text-base/6">
+                  PostCSS
+                </h3>
+                <p class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere">
+                  Native Vite config
+                </p>
+              </li>
+            </ul>
+            <p class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere">
+              React Fast Refresh requires
+              <code
+                class="font-mono rounded border border-black/10 bg-code px-[0.3em] py-[0.1em] text-[0.875em] dark:border-white/13 dark:bg-code-inverse"
+                >@vitejs/plugin-react/preamble</code
+              >
+              because Easel does not use an HTML entry. Framework code mounted inside
+              sections should handle Shopify Theme Editor section load and unload events.
+            </p>
+          </section>
+          <section
+            id="safety"
+            class="flex scroll-mt-8 flex-col gap-5 [&+section]:mt-16 focus-visible:outline-2 focus-visible:outline-offset-4"
+            tabindex="-1"
+            aria-labelledby="safety-title"
+          >
+            <h2
+              id="safety-title"
+              class="font-heading font-bold tracking-normal text-2xl/8"
+            >
+              Built for a shared assets directory.
+            </h2>
+            <p class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere">
+              Shopify mixes generated assets and hand authored files in one directory.
+              Easel cleans up without treating that directory like a disposable build
+              folder.
+            </p>
+            <ul
+              class="mt-2 grid max-w-5xl list-none grid-cols-1 gap-x-12 gap-y-8 p-0 sm:grid-cols-2 [&>*]:min-w-0"
+            >
+              <li class="flex flex-col gap-2">
+                <h3 class="font-heading font-bold tracking-normal text-base/6">
+                  Ownership ledger
+                </h3>
+                <p class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere">
+                  Only files recorded as Easel output can be removed as stale.
+                </p>
+              </li>
+              <li class="flex flex-col gap-2">
+                <h3 class="font-heading font-bold tracking-normal text-base/6">
+                  Isolated staging
+                </h3>
+                <p class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere">
+                  Every build finishes away from the theme before publication.
+                </p>
+              </li>
+              <li class="flex flex-col gap-2">
+                <h3 class="font-heading font-bold tracking-normal text-base/6">
+                  Protected writes
+                </h3>
+                <p class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere">
+                  Unknown theme files are never silently overwritten.
+                </p>
+              </li>
+              <li class="flex flex-col gap-2">
+                <h3 class="font-heading font-bold tracking-normal text-base/6">
+                  Recovery journal
+                </h3>
+                <p class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere">
+                  Interrupted publication is restored before the next build continues.
+                </p>
+              </li>
+            </ul>
+          </section>
+          <section
+            id="troubleshooting"
+            class="flex scroll-mt-8 flex-col gap-5 [&+section]:mt-16 focus-visible:outline-2 focus-visible:outline-offset-4"
+            tabindex="-1"
+            aria-labelledby="troubleshooting-title"
+          >
+            <h2
+              id="troubleshooting-title"
+              class="font-heading font-bold tracking-normal text-2xl/8"
+            >
+              Troubleshooting
+            </h2>
+            <p class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere">
+              Find the first error in your terminal or browser, then follow the checklist
+              below.
+            </p>
+            <nav aria-label="Troubleshooting topics" class="max-w-[66ch]">
+              <ul class="grid list-none gap-x-8 gap-y-2 p-0 sm:grid-cols-2">
+                <li>
+                  <a
+                    href="#troubleshooting-assets"
+                    @click="navigate"
+                    class="text-inherit underline underline-offset-[0.2em] focus-visible:outline-2 focus-visible:outline-offset-4"
+                    >Missing styles or JavaScript</a
+                  >
+                </li>
+                <li>
+                  <a
+                    href="#troubleshooting-cors"
+                    @click="navigate"
+                    class="text-inherit underline underline-offset-[0.2em] focus-visible:outline-2 focus-visible:outline-offset-4"
+                    >CORS errors</a
+                  >
+                </li>
+                <li>
+                  <a
+                    href="#troubleshooting-network"
+                    @click="navigate"
+                    class="text-inherit underline underline-offset-[0.2em] focus-visible:outline-2 focus-visible:outline-offset-4"
+                    >Browser and Theme Editor access</a
+                  >
+                </li>
+                <li>
+                  <a
+                    href="#troubleshooting-reload"
+                    @click="navigate"
+                    class="text-inherit underline underline-offset-[0.2em] focus-visible:outline-2 focus-visible:outline-offset-4"
+                    >Changes do not reload</a
+                  >
+                </li>
+                <li>
+                  <a
+                    href="#troubleshooting-production"
+                    @click="navigate"
+                    class="text-inherit underline underline-offset-[0.2em] focus-visible:outline-2 focus-visible:outline-offset-4"
+                    >Localhost in a published theme</a
+                  >
+                </li>
+                <li>
+                  <a
+                    href="#troubleshooting-ownership"
+                    @click="navigate"
+                    class="text-inherit underline underline-offset-[0.2em] focus-visible:outline-2 focus-visible:outline-offset-4"
+                    >Protected writes and recovery</a
+                  >
+                </li>
+                <li>
+                  <a
+                    href="#troubleshooting-entries"
+                    @click="navigate"
+                    class="text-inherit underline underline-offset-[0.2em] focus-visible:outline-2 focus-visible:outline-offset-4"
+                    >Entry and configuration errors</a
+                  >
+                </li>
+                <li>
+                  <a
+                    href="#troubleshooting-frameworks"
+                    @click="navigate"
+                    class="text-inherit underline underline-offset-[0.2em] focus-visible:outline-2 focus-visible:outline-offset-4"
+                    >Framework lifecycle issues</a
+                  >
+                </li>
+                <li>
+                  <a
+                    href="#troubleshooting-report"
+                    @click="navigate"
+                    class="text-inherit underline underline-offset-[0.2em] focus-visible:outline-2 focus-visible:outline-offset-4"
+                    >Still stuck?</a
+                  >
+                </li>
+              </ul>
+            </nav>
+            <div
+              class="mt-3 flex max-w-[66ch] flex-col gap-10 text-muted dark:text-muted-inverse wrap-anywhere [&_code]:font-mono [&_code]:text-sm"
+            >
+              <div class="flex min-w-0 flex-col gap-3">
+                <h3
+                  id="troubleshooting-assets"
+                  tabindex="-1"
+                  class="scroll-mt-8 font-heading font-bold tracking-normal text-lg/7 text-ink dark:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
+                >
+                  Missing styles or JavaScript
+                </h3>
+                <ul class="list-disc space-y-2 pl-5">
+                  <li>
+                    Run <code>npm run dev</code> and <code>shopify theme dev</code> in
+                    separate terminals. Check the previewed theme.
+                  </li>
+                  <li>
+                    Render <code>{% render 'easel-assets' %}</code> in the layout. Match
+                    any custom namespace; do not edit the generated snippet.
+                  </li>
+                  <li>
+                    Connection refused? Check the dev server. A 404? Check the requested
+                    path. Requests succeed? Check JavaScript errors and CSS rules.
+                  </li>
+                </ul>
+                <p>
+                  <a
+                    href="#quick-start"
+                    @click="navigate"
+                    class="text-inherit underline underline-offset-[0.2em] focus-visible:outline-2 focus-visible:outline-offset-4"
+                    >Check the setup</a
+                  >
+                  or use the
+                  <a
+                    href="#troubleshooting-production"
+                    @click="navigate"
+                    class="text-inherit underline underline-offset-[0.2em] focus-visible:outline-2 focus-visible:outline-offset-4"
+                    >production checklist</a
+                  >
+                  for a deployed theme.
+                </p>
+              </div>
+              <div class="flex min-w-0 flex-col gap-3">
+                <h3
+                  id="troubleshooting-cors"
+                  tabindex="-1"
+                  class="scroll-mt-8 font-heading font-bold tracking-normal text-lg/7 text-ink dark:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
+                >
+                  CORS errors
+                </h3>
+                <ul class="list-disc space-y-2 pl-5">
+                  <li>
+                    Easel allows myshopify.com, Shopify Admin, and localhost by default.
+                  </li>
+                  <li>
+                    Custom <code>server.cors</code> settings replace those defaults. Keep
+                    them in the list below.
+                  </li>
+                  <li>
+                    Replace <code>https://www.example.com</code> with the request's exact
+                    <code>Origin</code>: scheme, hostname, and port, with no path. Add www
+                    and non-www separately if needed.
+                  </li>
+                </ul>
+                <div
+                  class="min-w-0 rounded-md border border-black/8 dark:border-white/14 bg-panel dark:bg-panel-inverse"
+                  data-code-block
+                  x-data="copyCode($el)"
+                >
+                  <div
+                    class="flex flex-wrap items-center justify-between gap-3 px-5 pt-4 text-muted dark:text-muted-inverse wrap-anywhere"
+                  >
+                    <span id="code-troubleshooting-cors" class="font-mono" data-code-label
+                      >vite.config.ts · custom storefront origin</span
+                    >
+                    <div
+                      class="flex flex-wrap items-center gap-3 [&[x-cloak]]:hidden!"
+                      x-cloak
+                    >
+                      <button
+                        type="button"
+                        class="inline-flex min-h-9 max-w-full cursor-pointer items-center justify-center gap-2 rounded-md border border-black/8 dark:border-white/14 bg-white px-4 py-[7px] text-sm/5 font-medium text-ink dark:text-ink-inverse no-underline hover:bg-neutral-100 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-black dark:hover:bg-neutral-900 focus-visible:outline-2 focus-visible:outline-offset-4"
+                        @click="copy"
+                        :disabled="pending"
+                        :aria-label="'Copy ' + label"
+                        x-text="pending ? 'Copying…' : 'Copy'"
+                      >
+                        Copy
+                      </button>
+                      <span
+                        class="max-w-[28ch] text-[13px]/[18px] text-muted dark:text-muted-inverse"
+                        role="status"
+                        x-text="status"
+                      ></span>
+                    </div>
+                  </div>
+                  <pre
+                    class="min-w-0 max-w-full overflow-x-auto p-5 font-mono text-sm/6 font-normal [tab-size:2] text-ink dark:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
+                    tabindex="0"
+                    role="region"
+                    aria-labelledby="code-troubleshooting-cors"
+                  ><code>import {defineConfig} from 'vite';
+import easel from 'vite-plugin-shopify-easel';
+
+export default defineConfig({
+  plugins: [easel()],
+  server: {
+    cors: {
+      origin: [
+        /^https?:\/\/(?:[^.]+\.)*myshopify\.com$/,
+        'https://admin.shopify.com',
+        /^https?:\/\/(?:localhost|127\.0\.0\.1|\[::1\])(?::\d+)?$/,
+        'https://www.example.com',
+      ],
+    },
+  },
+});</code></pre>
+                </div>
+                <ul class="list-disc space-y-2 pl-5">
+                  <li>Restart Vite after changing the config.</li>
+                  <li>
+                    Never use <code>cors: true</code>: it exposes your source to any
+                    website.
+                    <a
+                      href="https://vite.dev/config/server-options#server-cors"
+                      class="text-inherit underline underline-offset-[0.2em] focus-visible:outline-2 focus-visible:outline-offset-4"
+                      >CORS reference</a
+                    >.
+                  </li>
+                </ul>
+              </div>
+              <div class="flex min-w-0 flex-col gap-3">
+                <h3
+                  id="troubleshooting-network"
+                  tabindex="-1"
+                  class="scroll-mt-8 font-heading font-bold tracking-normal text-lg/7 text-ink dark:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
+                >
+                  Browser and Theme Editor access
+                </h3>
+                <ul class="list-disc space-y-2 pl-5">
+                  <li>
+                    <strong>Local-network error:</strong> check the site's
+                    <a
+                      href="https://developer.chrome.com/blog/local-network-access"
+                      class="text-inherit underline underline-offset-[0.2em] focus-visible:outline-2 focus-visible:outline-offset-4"
+                      >browser permission</a
+                    >. Grant access only to trusted sites.
+                  </li>
+                  <li>
+                    <strong>Certificate or mixed-content error:</strong> use trusted
+                    HTTPS. Do not bypass warnings or disable browser security.
+                  </li>
+                  <li>
+                    <strong>Remote browser:</strong> its localhost is not your laptop. Set
+                    up an external endpoint and set <code>server.origin</code> to its URL.
+                    Easel does not create tunnels.
+                  </li>
+                  <li>
+                    <strong>Host blocked:</strong> add the exact development hostname you
+                    control to <code>server.allowedHosts</code>, never <code>true</code>.
+                    This differs from the storefront's CORS origin.
+                  </li>
+                  <li>
+                    <strong>HMR disconnected:</strong> proxy WebSockets too. Check
+                    <a
+                      href="https://vite.dev/config/server-options#server-hmr"
+                      class="text-inherit underline underline-offset-[0.2em] focus-visible:outline-2 focus-visible:outline-offset-4"
+                      >Vite's HMR settings</a
+                    >.
+                  </li>
+                  <li>
+                    <strong>Public tunnel:</strong> restrict access and stop it when
+                    finished.
+                  </li>
+                </ul>
+              </div>
+              <div class="flex min-w-0 flex-col gap-3">
+                <h3
+                  id="troubleshooting-reload"
+                  tabindex="-1"
+                  class="scroll-mt-8 font-heading font-bold tracking-normal text-lg/7 text-ink dark:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
+                >
+                  Changes do not reload
+                </h3>
+                <ul class="list-disc space-y-2 pl-5">
+                  <li>
+                    <strong>JavaScript/CSS:</strong> check Vite's terminal and the HMR
+                    WebSocket.
+                  </li>
+                  <li>
+                    <strong>Liquid:</strong> check Shopify CLI for sync errors and confirm
+                    the previewed theme.
+                  </li>
+                  <li>
+                    <strong>Coordinated reload:</strong> pass
+                    <code>--notify .easel/shopify-ready</code> to Shopify CLI from Vite's
+                    project root. Match any custom <code>refresh.signal</code>;
+                    <code>refresh: false</code> disables it.
+                  </li>
+                </ul>
+                <p>
+                  Coordination is optional. Vite HMR and Shopify CLI live reload work
+                  independently.
+                  <a
+                    href="#development"
+                    @click="navigate"
+                    class="text-inherit underline underline-offset-[0.2em] focus-visible:outline-2 focus-visible:outline-offset-4"
+                    >Development commands</a
+                  >.
+                </p>
+              </div>
+              <div class="flex min-w-0 flex-col gap-3">
+                <h3
+                  id="troubleshooting-production"
+                  tabindex="-1"
+                  class="scroll-mt-8 font-heading font-bold tracking-normal text-lg/7 text-ink dark:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
+                >
+                  Localhost in a published theme
+                </h3>
+                <ul class="list-disc space-y-2 pl-5">
+                  <li>Stop Vite before building or deploying.</li>
+                  <li>
+                    After building, check <code>snippets/easel-assets.liquid</code> uses
+                    <code>asset_url</code>, not localhost, <code>/@vite/client</code>, or
+                    a tunnel.
+                  </li>
+                  <li>
+                    Deploy the snippet and matching assets together. Check CLI ignore
+                    rules and upload flags, even though the snippet is Git-ignored.
+                  </li>
+                </ul>
+                <div
+                  class="min-w-0 rounded-md border border-black/8 dark:border-white/14 bg-panel dark:bg-panel-inverse"
+                >
+                  <p id="code-troubleshooting-production" class="px-5 pt-4 text-[13px]/4">
+                    Terminal · stop Vite first, then build and deploy
+                  </p>
+                  <pre
+                    class="min-w-0 max-w-full overflow-x-auto p-5 font-mono text-sm/6 font-normal [tab-size:2] text-ink dark:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
+                    tabindex="0"
+                    role="region"
+                    aria-labelledby="code-troubleshooting-production"
+                  ><code>npm run build
+shopify theme push</code></pre>
+                </div>
+              </div>
+              <div class="flex min-w-0 flex-col gap-3">
+                <h3
+                  id="troubleshooting-ownership"
+                  tabindex="-1"
+                  class="scroll-mt-8 font-heading font-bold tracking-normal text-lg/7 text-ink dark:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
+                >
+                  Protected writes and recovery
+                </h3>
+                <ul class="list-disc space-y-2 pl-5">
+                  <li>
+                    <strong>Name collision:</strong> preserve the existing file. Choose
+                    another <code>namespace</code> and update the layout's render call.
+                  </li>
+                  <li>
+                    <strong>Lock or interrupted build:</strong> stop competing Easel
+                    processes, then retry. Recovery is automatic; retain errors and files
+                    if it still fails.
+                  </li>
+                  <li>
+                    <strong>Do not delete</strong> <code>assets/</code> or
+                    <code>.easel/</code> to force a build. The ledger and journal support
+                    safe recovery.
+                  </li>
+                </ul>
+                <p>
+                  No separate cleanup plugin is needed.
+                  <a
+                    href="#safety"
+                    @click="navigate"
+                    class="text-inherit underline underline-offset-[0.2em] focus-visible:outline-2 focus-visible:outline-offset-4"
+                    >Output safety</a
+                  >.
+                </p>
+              </div>
+              <div class="flex min-w-0 flex-col gap-3">
+                <h3
+                  id="troubleshooting-entries"
+                  tabindex="-1"
+                  class="scroll-mt-8 font-heading font-bold tracking-normal text-lg/7 text-ink dark:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
+                >
+                  Entry and configuration errors
+                </h3>
+                <ul class="list-disc space-y-2 pl-5">
+                  <li>
+                    <strong>Defaults:</strong> <code>src/main.ts</code> or
+                    <code>src/main.js</code>, not both, plus <code>src/style.css</code>.
+                  </li>
+                  <li>
+                    <strong>Custom entries:</strong> set <code>source</code> and
+                    <code>bundles</code>. Each bundle needs a script, style, or both;
+                    script entries must be distinct.
+                  </li>
+                  <li>
+                    <strong>Wrong theme:</strong> check Vite's root and Easel's
+                    <code>theme</code> path.
+                  </li>
+                  <li>
+                    <strong>Output conflicts:</strong> remove overrides such as
+                    <code>build.outDir</code> and <code>build.rollupOptions.output</code>.
+                    Use Easel's
+                    <a
+                      href="#configuration"
+                      @click="navigate"
+                      class="text-inherit underline underline-offset-[0.2em] focus-visible:outline-2 focus-visible:outline-offset-4"
+                      >configuration options</a
+                    >
+                    instead.
+                  </li>
+                </ul>
+              </div>
+              <div class="flex min-w-0 flex-col gap-3">
+                <h3
+                  id="troubleshooting-frameworks"
+                  tabindex="-1"
+                  class="scroll-mt-8 font-heading font-bold tracking-normal text-lg/7 text-ink dark:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
+                >
+                  Framework lifecycle issues
+                </h3>
+                <ul class="list-disc space-y-2 pl-5">
+                  <li>
+                    Mount on initial page load and <code>shopify:section:load</code>;
+                    destroy or unmount on <code>shopify:section:unload</code>.
+                  </li>
+                  <li>
+                    Remove global listeners in <code>import.meta.hot.dispose</code> to
+                    prevent duplicates.
+                  </li>
+                  <li>
+                    React needs <code>@vitejs/plugin-react/preamble</code> because Easel
+                    has no Vite HTML entry.
+                  </li>
+                </ul>
+                <p>
+                  Easel does not mount components for you. Copy the lifecycle patterns
+                  from the
+                  <a
+                    href="#examples"
+                    @click="navigate"
+                    class="text-inherit underline underline-offset-[0.2em] focus-visible:outline-2 focus-visible:outline-offset-4"
+                    >runnable examples</a
+                  >.
+                </p>
+              </div>
+              <div class="flex min-w-0 flex-col gap-3">
+                <h3
+                  id="troubleshooting-report"
+                  tabindex="-1"
+                  class="scroll-mt-8 font-heading font-bold tracking-normal text-lg/7 text-ink dark:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
+                >
+                  Still stuck?
+                </h3>
+                <p>
+                  Requires Node.js 22.12+ and Vite 7 or 8. With pnpm, replace
+                  <code>npm ls</code> below with <code>pnpm list</code>.
+                </p>
+                <div
+                  class="min-w-0 rounded-md border border-black/8 dark:border-white/14 bg-panel dark:bg-panel-inverse"
+                  data-code-block
+                  x-data="copyCode($el)"
+                >
+                  <div
+                    class="flex flex-wrap items-center justify-between gap-3 px-5 pt-4 text-muted dark:text-muted-inverse wrap-anywhere"
+                  >
+                    <span
+                      id="code-troubleshooting-versions"
+                      class="text-[13px]/4 font-normal"
+                      data-code-label
+                      >Terminal · installed versions</span
+                    >
+                    <div
+                      class="flex flex-wrap items-center gap-3 [&[x-cloak]]:hidden!"
+                      x-cloak
+                    >
+                      <button
+                        type="button"
+                        class="inline-flex min-h-9 max-w-full cursor-pointer items-center justify-center gap-2 rounded-md border border-black/8 dark:border-white/14 bg-white px-4 py-[7px] text-sm/5 font-medium text-ink dark:text-ink-inverse no-underline hover:bg-neutral-100 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-black dark:hover:bg-neutral-900 focus-visible:outline-2 focus-visible:outline-offset-4"
+                        @click="copy"
+                        :disabled="pending"
+                        :aria-label="'Copy ' + label"
+                        x-text="pending ? 'Copying…' : 'Copy'"
+                      >
+                        Copy
+                      </button>
+                      <span
+                        class="max-w-[28ch] text-[13px]/[18px] text-muted dark:text-muted-inverse"
+                        role="status"
+                        x-text="status"
+                      ></span>
+                    </div>
+                  </div>
+                  <pre
+                    class="min-w-0 max-w-full overflow-x-auto p-5 font-mono text-sm/6 font-normal [tab-size:2] text-ink dark:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
+                    tabindex="0"
+                    role="region"
+                    aria-labelledby="code-troubleshooting-versions"
+                  ><code>node --version
+npm --version
+npm ls vite vite-plugin-shopify-easel --depth=0
+shopify version</code></pre>
+                </div>
+                <ul class="list-disc space-y-2 pl-5">
+                  <li>
+                    <a
+                      href="https://github.com/BillyNoyes/Easel/issues/new"
+                      class="text-inherit underline underline-offset-[0.2em] focus-visible:outline-2 focus-visible:outline-offset-4"
+                      >Open an issue</a
+                    >
+                    with versions, OS/browser, commands, the exact error, and a minimal
+                    reproduction with redacted config.
+                  </li>
+                  <li>
+                    Say where it fails: CLI preview, Theme Editor, or production. For
+                    failed requests, include the status and origin.
+                  </li>
+                  <li>
+                    Remove tokens, cookies, authorization headers, and sensitive URL
+                    parameters. Do not upload raw network exports or recovery files.
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </section>
+          <section
+            id="examples"
+            class="flex scroll-mt-8 flex-col gap-5 [&+section]:mt-16 focus-visible:outline-2 focus-visible:outline-offset-4"
+            tabindex="-1"
+            aria-labelledby="examples-title"
+          >
+            <h2
+              id="examples-title"
+              class="font-heading font-bold tracking-normal text-2xl/8"
+            >
+              See it in a real theme.
+            </h2>
+            <p class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere">
+              Every example is independently runnable and checked in CI. Connect one to
+              your Shopify development store to try it.
+            </p>
+            <ul
+              class="mt-2 grid max-w-5xl list-none grid-cols-1 gap-x-12 gap-y-8 p-0 sm:grid-cols-2 [&>*]:min-w-0"
+            >
+              <li class="flex flex-col gap-2">
+                <h3 class="font-heading font-bold tracking-normal text-base/6">
+                  <a
+                    class="text-inherit underline underline-offset-[0.2em] hover:text-ink dark:hover:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
+                    href="https://github.com/BillyNoyes/Easel/tree/main/examples/vanilla"
+                    >Vanilla</a
+                  >
+                </h3>
+                <p class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere">
+                  TypeScript, CSS, dynamic imports, fonts, and images
+                </p>
+              </li>
+              <li class="flex flex-col gap-2">
+                <h3 class="font-heading font-bold tracking-normal text-base/6">
+                  <a
+                    class="text-inherit underline underline-offset-[0.2em] hover:text-ink dark:hover:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
+                    href="https://github.com/BillyNoyes/Easel/tree/main/examples/named-bundles"
+                    >Named bundles</a
+                  >
+                </h3>
+                <p class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere">
+                  Separate product and collection entries with TypeScript and CSS
+                </p>
+              </li>
+              <li class="flex flex-col gap-2">
+                <h3 class="font-heading font-bold tracking-normal text-base/6">
+                  <a
+                    class="text-inherit underline underline-offset-[0.2em] hover:text-ink dark:hover:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
+                    href="https://github.com/BillyNoyes/Easel/tree/main/examples/alpine-tailwind"
+                    >Alpine and Tailwind</a
+                  >
+                </h3>
+                <p class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere">
+                  Alpine.js with Tailwind CSS through Vite
+                </p>
+              </li>
+              <li class="flex flex-col gap-2">
+                <h3 class="font-heading font-bold tracking-normal text-base/6">
+                  <a
+                    class="text-inherit underline underline-offset-[0.2em] hover:text-ink dark:hover:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
+                    href="https://github.com/BillyNoyes/Easel/tree/main/examples/react"
+                    >React</a
+                  >
+                </h3>
+                <p class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere">
+                  React components mounted inside Liquid sections
+                </p>
+              </li>
+              <li class="flex flex-col gap-2">
+                <h3 class="font-heading font-bold tracking-normal text-base/6">
+                  <a
+                    class="text-inherit underline underline-offset-[0.2em] hover:text-ink dark:hover:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
+                    href="https://github.com/BillyNoyes/Easel/tree/main/examples/vue"
+                    >Vue</a
+                  >
+                </h3>
+                <p class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere">
+                  Vue single file components inside Liquid sections
+                </p>
+              </li>
+            </ul>
+          </section>
+        </div>
+      </main>
+      <footer
+        class="flex flex-col gap-5 py-6 text-[13px]/[18px] text-muted dark:text-muted-inverse md:flex-row md:items-center md:justify-between"
+      >
+        <span>Easel</span>
+        <span
+          >Built by
+          <a
+            href="https://billynoyes.co.uk/"
+            class="text-inherit underline underline-offset-[0.2em] hover:text-ink dark:hover:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
+            >Billy Noyes</a
+          >. An independent project with no Shopify sponsorship or endorsement.</span
+        >
+      </footer>
+    </div>
+  </body>
+</html>

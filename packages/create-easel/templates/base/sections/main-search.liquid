@@ -1,0 +1,28 @@
+<section class="page">
+  <h1>{{ 'search.title' | t }}</h1>
+  <form action="{{ routes.search_url }}" method="get" role="search">
+    <label for="SearchInput-{{ section.id }}">{{ 'search.label' | t }}</label>
+    <input id="SearchInput-{{ section.id }}" type="search" name="q" value="{{ search.terms | escape }}">
+    <button type="submit">{{ 'search.submit' | t }}</button>
+  </form>
+  {% if search.performed %}
+    {% paginate search.results by 24 %}
+      <p>{{ 'search.results' | t: count: search.results_count, terms: search.terms }}</p>
+      <ul class="resource-list" role="list">
+        {% for item in search.results %}
+          <li><a href="{{ item.url }}">{{ item.title | escape }}</a></li>
+        {% else %}
+          <li>{{ 'search.empty' | t }}</li>
+        {% endfor %}
+      </ul>
+      {{ paginate | default_pagination }}
+    {% endpaginate %}
+  {% endif %}
+</section>
+
+{% schema %}
+{
+  "name": "t:sections.main_search.name",
+  "settings": []
+}
+{% endschema %}

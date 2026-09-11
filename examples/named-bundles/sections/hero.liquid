@@ -1,0 +1,35 @@
+<section class="hero">
+  <p class="bundle-label">{{ 'general.home_bundle' | t }}</p>
+  <h1>{{ section.settings.heading | escape }}</h1>
+  <div>{{ section.settings.text }}</div>
+  <p><a href="{{ routes.all_products_collection_url }}">{{ 'general.browse_products' | t }}</a></p>
+  <ul class="home-products">
+    {% for item in collections.all.products limit: 4 %}
+      <li><a href="{{ item.url }}">{{ item.title | escape }}</a></li>
+    {% else %}
+      <li>{{ 'general.add_products' | t }}</li>
+    {% endfor %}
+  </ul>
+</section>
+
+{% schema %}
+{
+  "name": "t:sections.hero.name",
+  "enabled_on": {"templates": ["index"]},
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:sections.hero.heading",
+      "default": "t:sections.hero.default_heading"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "t:sections.hero.text",
+      "default": "t:sections.hero.default_text"
+    }
+  ],
+  "presets": [{"name": "t:sections.hero.name"}]
+}
+{% endschema %}

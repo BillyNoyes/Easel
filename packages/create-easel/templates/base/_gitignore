@@ -1,0 +1,5 @@
+node_modules/
+.easel/
+*.zip
+assets/easel-*
+snippets/easel-assets.liquid

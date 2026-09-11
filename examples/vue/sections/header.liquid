@@ -1,0 +1,11 @@
+<header class="site-header">
+  <a href="{{ routes.root_url }}">{{ shop.name }}</a>
+  <a href="{{ routes.cart_url }}">{{ cart.item_count }}</a>
+</header>
+
+{% schema %}
+{
+  "name": "t:sections.header.name",
+  "settings": []
+}
+{% endschema %}

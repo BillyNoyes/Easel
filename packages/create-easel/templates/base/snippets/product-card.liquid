@@ -1,0 +1,15 @@
+{% doc %}
+  Renders a product link with its featured image and price.
+
+  @param {product} product - The product to render.
+{% enddoc %}
+
+<article class="card">
+  <a href="{{ product.url }}">
+    {% if product.featured_image %}
+      {{ product.featured_image | image_url: width: 720 | image_tag: loading: 'lazy', widths: '240, 360, 540, 720', sizes: '(min-width: 64rem) 20rem, 50vw', alt: product.featured_image.alt | default: product.title }}
+    {% endif %}
+    <h2>{{ product.title | escape }}</h2>
+  </a>
+  <p>{{ product.price | money }}</p>
+</article>

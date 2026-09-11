@@ -1,0 +1,35 @@
+{% layout none %}
+
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="canonical" href="{{ canonical_url | escape }}">
+    <link rel="icon" type="image/svg+xml" href="{{ 'easel.svg' | asset_url }}">
+    <title>{{ gift_card.product.title | default: shop.name | escape }}</title>
+    <style>
+      :root { --theme-background: {{ settings.background }}; --theme-foreground: {{ settings.foreground }}; }
+    </style>
+    {% render 'easel-assets' %}
+    {{ content_for_header }}
+  </head>
+  <body>
+    <main class="page gift-card">
+      <h1>{{ gift_card.product.title | default: shop.name | escape }}</h1>
+      <p class="gift-card__balance">{{ gift_card.balance | money_with_currency }}</p>
+      {% unless gift_card.enabled %}
+        <p>{{ 'gift_card.disabled' | t }}</p>
+      {% endunless %}
+      {% if gift_card.expired %}
+        <p>{{ 'gift_card.expired' | t }}</p>
+      {% elsif gift_card.expires_on %}
+        {% assign expiration_date = gift_card.expires_on | date: format: 'date' %}
+        <p>{{ 'gift_card.expires_on' | t: date: expiration_date }}</p>
+      {% endif %}
+      <p>{{ 'gift_card.code' | t }}</p>
+      <code class="gift-card__code">{{ gift_card.code | format_code }}</code>
+      <a href="{{ shop.url }}">{{ 'gift_card.continue_shopping' | t }}</a>
+    </main>
+  </body>
+</html>

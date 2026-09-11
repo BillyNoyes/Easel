@@ -1,0 +1,53 @@
+@import 'tailwindcss';
+@source "../layout/**/*.liquid";
+@source "../sections/**/*.liquid";
+@source "../snippets/**/*.liquid";
+@source "../blocks/**/*.liquid";
+
+@theme {
+  --color-canvas: #f5f2eb;
+  --color-ink: #171714;
+  --font-sans: Inter, ui-sans-serif, system-ui, sans-serif;
+}
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    color: var(--color-ink);
+    background: var(--color-canvas);
+  }
+}
+
+@layer components {
+  .site-header,
+  .site-footer {
+    width: min(100% - 2rem, 72rem);
+    margin-inline: auto;
+    padding-block: 1.5rem;
+  }
+
+  .site-header {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .badge {
+    display: inline-flex;
+    border: 1px solid currentcolor;
+    border-radius: 999px;
+    padding: 0.35rem 0.7rem;
+  }
+
+  .skip-link {
+    position: fixed;
+    transform: translateY(-150%);
+  }
+
+  .skip-link:focus {
+    transform: translateY(0);
+  }
+}

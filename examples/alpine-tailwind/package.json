@@ -1,0 +1,20 @@
+{
+  "name": "easel-example-alpine-tailwind",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "vite build",
+    "check": "tsc && vite build",
+    "dev": "vite"
+  },
+  "dependencies": {
+    "alpinejs": "3.17.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "4.3.3",
+    "@types/alpinejs": "3.13.11",
+    "tailwindcss": "4.3.3",
+    "typescript": "5.9.3",
+    "vite": "8.2.2"
+  }
+}
