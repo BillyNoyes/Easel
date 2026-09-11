@@ -1,5 +1,5 @@
 import * as p from '@clack/prompts';
-import {lstatSync} from 'node:fs';
+import {assertTargetDirectory} from './directory.js';
 import {resolve} from 'node:path';
 import {version} from '../package.json';
 import {generateTheme} from './generate.js';
@@ -36,7 +36,8 @@ Create a Shopify Liquid theme with Easel and Vite.
   --version, -v                  Show version
 
 Non-interactive runs require a directory and only install with --install.
-Existing directories are never overwritten. Shopify CLI remains separate.
+Use . for the current directory, empty apart from .git or .DS_Store.
+Existing project files are never overwritten. Shopify CLI remains separate.
 `;
 
 class Cancelled extends Error {}
@@ -51,11 +52,7 @@ function targetError(target: string | undefined): string | undefined {
   try {
     if (!target) throw new Error('Provide a directory for your theme.');
     packageNameFor(target);
-    if (lstatSync(resolve(target), {throwIfNoEntry: false})) {
-      throw new Error(
-        'Target already exists. Choose a new directory; existing files are never overwritten.',
-      );
-    }
+    assertTargetDirectory(resolve(target));
   } catch (error) {
     return error instanceof Error ? error.message : String(error);
   }
@@ -86,7 +83,7 @@ async function main(): Promise<void> {
       (interactive
         ? await ask(
             p.text({
-              message: 'Where should we create your theme?',
+              message: 'Where should we create your theme? (. for current directory)',
               placeholder: 'my-theme',
               defaultValue: 'my-theme',
               validate: (value) => targetError(value || 'my-theme'),
@@ -178,7 +175,7 @@ async function main(): Promise<void> {
         process.exitCode = error instanceof InstallError && error.cancelled ? 130 : 1;
       }
     }
-    const steps = [changeDirectoryCommand(created)];
+    const steps = created === process.cwd() ? [] : [changeDirectoryCommand(created)];
     if (!installed) steps.push(`${manager} ${installArguments(manager).join(' ')}`);
     steps.push(`${manager} run dev`);
     const message = `${steps.join('\n')}\n\nIn another terminal:\nshopify theme dev --store your-store.myshopify.com --notify .easel/shopify-ready\n\nShopify CLI must be installed and authenticated separately.`;

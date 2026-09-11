@@ -50,10 +50,15 @@ const variants = ['ts', 'js'].flatMap((language) =>
 );
 
 describe('public theme generator', () => {
-  it.each(variants)(
-    'generates $language / $framework / tailwind=$tailwind',
+  it.each(
+    variants.flatMap((variant) =>
+      ['new', 'existing'].map((mode) => ({...variant, mode})),
+    ),
+  )(
+    'generates $language / $framework / tailwind=$tailwind in a $mode directory',
     (options) => {
       const target = join(directory(), 'My Theme');
+      if (options.mode === 'existing') mkdirSync(target);
       generateTheme({...options, target, name: 'My Theme'});
       const manifest = JSON.parse(readFileSync(join(target, 'package.json'), 'utf8'));
       expect(manifest.name).toBe('my-theme');
@@ -100,7 +105,7 @@ describe('public theme generator', () => {
     },
   );
 
-  it('refuses existing directories and preserves their contents', () => {
+  it('refuses nonempty directories and preserves their contents', () => {
     const target = directory();
     writeFileSync(join(target, 'keep.txt'), 'keep');
     expect(() =>
@@ -137,6 +142,44 @@ describe('public theme generator', () => {
       }
     },
   );
+
+  it.each(['directory', 'file'])('preserves .git as a %s and .DS_Store', (kind) => {
+    const target = directory();
+    const git = join(target, '.git');
+    if (kind === 'directory') mkdirSync(git);
+    const metadata = kind === 'directory' ? join(git, 'config') : git;
+    writeFileSync(metadata, 'Existing Git metadata');
+    writeFileSync(join(target, '.DS_Store'), 'Existing Finder metadata');
+    const inode = lstatSync(target).ino;
+    generateTheme({
+      target,
+      name: 'Example',
+      language: 'ts',
+      framework: 'none',
+      tailwind: false,
+    });
+    expect(lstatSync(target).ino).toBe(inode);
+    expect(readFileSync(metadata, 'utf8')).toBe('Existing Git metadata');
+    expect(readFileSync(join(target, '.DS_Store'), 'utf8')).toBe(
+      'Existing Finder metadata',
+    );
+    expect(existsSync(join(target, 'package.json'))).toBe(true);
+  });
+
+  it('leaves an existing directory untouched when template rendering fails', () => {
+    const target = directory();
+    writeFileSync(join(target, '.git'), 'gitdir: existing-worktree');
+    const inode = lstatSync(target).ino;
+    expect(() =>
+      generateTheme(
+        {target, name: 'Example', language: 'ts', framework: 'none', tailwind: false},
+        join(target, 'missing-templates'),
+      ),
+    ).toThrow();
+    expect(lstatSync(target).ino).toBe(inode);
+    expect(readdirSync(target)).toEqual(['.git']);
+    expect(readFileSync(join(target, '.git'), 'utf8')).toBe('gitdir: existing-worktree');
+  });
 
   it('cleans only its own target after a copy failure', () => {
     const parent = directory();
@@ -203,6 +246,28 @@ describe('CLI arguments and automation', () => {
     expect(existsSync(join(target, 'package.json'))).toBe(true);
     expect(existsSync(join(target, 'node_modules'))).toBe(false);
     expect(result.stdout).toContain('Shopify CLI must be installed');
+  });
+  it('creates directly in the current directory when given a dot', () => {
+    const cwd = directory();
+    writeFileSync(join(cwd, '.git'), 'gitdir: existing-worktree');
+    const result = run(['.', '--yes', '--no-install'], {cwd});
+    expect(result.status, result.stderr).toBe(0);
+    const manifest = JSON.parse(readFileSync(join(cwd, 'package.json'), 'utf8'));
+    expect(manifest.name).toBe(packageNameFor(cwd));
+    expect(existsSync(join(cwd, 'my-theme'))).toBe(false);
+    expect(readFileSync(join(cwd, '.git'), 'utf8')).toBe('gitdir: existing-worktree');
+    expect(result.stdout).not.toMatch(/^cd |^Set-Location /m);
+  });
+  it('rejects a populated current directory without modifying it', () => {
+    const cwd = directory();
+    writeFileSync(join(cwd, 'package.json'), '{"name":"existing-project"}');
+    const result = run(['.', '--yes', '--no-install'], {cwd});
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain('not empty');
+    expect(readdirSync(cwd)).toEqual(['package.json']);
+    expect(readFileSync(join(cwd, 'package.json'), 'utf8')).toBe(
+      '{"name":"existing-project"}',
+    );
   });
   it('requires an explicit directory without a terminal', () => {
     const result = run([], {cwd: directory()});

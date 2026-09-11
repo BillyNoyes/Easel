@@ -11,6 +11,20 @@ pnpm create:theme ../my-theme
 
 Once this package is published, the equivalent commands will be `npm create shopify-easel@latest my-theme` or `npx create-shopify-easel@latest my-theme`. A prerelease published under `beta` will require `@beta` instead of `@latest`.
 
+## Use the current directory
+
+Pass `.` as the directory, or enter `.` at the directory prompt. The theme is created directly in that folder, and its name is derived from the folder name.
+
+Until npm publication, run the built CLI from your desired folder:
+
+```sh
+node /path/to/Easel/packages/create-shopify-easel/bin/create-shopify-easel.mjs .
+```
+
+Build it in the checkout first with `pnpm --dir /path/to/Easel/packages/create-shopify-easel build`. Invoke the executable directly so `.` refers to your folder rather than the Easel checkout. Once published, `npm create shopify-easel@latest .` will do the same.
+
+Existing folders must be empty apart from `.git` and `.DS_Store`, which are preserved. Existing project files, including a README or `.gitignore`, are not overwritten or merged.
+
 ## Choices
 
 - TypeScript (default) or JavaScript.
@@ -47,9 +61,9 @@ Without an interactive terminal, or in CI, a directory is required, prompts are 
 
 ## Safety and ownership
 
-- Existing directories are rejected, including empty directories and symlinks. There is no overwrite or force option.
+- New directories and existing empty directories are supported. Git and Finder metadata are preserved; populated directories and symlink targets are rejected. There is no overwrite or force option.
 - All questions are answered before writing the theme. Cancelling a prompt exits with code 130 without creating it.
-- A generation error removes only the new target directory. Newly created parent directories can remain.
+- Templates are rendered in a temporary directory before copying to the target. On failure, rollback removes only unchanged generated files and empty directories it created. Existing directories, metadata, and concurrent edits are preserved. Newly created parent directories can remain.
 - Installation failure or Ctrl+C during installation keeps the theme and prints retry instructions. Failures return a nonzero exit code.
 - The CLI does not authenticate with Shopify, create stores, push themes, initialize Git, or change global package-manager configuration.
 - The CLI invokes the selected package manager directly, without interpolating the destination into a shell command. pnpm installation uses `--ignore-workspace` to avoid installing into an unrelated ancestor workspace.

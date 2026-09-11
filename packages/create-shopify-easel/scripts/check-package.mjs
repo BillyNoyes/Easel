@@ -96,24 +96,45 @@ try {
           temporary,
           `${language} ${framework} ${tailwind ? 'tailwind' : 'css'}`,
         );
-        await run(
+        const options = [
+          '--yes',
+          '--language',
+          language,
+          '--framework',
+          framework,
+          tailwind ? '--tailwind' : '--no-tailwind',
+          '--no-install',
+          '--package-manager',
           'pnpm',
-          [
-            'exec',
-            'create-shopify-easel',
+        ];
+        if (language === 'js') {
+          await mkdir(target);
+          await writeFile(join(target, '.git'), 'gitdir: existing-worktree');
+          await run(
+            'npm',
+            [
+              'exec',
+              '--yes',
+              '--package',
+              join(temporary, cliTarball),
+              '--',
+              'create-shopify-easel',
+              '.',
+              ...options,
+            ],
             target,
-            '--yes',
-            '--language',
-            language,
-            '--framework',
-            framework,
-            tailwind ? '--tailwind' : '--no-tailwind',
-            '--no-install',
-            '--package-manager',
+          );
+          assert.equal(
+            await readFile(join(target, '.git'), 'utf8'),
+            'gitdir: existing-worktree',
+          );
+        } else {
+          await run(
             'pnpm',
-          ],
-          consumer,
-        );
+            ['exec', 'create-shopify-easel', target, ...options],
+            consumer,
+          );
+        }
         const manifestPath = join(target, 'package.json');
         const manifest = JSON.parse(await readFile(manifestPath, 'utf8'));
         assert.equal(

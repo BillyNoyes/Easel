@@ -25,7 +25,7 @@ pnpm install
 pnpm create:theme ../my-theme
 ```
 
-Use `--yes --no-install` for a non-interactive starter, or see the package README for all flags. Shopify CLI remains separate.
+Use `--yes --no-install` for a non-interactive starter. The CLI also accepts `.` to use the current folder; see [current-directory setup](packages/create-shopify-easel#use-the-current-directory) for running it from outside this checkout. Existing folders must be empty apart from Git or Finder metadata. Shopify CLI remains separate.
 
 ## Start
 
