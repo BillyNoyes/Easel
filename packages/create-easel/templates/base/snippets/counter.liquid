@@ -1,0 +1,9 @@
+{% doc %}
+  Counter labels are provided by Liquid so client-side components share the theme's translations.
+{% enddoc %}
+
+<div data-easel-counter data-decrease="{{ 'general.counter.decrease' | t | escape }}" data-increase="{{ 'general.counter.increase' | t | escape }}">
+  <button type="button" data-decrease-button aria-label="{{ 'general.counter.decrease' | t | escape }}" disabled>−</button>
+  <output>0</output>
+  <button type="button" data-increase-button aria-label="{{ 'general.counter.increase' | t | escape }}" disabled>+</button>
+</div>

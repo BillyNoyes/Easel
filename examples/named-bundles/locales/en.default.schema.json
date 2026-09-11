@@ -1,0 +1,23 @@
+{
+  "general": {
+    "not_found_name": "404 page"
+  },
+  "sections": {
+    "hero": {
+      "name": "Hero",
+      "heading": "Heading",
+      "default_heading": "Easel Named Bundles",
+      "text": "Text",
+      "default_text": "<p>The home page loads only the shared bundle. Open a product or collection to load its own TypeScript and CSS entry.</p>"
+    },
+    "product": {"name": "Product bundle demo"},
+    "collection": {"name": "Collection bundle demo"}
+  },
+  "settings": {
+    "colors": {
+      "name": "Colors",
+      "background": "Background",
+      "foreground": "Foreground"
+    }
+  }
+}

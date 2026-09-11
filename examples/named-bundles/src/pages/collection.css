@@ -1,0 +1,38 @@
+.collection-filter {
+  margin-block: 1.5rem;
+}
+.collection-filter label {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+.collection-filter input {
+  width: min(100%, 28rem);
+  min-height: 2.75rem;
+  padding: 0.5rem;
+}
+.collection-products {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+  gap: 1.5rem;
+  padding: 0;
+  list-style: none;
+}
+.collection-card a {
+  display: block;
+  height: 100%;
+  padding: 1rem;
+  border: 1px solid currentColor;
+}
+.collection-card img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: contain;
+}
+.collection-pagination {
+  margin-top: 2rem;
+}
+.collection-pagination a,
+.collection-pagination .current {
+  display: inline-block;
+  padding: 0.75rem;
+}

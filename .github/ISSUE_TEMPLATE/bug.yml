@@ -1,0 +1,47 @@
+name: Bug report
+description: Report reproducible Easel behavior
+title: '[Bug]: '
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: Do not include Shopify credentials, npm credentials, customer data, or other secrets. Report security issues privately through the Security tab.
+  - type: input
+    id: package
+    attributes:
+      label: Package and version
+      description: For example, vite-plugin-shopify-easel 0.2.0 or create-easel-theme 0.2.0.
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: Operating system, Node.js version, Vite version, and Shopify CLI version where relevant.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Minimal reproduction
+      description: Provide a small public repository or exact steps with sensitive information removed.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant logs
+      description: Remove store domains, tokens, customer data, local usernames, and unrelated output.
+      render: shell

@@ -1,0 +1,15 @@
+<article class="page article">
+  <a href="{{ blog.url }}">{{ 'article.back_to_blog' | t: blog: blog.title }}</a>
+  <header>
+    <h1>{{ article.title | escape }}</h1>
+    <p>{{ article.published_at | time_tag: format: 'date' }}</p>
+  </header>
+  <div class="rte">{{ article.content }}</div>
+</article>
+
+{% schema %}
+{
+  "name": "t:sections.main_article.name",
+  "settings": []
+}
+{% endschema %}

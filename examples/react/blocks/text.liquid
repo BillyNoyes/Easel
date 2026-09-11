@@ -1,0 +1,19 @@
+<div class="theme-block-text" {{ block.shopify_attributes }}>{{ block.settings.text }}</div>
+
+{% schema %}
+{
+  "name": "t:blocks.text.name",
+  "settings": [
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "t:blocks.text.text"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:blocks.text.name"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,11 @@
+{% doc %}
+  @param {product} card_product - Product displayed in the collection grid.
+{% enddoc %}
+
+<a href="{{ card_product.url }}">
+  {% if card_product.featured_image %}
+    {{ card_product.featured_image | image_url: width: 600 | image_tag: loading: 'lazy', widths: '300, 600', sizes: '(min-width: 768px) 33vw, 100vw' }}
+  {% endif %}
+  <h2>{{ card_product.title | escape }}</h2>
+  <p>{{ card_product.price | money }}</p>
+</a>

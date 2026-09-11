@@ -1,0 +1,23 @@
+<section class="page contact">
+  <h2>{{ 'contact.title' | t }}</h2>
+  {% form 'contact' %}
+    {% if form.posted_successfully? %}<p>{{ 'contact.success' | t }}</p>{% endif %}
+    {{ form.errors | default_errors }}
+    <label for="ContactName-{{ section.id }}">{{ 'contact.name' | t }}</label>
+    <input id="ContactName-{{ section.id }}" type="text" name="contact[name]" value="{{ form.name | escape }}" autocomplete="name">
+    <label for="ContactEmail-{{ section.id }}">{{ 'contact.email' | t }}</label>
+    <input id="ContactEmail-{{ section.id }}" type="email" name="contact[email]" value="{{ form.email | escape }}" autocomplete="email" required>
+    <label for="ContactPhone-{{ section.id }}">{{ 'contact.phone' | t }}</label>
+    <input id="ContactPhone-{{ section.id }}" type="tel" name="contact[phone]" value="{{ form.phone | escape }}" autocomplete="tel">
+    <label for="ContactMessage-{{ section.id }}">{{ 'contact.message' | t }}</label>
+    <textarea id="ContactMessage-{{ section.id }}" name="contact[body]" rows="8" required>{{ form.body | escape }}</textarea>
+    <button type="submit">{{ 'contact.send' | t }}</button>
+  {% endform %}
+</section>
+
+{% schema %}
+{
+  "name": "t:sections.contact_form.name",
+  "settings": []
+}
+{% endschema %}

@@ -1,0 +1,8 @@
+{
+  "accessibility": {"skip_to_content": "Skip to content"},
+  "actions": {"decrease": "Decrease", "increase": "Increase"},
+  "examples": {"label": "Vue"},
+  "footer": {"copyright": "© {{ year }} {{ shop }}"},
+  "general": {"not_found": "Page not found", "return_home": "Return home"},
+  "gift_card": {"heading": "Your gift card", "title": "Gift card for {{ shop }}"}
+}

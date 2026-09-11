@@ -1,0 +1,11 @@
+{% assign current_year = 'now' | date: '%Y' %}
+<footer class="site-footer">
+  {{ 'footer.copyright' | t: year: current_year, shop: shop.name }}
+</footer>
+
+{% schema %}
+{
+  "name": "t:sections.footer.name",
+  "settings": []
+}
+{% endschema %}
