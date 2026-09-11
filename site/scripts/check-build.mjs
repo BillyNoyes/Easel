@@ -150,8 +150,8 @@ for (const [route, html] of pages) {
     assert.equal(attribute(terminal[0], 'aria-describedby'), 'cli-preview-note');
     assert.match(html, /npm create easel@latest \./);
     assert.match(html, /CLI preview/);
-    assert.match(html, /Not on npm yet\./);
-    assert.match(html, /Try the local CLI/);
+    assert.match(html, /Preview only — npm release coming soon\./);
+    assert.doesNotMatch(html, /Try the local CLI/);
     assert.match(html, /plugins: \[easel\(\)\]/);
   } else {
     const documentClasses = new Set(
