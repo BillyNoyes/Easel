@@ -289,11 +289,11 @@ describe('CLI arguments and automation', () => {
       child.stderr.on('data', (chunk) => {
         errors += chunk.toString();
       });
-      const code = await new Promise((resolve, reject) => {
+      const result = await new Promise((resolve, reject) => {
         child.on('error', reject);
-        child.on('close', resolve);
+        child.on('close', (code, signal) => resolve({code, signal}));
       });
-      expect(code, errors).toBe(130);
+      expect(result, `${errors}\n${output}`).toEqual({code: 130, signal: null});
       expect(errors).toContain('Your theme files have been kept');
       expect(existsSync(join(target, 'package.json'))).toBe(true);
     },
