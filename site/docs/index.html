@@ -1262,9 +1262,8 @@ shopify theme push</code></pre>
               Troubleshooting
             </h2>
             <p class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere">
-              Start with the first error in the Vite terminal or your browser's Console
-              and Network panels. A failed asset request, a blocked connection, and a
-              missing reload need different fixes.
+              Find the first error in your terminal or browser, then follow the checklist
+              below.
             </p>
             <nav aria-label="Troubleshooting topics" class="max-w-[66ch]">
               <ul class="grid list-none gap-x-8 gap-y-2 p-0 sm:grid-cols-2">
@@ -1351,31 +1350,37 @@ shopify theme push</code></pre>
                   tabindex="-1"
                   class="scroll-mt-8 font-heading font-bold tracking-normal text-lg/7 text-ink dark:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
                 >
-                  The theme loads without styles or JavaScript
+                  Missing styles or JavaScript
                 </h3>
+                <ul class="list-disc space-y-2 pl-5">
+                  <li>
+                    Run <code>npm run dev</code> and <code>shopify theme dev</code> in
+                    separate terminals. Check the previewed theme.
+                  </li>
+                  <li>
+                    Render <code>{% render 'easel-assets' %}</code> in the layout. Match
+                    any custom namespace; do not edit the generated snippet.
+                  </li>
+                  <li>
+                    Connection refused? Check the dev server. A 404? Check the requested
+                    path. Requests succeed? Check JavaScript errors and CSS rules.
+                  </li>
+                </ul>
                 <p>
-                  Run <code>npm run dev</code> and <code>shopify theme dev</code> in
-                  separate terminals from the intended project. Confirm Vite reports a
-                  ready URL and Shopify CLI is previewing the expected theme.
-                </p>
-                <p>
-                  The layout must render <code>{% render 'easel-assets' %}</code>, or the
-                  matching snippet for your custom namespace. The snippet is generated, so
-                  do not edit it by hand. Check the failed request in Network: connection
-                  refused means the server is unreachable; a 404 means the requested file
-                  or URL is missing. If files load successfully, check for JavaScript
-                  errors or CSS rules before changing server settings.
-                </p>
-                <p>
-                  Use
                   <a
                     href="#quick-start"
                     @click="navigate"
                     class="text-inherit underline underline-offset-[0.2em] focus-visible:outline-2 focus-visible:outline-offset-4"
-                    >Quick start</a
+                    >Check the setup</a
                   >
-                  to check the setup. On a deployed theme, follow the production checks
-                  below instead of starting a local server.
+                  or use the
+                  <a
+                    href="#troubleshooting-production"
+                    @click="navigate"
+                    class="text-inherit underline underline-offset-[0.2em] focus-visible:outline-2 focus-visible:outline-offset-4"
+                    >production checklist</a
+                  >
+                  for a deployed theme.
                 </p>
               </div>
               <div class="flex min-w-0 flex-col gap-3">
@@ -1384,20 +1389,22 @@ shopify theme push</code></pre>
                   tabindex="-1"
                   class="scroll-mt-8 font-heading font-bold tracking-normal text-lg/7 text-ink dark:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
                 >
-                  The browser reports a CORS error
+                  CORS errors
                 </h3>
-                <p>
-                  Easel allows myshopify.com storefronts, Shopify Admin, and localhost by
-                  default. A custom storefront domain needs an explicit allowed origin in
-                  Vite. Use the request's <code>Origin</code> header, including its scheme
-                  and port if present, not a URL path.
-                </p>
-                <p>
-                  A custom <code>server.cors</code> setting replaces Easel's defaults.
-                  This example keeps those origins and adds a custom storefront. Replace
-                  <code>https://www.example.com</code> with your actual origin; add the
-                  non-www origin separately if you use both.
-                </p>
+                <ul class="list-disc space-y-2 pl-5">
+                  <li>
+                    Easel allows myshopify.com, Shopify Admin, and localhost by default.
+                  </li>
+                  <li>
+                    Custom <code>server.cors</code> settings replace those defaults. Keep
+                    them in the list below.
+                  </li>
+                  <li>
+                    Replace <code>https://www.example.com</code> with the request's exact
+                    <code>Origin</code>: scheme, hostname, and port, with no path. Add www
+                    and non-www separately if needed.
+                  </li>
+                </ul>
                 <div
                   class="min-w-0 rounded-md border border-black/8 dark:border-white/14 bg-panel dark:bg-panel-inverse"
                   data-code-block
@@ -1452,16 +1459,18 @@ export default defineConfig({
   },
 });</code></pre>
                 </div>
-                <p>
-                  Restart Vite after changing the config. Do not use
-                  <code>cors: true</code>: it lets any website request your development
-                  source. See
-                  <a
-                    href="https://vite.dev/config/server-options#server-cors"
-                    class="text-inherit underline underline-offset-[0.2em] focus-visible:outline-2 focus-visible:outline-offset-4"
-                    >Vite's CORS guidance</a
-                  >.
-                </p>
+                <ul class="list-disc space-y-2 pl-5">
+                  <li>Restart Vite after changing the config.</li>
+                  <li>
+                    Never use <code>cors: true</code>: it exposes your source to any
+                    website.
+                    <a
+                      href="https://vite.dev/config/server-options#server-cors"
+                      class="text-inherit underline underline-offset-[0.2em] focus-visible:outline-2 focus-visible:outline-offset-4"
+                      >CORS reference</a
+                    >.
+                  </li>
+                </ul>
               </div>
               <div class="flex min-w-0 flex-col gap-3">
                 <h3
@@ -1469,56 +1478,44 @@ export default defineConfig({
                   tabindex="-1"
                   class="scroll-mt-8 font-heading font-bold tracking-normal text-lg/7 text-ink dark:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
                 >
-                  Assets are blocked in the browser or Theme Editor
+                  Browser and Theme Editor access
                 </h3>
-                <p>
-                  CORS does not grant local-network access or make an invalid certificate
-                  trustworthy. If the browser reports a local-network permission error,
-                  check the relevant site's permission and allow access only if you trust
-                  it. See
-                  <a
-                    href="https://developer.chrome.com/blog/local-network-access"
-                    class="text-inherit underline underline-offset-[0.2em] focus-visible:outline-2 focus-visible:outline-offset-4"
-                    >Chrome's Local Network Access guidance</a
-                  >. Do not disable browser security globally.
-                </p>
-                <p>
-                  A remote browser cannot reach your laptop through its own localhost. An
-                  HTTPS development endpoint or tunnel may be needed for your setup. Easel
-                  does not create tunnels and has no <code>tunnel</code> option.
-                </p>
                 <ul class="list-disc space-y-2 pl-5">
                   <li>
-                    For certificate or mixed-content errors, use an endpoint with a valid,
-                    trusted certificate rather than bypassing the warning.
+                    <strong>Local-network error:</strong> check the site's
+                    <a
+                      href="https://developer.chrome.com/blog/local-network-access"
+                      class="text-inherit underline underline-offset-[0.2em] focus-visible:outline-2 focus-visible:outline-offset-4"
+                      >browser permission</a
+                    >. Grant access only to trusted sites.
                   </li>
                   <li>
-                    <code>server.origin</code> tells Easel which development origin to
-                    write into the Liquid loader. It does not start a tunnel or configure
-                    its proxy.
+                    <strong>Certificate or mixed-content error:</strong> use trusted
+                    HTTPS. Do not bypass warnings or disable browser security.
                   </li>
                   <li>
-                    If Vite says a host is not allowed, add only the exact development or
-                    tunnel hostname you control to <code>server.allowedHosts</code>. This
-                    is not the storefront's CORS origin. Do not set it to
-                    <code>true</code>.
+                    <strong>Remote browser:</strong> its localhost is not your laptop. Set
+                    up an external endpoint and set <code>server.origin</code> to its URL.
+                    Easel does not create tunnels.
                   </li>
                   <li>
-                    The endpoint must also proxy WebSockets. Check the browser's WebSocket
-                    connection and the
+                    <strong>Host blocked:</strong> add the exact development hostname you
+                    control to <code>server.allowedHosts</code>, never <code>true</code>.
+                    This differs from the storefront's CORS origin.
+                  </li>
+                  <li>
+                    <strong>HMR disconnected:</strong> proxy WebSockets too. Check
                     <a
                       href="https://vite.dev/config/server-options#server-hmr"
                       class="text-inherit underline underline-offset-[0.2em] focus-visible:outline-2 focus-visible:outline-offset-4"
-                      >Vite HMR settings</a
-                    >
-                    for your installed version. Loading JavaScript successfully does not
-                    prove HMR can connect.
+                      >Vite's HMR settings</a
+                    >.
+                  </li>
+                  <li>
+                    <strong>Public tunnel:</strong> restrict access and stop it when
+                    finished.
                   </li>
                 </ul>
-                <p>
-                  A public tunnel exposes your development server. Use your provider's
-                  access controls and stop the tunnel when you finish.
-                </p>
               </div>
               <div class="flex min-w-0 flex-col gap-3">
                 <h3
@@ -1530,32 +1527,29 @@ export default defineConfig({
                 </h3>
                 <ul class="list-disc space-y-2 pl-5">
                   <li>
-                    JavaScript and CSS updates use Vite HMR. Check that Vite sees the file
-                    change and that the browser's HMR WebSocket is connected. A module
-                    without an HMR handler may cause a full reload instead.
+                    <strong>JavaScript/CSS:</strong> check Vite's terminal and the HMR
+                    WebSocket.
                   </li>
                   <li>
-                    Liquid changes are handled by Shopify CLI. Check its terminal for sync
-                    errors and confirm you are viewing the theme it serves.
+                    <strong>Liquid:</strong> check Shopify CLI for sync errors and confirm
+                    the previewed theme.
                   </li>
                   <li>
-                    Easel's coordinated reload is optional. To use it, run
-                    <code>shopify theme dev --notify .easel/shopify-ready</code> from the
-                    same project root as Vite. If you changed <code>refresh.signal</code>,
-                    use that path for <code>--notify</code>;
-                    <code>refresh: false</code> disables coordination.
+                    <strong>Coordinated reload:</strong> pass
+                    <code>--notify .easel/shopify-ready</code> to Shopify CLI from Vite's
+                    project root. Match any custom <code>refresh.signal</code>;
+                    <code>refresh: false</code> disables it.
                   </li>
                 </ul>
                 <p>
-                  The notification does not replace Vite HMR or Shopify CLI live reload.
-                  See
+                  Coordination is optional. Vite HMR and Shopify CLI live reload work
+                  independently.
                   <a
                     href="#development"
                     @click="navigate"
                     class="text-inherit underline underline-offset-[0.2em] focus-visible:outline-2 focus-visible:outline-offset-4"
-                    >Development</a
-                  >
-                  for the two-terminal workflow.
+                    >Development commands</a
+                  >.
                 </p>
               </div>
               <div class="flex min-w-0 flex-col gap-3">
@@ -1564,28 +1558,34 @@ export default defineConfig({
                   tabindex="-1"
                   class="scroll-mt-8 font-heading font-bold tracking-normal text-lg/7 text-ink dark:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
                 >
-                  A published theme requests localhost
+                  Localhost in a published theme
                 </h3>
-                <p>
-                  The theme likely received a development loader. Stop Vite, run
-                  <code>npm run build</code>, and confirm
-                  <code>snippets/easel-assets.liquid</code> references assets through
-                  <code>asset_url</code>, not <code>/@vite/client</code>, localhost, or a
-                  development tunnel.
-                </p>
-                <p>
-                  Use Shopify CLI to deploy the generated snippet and its matching assets
-                  together to the intended theme. A Git-ignored snippet still needs to be
-                  included in deployment; check any CLI ignore settings or selective
-                  upload flags. Do not run the dev server while preparing a production
-                  deployment. See
-                  <a
-                    href="#production"
-                    @click="navigate"
-                    class="text-inherit underline underline-offset-[0.2em] focus-visible:outline-2 focus-visible:outline-offset-4"
-                    >Production</a
-                  >.
-                </p>
+                <ul class="list-disc space-y-2 pl-5">
+                  <li>Stop Vite before building or deploying.</li>
+                  <li>
+                    After building, check <code>snippets/easel-assets.liquid</code> uses
+                    <code>asset_url</code>, not localhost, <code>/@vite/client</code>, or
+                    a tunnel.
+                  </li>
+                  <li>
+                    Deploy the snippet and matching assets together. Check CLI ignore
+                    rules and upload flags, even though the snippet is Git-ignored.
+                  </li>
+                </ul>
+                <div
+                  class="min-w-0 rounded-md border border-black/8 dark:border-white/14 bg-panel dark:bg-panel-inverse"
+                >
+                  <p id="code-troubleshooting-production" class="px-5 pt-4 text-[13px]/4">
+                    Terminal · stop Vite first, then build and deploy
+                  </p>
+                  <pre
+                    class="min-w-0 max-w-full overflow-x-auto p-5 font-mono text-sm/6 font-normal [tab-size:2] text-ink dark:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
+                    tabindex="0"
+                    role="region"
+                    aria-labelledby="code-troubleshooting-production"
+                  ><code>npm run build
+shopify theme push</code></pre>
+                </div>
               </div>
               <div class="flex min-w-0 flex-col gap-3">
                 <h3
@@ -1593,26 +1593,26 @@ export default defineConfig({
                   tabindex="-1"
                   class="scroll-mt-8 font-heading font-bold tracking-normal text-lg/7 text-ink dark:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
                 >
-                  Easel refuses to overwrite a file or recover a build
+                  Protected writes and recovery
                 </h3>
+                <ul class="list-disc space-y-2 pl-5">
+                  <li>
+                    <strong>Name collision:</strong> preserve the existing file. Choose
+                    another <code>namespace</code> and update the layout's render call.
+                  </li>
+                  <li>
+                    <strong>Lock or interrupted build:</strong> stop competing Easel
+                    processes, then retry. Recovery is automatic; retain errors and files
+                    if it still fails.
+                  </li>
+                  <li>
+                    <strong>Do not delete</strong> <code>assets/</code> or
+                    <code>.easel/</code> to force a build. The ledger and journal support
+                    safe recovery.
+                  </li>
+                </ul>
                 <p>
-                  A file that Easel cannot prove it owns is protected. Read the path in
-                  the error and check whether it belongs to the theme, an app, or another
-                  build tool. Preserve that file; choose a different
-                  <code>namespace</code> and update the layout's render call if the
-                  default name conflicts.
-                </p>
-                <p>
-                  For a publishing lock or interrupted build, first stop any other Easel
-                  processes working on the same theme, then retry the build. Easel
-                  attempts journal recovery automatically. If recovery still fails, keep
-                  the exact error and the affected files for investigation.
-                </p>
-                <p>
-                  Do not empty <code>assets/</code> or delete <code>.easel/</code>, its
-                  ownership ledger, or transaction journal to force a build through. Those
-                  records support safe cleanup and recovery. Easel already handles stale
-                  generated assets; a separate cleanup plugin is not required. See
+                  No separate cleanup plugin is needed.
                   <a
                     href="#safety"
                     @click="navigate"
@@ -1627,35 +1627,35 @@ export default defineConfig({
                   tabindex="-1"
                   class="scroll-mt-8 font-heading font-bold tracking-normal text-lg/7 text-ink dark:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
                 >
-                  Entry files or Vite configuration are rejected
+                  Entry and configuration errors
                 </h3>
-                <p>
-                  Without explicit bundles, use exactly one of <code>src/main.ts</code> or
-                  <code>src/main.js</code>, plus <code>src/style.css</code>. If both
-                  scripts exist, select one explicitly or remove the unintended entry. For
-                  different filenames, a different source directory, or a script-only or
-                  style-only bundle, configure <code>source</code> and
-                  <code>bundles</code> as needed.
-                </p>
-                <p>
-                  Each named bundle needs a script, a style, or both. Provided script
-                  entries must be distinct across bundles. The <code>theme</code> path
-                  must point to your Shopify theme; Vite's root determines the default
-                  project location.
-                </p>
-                <p>
-                  Easel owns its staging directory, manifest, and output naming. Remove
-                  conflicting output overrides such as <code>build.outDir</code> or
-                  <code>build.rollupOptions.output</code> rather than bypassing its safety
-                  checks. Use Easel's <code>theme</code>, <code>bundles</code>, and
-                  <code>namespace</code> options instead. See
-                  <a
-                    href="#configuration"
-                    @click="navigate"
-                    class="text-inherit underline underline-offset-[0.2em] focus-visible:outline-2 focus-visible:outline-offset-4"
-                    >Configuration</a
-                  >.
-                </p>
+                <ul class="list-disc space-y-2 pl-5">
+                  <li>
+                    <strong>Defaults:</strong> <code>src/main.ts</code> or
+                    <code>src/main.js</code>, not both, plus <code>src/style.css</code>.
+                  </li>
+                  <li>
+                    <strong>Custom entries:</strong> set <code>source</code> and
+                    <code>bundles</code>. Each bundle needs a script, style, or both;
+                    script entries must be distinct.
+                  </li>
+                  <li>
+                    <strong>Wrong theme:</strong> check Vite's root and Easel's
+                    <code>theme</code> path.
+                  </li>
+                  <li>
+                    <strong>Output conflicts:</strong> remove overrides such as
+                    <code>build.outDir</code> and <code>build.rollupOptions.output</code>.
+                    Use Easel's
+                    <a
+                      href="#configuration"
+                      @click="navigate"
+                      class="text-inherit underline underline-offset-[0.2em] focus-visible:outline-2 focus-visible:outline-offset-4"
+                      >configuration options</a
+                    >
+                    instead.
+                  </li>
+                </ul>
               </div>
               <div class="flex min-w-0 flex-col gap-3">
                 <h3
@@ -1663,25 +1663,31 @@ export default defineConfig({
                   tabindex="-1"
                   class="scroll-mt-8 font-heading font-bold tracking-normal text-lg/7 text-ink dark:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
                 >
-                  Framework components stop working after a section update
+                  Framework lifecycle issues
                 </h3>
+                <ul class="list-disc space-y-2 pl-5">
+                  <li>
+                    Mount on initial page load and <code>shopify:section:load</code>;
+                    destroy or unmount on <code>shopify:section:unload</code>.
+                  </li>
+                  <li>
+                    Remove global listeners in <code>import.meta.hot.dispose</code> to
+                    prevent duplicates.
+                  </li>
+                  <li>
+                    React needs <code>@vitejs/plugin-react/preamble</code> because Easel
+                    has no Vite HTML entry.
+                  </li>
+                </ul>
                 <p>
-                  The Theme Editor replaces section markup without rerunning the whole
-                  page. Initialize or mount on <code>shopify:section:load</code>, and
-                  destroy or unmount on <code>shopify:section:unload</code>. Remove global
-                  listeners in <code>import.meta.hot.dispose</code> so HMR does not
-                  register duplicate handlers.
-                </p>
-                <p>
-                  React also needs <code>@vitejs/plugin-react/preamble</code> because
-                  Easel does not use a Vite HTML entry. Easel does not mount framework
-                  components for you. Compare your setup with the
+                  Easel does not mount components for you. Copy the lifecycle patterns
+                  from the
                   <a
                     href="#examples"
                     @click="navigate"
                     class="text-inherit underline underline-offset-[0.2em] focus-visible:outline-2 focus-visible:outline-offset-4"
                     >runnable examples</a
-                  >, including their initial page mount and cleanup.
+                  >.
                 </p>
               </div>
               <div class="flex min-w-0 flex-col gap-3">
@@ -1693,9 +1699,8 @@ export default defineConfig({
                   Still stuck?
                 </h3>
                 <p>
-                  Easel supports Node.js 22.12 or later and Vite 7 or 8. Collect the
-                  installed versions from the affected project. If you use pnpm, use
-                  <code>pnpm list</code> in place of <code>npm ls</code>.
+                  Requires Node.js 22.12+ and Vite 7 or 8. With pnpm, replace
+                  <code>npm ls</code> below with <code>pnpm list</code>.
                 </p>
                 <div
                   class="min-w-0 rounded-md border border-black/8 dark:border-white/14 bg-panel dark:bg-panel-inverse"
@@ -1742,23 +1747,25 @@ npm --version
 npm ls vite vite-plugin-shopify-easel --depth=0
 shopify version</code></pre>
                 </div>
-                <p>
-                  <a
-                    href="https://github.com/BillyNoyes/Easel/issues/new"
-                    class="text-inherit underline underline-offset-[0.2em] focus-visible:outline-2 focus-visible:outline-offset-4"
-                    >Open an issue</a
-                  >
-                  with your operating system and browser version, the commands you ran, a
-                  minimal reproduction, a redacted Vite config, and the exact terminal or
-                  browser error. Include whether it happens in a CLI preview, the Theme
-                  Editor, or a deployed theme.
-                </p>
-                <p>
-                  For network failures, include the request's status and origin after
-                  removing sensitive URL parameters. Never attach tokens, cookies,
-                  authorization headers, or an unredacted network export. Keep recovery
-                  files locally unless a specific, reviewed excerpt is needed.
-                </p>
+                <ul class="list-disc space-y-2 pl-5">
+                  <li>
+                    <a
+                      href="https://github.com/BillyNoyes/Easel/issues/new"
+                      class="text-inherit underline underline-offset-[0.2em] focus-visible:outline-2 focus-visible:outline-offset-4"
+                      >Open an issue</a
+                    >
+                    with versions, OS/browser, commands, the exact error, and a minimal
+                    reproduction with redacted config.
+                  </li>
+                  <li>
+                    Say where it fails: CLI preview, Theme Editor, or production. For
+                    failed requests, include the status and origin.
+                  </li>
+                  <li>
+                    Remove tokens, cookies, authorization headers, and sensitive URL
+                    parameters. Do not upload raw network exports or recovery files.
+                  </li>
+                </ul>
               </div>
             </div>
           </section>
