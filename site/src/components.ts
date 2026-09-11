@@ -6,6 +6,7 @@ export function createDocsNavigation(root: HTMLElement) {
     activeSection: '',
     init() {
       const sections = [...root.querySelectorAll<HTMLElement>('main section[id]')];
+      const targets = [...root.querySelectorAll<HTMLElement>('main [id]')];
       const menu = root.querySelector<HTMLDetailsElement>('details');
       const sidebar = root.querySelector('aside');
       const desktop = window.matchMedia('(min-width: 1024px)');
@@ -28,8 +29,9 @@ export function createDocsNavigation(root: HTMLElement) {
         if (frame === undefined) frame = requestAnimationFrame(update);
       };
       const syncHash = () => {
-        const target = sections.find((item) => `#${item.id}` === window.location.hash);
-        if (target) this.activeSection = target.id;
+        const target = targets.find((item) => `#${item.id}` === window.location.hash);
+        const section = target?.closest('section[id]');
+        if (section) this.activeSection = section.id;
         else update();
       };
       const resize = () => {
@@ -66,7 +68,7 @@ export function createDocsNavigation(root: HTMLElement) {
       if (!target) return;
       const menu = root.querySelector<HTMLDetailsElement>('details');
       if (menu) menu.open = false;
-      this.activeSection = target.id;
+      this.activeSection = target.closest('section[id]')?.id ?? target.id;
       if (frame !== undefined) cancelAnimationFrame(frame);
       // Closing the disclosure changes document geometry before native hash navigation.
       frame = requestAnimationFrame(() => {

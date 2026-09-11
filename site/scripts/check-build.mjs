@@ -13,6 +13,7 @@ const sections = [
   'configuration',
   'integrations',
   'safety',
+  'troubleshooting',
   'examples',
 ];
 const pages = new Map([
@@ -145,6 +146,26 @@ for (const [route, html] of pages) {
     for (const id of sections) {
       assert(ids.includes(id), `Preserved section: ${id}`);
       assert.match(html, new RegExp(`activeSection === '${id}' \\? 'location' : null`));
+    }
+    const sidebar = html.match(/<aside\b[^>]*>([\s\S]*?)<\/aside>/)?.[0];
+    assert(sidebar, 'Desktop navigation is present');
+    for (const id of sections) assert(sidebar.includes(`href="#${id}"`));
+    for (const topic of [
+      'assets',
+      'cors',
+      'network',
+      'reload',
+      'production',
+      'ownership',
+      'entries',
+      'frameworks',
+      'report',
+    ]) {
+      const id = `troubleshooting-${topic}`;
+      const heading = tags(html, 'h3').find(([tag]) => attribute(tag, 'id') === id);
+      assert(heading, `Troubleshooting topic: ${topic}`);
+      assert.equal(attribute(heading[0], 'tabindex'), '-1', `${topic}: focusable target`);
+      assert(html.includes(`href="#${id}"`), `${topic}: jump link`);
     }
     const disclosure = html.match(/<details\b[^>]*>([\s\S]*?)<\/details>/)?.[0];
     assert(disclosure, 'Native mobile navigation works without JavaScript');

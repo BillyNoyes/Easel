@@ -126,6 +126,9 @@ function navigation(hash = '#production') {
     getBoundingClientRect() {
       return {top: this.top};
     },
+    closest() {
+      return this;
+    },
     focus() {
       document.activeElement = this;
     },
@@ -134,6 +137,8 @@ function navigation(hash = '#production') {
     },
   });
   const sections = [section('quick-start', 0), section('production', 1000)];
+  const topic = {...section('production-topic', 1100), closest: () => sections[1]};
+  const targets = [...sections, topic];
   const trigger = {
     focus() {
       document.activeElement = this;
@@ -147,11 +152,11 @@ function navigation(hash = '#production') {
   const sidebarLink = {};
   const sidebar = {contains: (element) => element === sidebarLink};
   const root = {
-    querySelectorAll: () => sections,
+    querySelectorAll: (selector) => (selector === 'main [id]' ? targets : sections),
     querySelector(selector) {
       if (selector === 'details') return menu;
       if (selector === 'aside') return sidebar;
-      return sections.find((item) => `#${item.id}` === selector);
+      return targets.find((item) => `#${item.id}` === selector);
     },
   };
   for (const [name, value] of Object.entries({
@@ -176,6 +181,7 @@ function navigation(hash = '#production') {
   return {
     component,
     sections,
+    topic,
     menu,
     trigger,
     sidebarLink,
@@ -250,6 +256,30 @@ test('section selection closes the disclosure and uses the CSS scroll preference
   flush();
   assert.equal(document.activeElement, sections[0]);
   assert.deepEqual(sections[0].scrollOptions, {behavior: 'auto', block: 'start'});
+  component.destroy();
+});
+
+test('topic hashes and history select their parent section', () => {
+  const {component, window} = navigation('#production-topic');
+  assert.equal(component.activeSection, 'production');
+  window.location.hash = '#quick-start';
+  window.dispatchEvent(new Event('hashchange'));
+  assert.equal(component.activeSection, 'quick-start');
+  window.location.hash = '#production-topic';
+  window.dispatchEvent(new Event('hashchange'));
+  assert.equal(component.activeSection, 'production');
+  component.destroy();
+});
+
+test('repeated topic navigation keeps the parent active and focuses the heading', () => {
+  const {component, topic, document, flush} = navigation('#quick-start');
+  for (let attempt = 0; attempt < 2; attempt++) {
+    component.navigate({currentTarget: {hash: '#production-topic'}});
+    flush();
+    assert.equal(component.activeSection, 'production');
+    assert.equal(document.activeElement, topic);
+    assert.deepEqual(topic.scrollOptions, {behavior: 'auto', block: 'start'});
+  }
   component.destroy();
 });
 
