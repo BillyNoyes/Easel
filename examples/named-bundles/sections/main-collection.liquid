@@ -1,0 +1,35 @@
+<section class="page-content" data-collection-filter>
+  <p class="bundle-label">{{ 'collection.bundle' | t }}</p>
+  <h1>{{ collection.title | escape }}</h1>
+  <div>{{ collection.description }}</div>
+  {% paginate collection.products by 24 %}
+    <div class="collection-filter" data-filter-controls hidden>
+      <label for="Filter-{{ section.id }}">{{ 'collection.filter_label' | t }}</label>
+      <input id="Filter-{{ section.id }}" type="search" autocomplete="off" aria-controls="Products-{{ section.id }}">
+      <p>{{ 'collection.filter_hint' | t }}</p>
+    </div>
+    <p role="status" data-filter-status data-count-label="{{ 'collection.count' | t: count: '[count]' | escape }}">{{ 'collection.count' | t: count: collection.products.size }}</p>
+    <ul id="Products-{{ section.id }}" class="collection-products">
+      {% for item in collection.products %}
+        <li class="collection-card" data-product-title="{{ item.title | escape }}">
+          {% render 'product-card', card_product: item %}
+        </li>
+      {% else %}
+        <li>{{ 'collection.empty' | t }}</li>
+      {% endfor %}
+    </ul>
+    {% if paginate.pages > 1 %}
+      <nav class="collection-pagination" aria-label="{{ 'collection.pagination' | t }}">
+        {{ paginate | default_pagination }}
+      </nav>
+    {% endif %}
+  {% endpaginate %}
+</section>
+
+{% schema %}
+{
+  "name": "t:sections.collection.name",
+  "enabled_on": {"templates": ["collection"]},
+  "settings": []
+}
+{% endschema %}

@@ -1,0 +1,25 @@
+:root {
+  color: var(--theme-foreground);
+  background: var(--theme-background);
+  font-family: system-ui, sans-serif;
+}
+
+body {
+  margin: 0;
+}
+
+.skip-link {
+  position: absolute;
+  transform: translateY(-200%);
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+.hero,
+.not-found {
+  margin-inline: auto;
+  max-width: 64rem;
+  padding: 4rem 1.5rem;
+}

@@ -1,0 +1,28 @@
+<section class="page">
+  <h1>{{ blog.title | escape }}</h1>
+  {% paginate blog.articles by 12 %}
+    {% if blog.articles_count > 0 %}
+      <ul class="resource-list" role="list">
+        {% for article in blog.articles %}
+          <li>
+            <article class="card">
+              <h2><a href="{{ article.url }}">{{ article.title | escape }}</a></h2>
+              <p>{{ article.published_at | time_tag: format: 'date' }}</p>
+              {% if article.excerpt != blank %}<div class="rte">{{ article.excerpt }}</div>{% endif %}
+            </article>
+          </li>
+        {% endfor %}
+      </ul>
+      {{ paginate | default_pagination }}
+    {% else %}
+      <p>{{ 'blog.empty' | t }}</p>
+    {% endif %}
+  {% endpaginate %}
+</section>
+
+{% schema %}
+{
+  "name": "t:sections.main_blog.name",
+  "settings": []
+}
+{% endschema %}

@@ -1,0 +1,36 @@
+name: Feature request
+description: Propose a focused improvement to Easel
+title: '[Feature]: '
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What Shopify theme-development problem should Easel solve?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behavior
+      description: Describe the smallest useful interface or workflow.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Explain how this is handled with Vite, Shopify CLI, or existing Easel configuration today.
+  - type: dropdown
+    id: surface
+    attributes:
+      label: Relevant surface
+      options:
+        - Vite plugin
+        - Theme generator
+        - Documentation
+        - Example themes
+        - Release tooling
+    validations:
+      required: true

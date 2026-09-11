@@ -1,0 +1,25 @@
+<section class="page">
+  <header>
+    <h1>{{ collection.title | escape }}</h1>
+    {% if collection.description != blank %}<div class="rte">{{ collection.description }}</div>{% endif %}
+  </header>
+  {% paginate collection.products by 24 %}
+    {% if collection.products_count > 0 %}
+      <div class="resource-grid">
+        {% for product in collection.products %}
+          {% render 'product-card', product: product %}
+        {% endfor %}
+      </div>
+      {{ paginate | default_pagination }}
+    {% else %}
+      <p>{{ 'collection.empty' | t }}</p>
+    {% endif %}
+  {% endpaginate %}
+</section>
+
+{% schema %}
+{
+  "name": "t:sections.main_collection.name",
+  "settings": []
+}
+{% endschema %}

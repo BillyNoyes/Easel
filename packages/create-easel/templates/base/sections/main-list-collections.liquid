@@ -1,0 +1,27 @@
+<section class="page">
+  <h1>{{ 'collections.title' | t }}</h1>
+  {% paginate collections by 24 %}
+    <div class="resource-grid">
+      {% for collection in collections %}
+        <article class="card">
+          <a href="{{ collection.url }}">
+            {% if collection.featured_image %}
+              {{ collection.featured_image | image_url: width: 720 | image_tag: loading: 'lazy', widths: '240, 360, 540, 720', sizes: '(min-width: 64rem) 20rem, 50vw', alt: collection.featured_image.alt | default: collection.title }}
+            {% endif %}
+            <h2>{{ collection.title | escape }}</h2>
+          </a>
+        </article>
+      {% else %}
+        <p>{{ 'collections.empty' | t }}</p>
+      {% endfor %}
+    </div>
+    {{ paginate | default_pagination }}
+  {% endpaginate %}
+</section>
+
+{% schema %}
+{
+  "name": "t:sections.main_list_collections.name",
+  "settings": []
+}
+{% endschema %}

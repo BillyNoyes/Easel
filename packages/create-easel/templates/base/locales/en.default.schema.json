@@ -1,0 +1,51 @@
+{
+  "general": {
+    "not_found_name": "404 page"
+  },
+  "sections": {
+    "contact_form": {
+      "name": "Contact form"
+    },
+    "hero": {
+      "name": "Hero",
+      "heading": "Heading",
+      "default_heading": "__THEME_NAME__",
+      "text": "Text",
+      "default_text": "<p>Build the storefront experience here.</p>"
+    },
+    "main_article": {
+      "name": "Article"
+    },
+    "main_blog": {
+      "name": "Blog"
+    },
+    "main_cart": {
+      "name": "Cart"
+    },
+    "main_collection": {
+      "name": "Collection"
+    },
+    "main_list_collections": {
+      "name": "Collection list"
+    },
+    "main_page": {
+      "name": "Page"
+    },
+    "main_password": {
+      "name": "Password page"
+    },
+    "main_product": {
+      "name": "Product"
+    },
+    "main_search": {
+      "name": "Search"
+    }
+  },
+  "settings": {
+    "colors": {
+      "name": "Colors",
+      "background": "Background",
+      "foreground": "Foreground"
+    }
+  }
+}

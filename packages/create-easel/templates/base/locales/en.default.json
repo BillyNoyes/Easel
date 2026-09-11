@@ -1,0 +1,66 @@
+{
+  "accessibility": {
+    "skip_to_content": "Skip to content"
+  },
+  "article": {
+    "back_to_blog": "Back to {{ blog }}"
+  },
+  "blog": {
+    "empty": "No articles found."
+  },
+  "cart": {
+    "title": "Cart",
+    "empty": "Your cart is empty.",
+    "continue_shopping": "Continue shopping",
+    "quantity": "Quantity",
+    "subtotal": "Subtotal",
+    "update": "Update cart",
+    "checkout": "Checkout"
+  },
+  "collection": {
+    "empty": "No products found."
+  },
+  "collections": {
+    "title": "Collections",
+    "empty": "No collections found."
+  },
+  "contact": {
+    "title": "Contact us",
+    "success": "Thanks for contacting us. We'll get back to you soon.",
+    "name": "Name",
+    "email": "Email",
+    "phone": "Phone number",
+    "message": "Message",
+    "send": "Send"
+  },
+  "general": {
+    "not_found": "Page not found",
+    "return_home": "Return home",
+    "counter": {
+      "decrease": "Decrease count",
+      "increase": "Increase count"
+    }
+  },
+  "gift_card": {
+    "disabled": "This gift card is disabled.",
+    "expired": "This gift card has expired.",
+    "expires_on": "Expires {{ date }}.",
+    "code": "Gift card code",
+    "continue_shopping": "Continue shopping"
+  },
+  "password": {
+    "password": "Store password",
+    "enter": "Enter store"
+  },
+  "product": {
+    "add_to_cart": "Add to cart",
+    "sold_out": "Sold out"
+  },
+  "search": {
+    "title": "Search",
+    "label": "Search the store",
+    "submit": "Search",
+    "results": "{{ count }} results for “{{ terms }}”",
+    "empty": "No results found."
+  }
+}

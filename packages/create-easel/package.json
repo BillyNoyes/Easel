@@ -1,0 +1,64 @@
+{
+  "name": "create-easel-theme",
+  "version": "0.2.1",
+  "description": "Scaffold a Shopify Liquid theme with Vite, Easel, and optional Alpine, React, Vue, or Tailwind CSS",
+  "type": "module",
+  "license": "MIT",
+  "author": {
+    "name": "Billy Noyes",
+    "url": "https://billynoyes.co.uk/"
+  },
+  "keywords": [
+    "create",
+    "scaffold",
+    "generator",
+    "shopify",
+    "shopify-theme",
+    "shopify-liquid",
+    "liquid",
+    "theme-development",
+    "storefront",
+    "vite",
+    "tailwindcss",
+    "alpinejs",
+    "react",
+    "vue"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BillyNoyes/Easel.git",
+    "directory": "packages/create-easel"
+  },
+  "homepage": "https://easel.billynoyes.co.uk/",
+  "bugs": "https://github.com/BillyNoyes/Easel/issues",
+  "bin": {
+    "create-easel-theme": "bin/create-easel-theme.mjs"
+  },
+  "files": [
+    "bin",
+    "dist"
+  ],
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "scripts": {
+    "build": "tsup src/cli.ts --format esm --target node22 --clean && node scripts/build-templates.mjs",
+    "check": "tsc --noEmit",
+    "prepack": "pnpm build",
+    "prepublishOnly": "pnpm --dir ../.. check"
+  },
+  "dependencies": {
+    "@clack/prompts": "1.8.0",
+    "cross-spawn": "7.0.6"
+  },
+  "devDependencies": {
+    "@types/cross-spawn": "6.0.6",
+    "@types/node": "^24.0.0",
+    "tsup": "^8.5.0",
+    "typescript": "^5.9.0"
+  }
+}

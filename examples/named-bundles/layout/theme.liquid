@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="canonical" href="{{ canonical_url }}">
+    <link rel="icon" href="{{ 'easel.svg' | asset_url }}" type="image/svg+xml">
+    <title>{{ page_title }}{% unless page_title contains shop.name %} — {{ shop.name }}{% endunless %}</title>
+    <style>
+      :root { --theme-background: {{ settings.background }}; --theme-foreground: {{ settings.foreground }}; }
+    </style>
+    {% render 'easel-assets', entry: 'theme' %}
+    {% case request.page_type %}
+      {% when 'product' %}
+        {% render 'easel-assets', entry: 'product' %}
+      {% when 'collection' %}
+        {% render 'easel-assets', entry: 'collection' %}
+    {% endcase %}
+    {{ content_for_header }}
+  </head>
+  <body>
+    <a class="skip-link" href="#MainContent">{{ 'accessibility.skip_to_content' | t }}</a>
+    <header class="site-header">
+      <a href="{{ routes.root_url }}">{{ 'general.example_name' | t }}</a>
+      <nav aria-label="{{ 'general.navigation' | t }}">
+        <a href="{{ routes.all_products_collection_url }}">{{ 'general.browse_products' | t }}</a>
+      </nav>
+    </header>
+    <main id="MainContent" tabindex="-1">{{ content_for_layout }}</main>
+    <footer class="site-footer">
+      <p data-shared-status data-loaded-label="{{ 'general.shared_loaded' | t | escape }}">{{ 'general.shared_fallback' | t }}</p>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,28 @@
+<section class="page-content product-page">
+  <div>
+    {% if product.featured_image %}
+      {{ product.featured_image | image_url: width: 1000 | image_tag: class: 'product-page__image', widths: '400, 700, 1000', sizes: '(min-width: 768px) 50vw, 100vw' }}
+    {% endif %}
+  </div>
+  <div>
+    <p class="bundle-label">{{ 'product.bundle' | t }}</p>
+    <h1>{{ product.title | escape }}</h1>
+    <p>{{ product.price | money }}</p>
+    <div>{{ product.description }}</div>
+    <div class="quantity-demo" data-quantity-demo>
+      <label for="Quantity-{{ section.id }}">{{ 'product.quantity' | t }}</label>
+      <button type="button" data-step="-1" aria-label="{{ 'product.decrease' | t }}" hidden>−</button>
+      <input id="Quantity-{{ section.id }}" type="number" min="1" max="99" step="1" value="1" inputmode="numeric">
+      <button type="button" data-step="1" aria-label="{{ 'product.increase' | t }}" hidden>+</button>
+    </div>
+    <p>{{ 'product.demo_notice' | t }}</p>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "t:sections.product.name",
+  "enabled_on": {"templates": ["product"]},
+  "settings": []
+}
+{% endschema %}

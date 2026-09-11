@@ -1,0 +1,30 @@
+<section class="hero">
+  <h1>{{ section.settings.heading }}</h1>
+  <div>{{ section.settings.text }}</div>
+  <div data-easel-app></div>
+</section>
+
+{% schema %}
+{
+  "name": "t:sections.hero.name",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:sections.hero.heading",
+      "default": "t:sections.hero.default_heading"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "t:sections.hero.text",
+      "default": "t:sections.hero.default_text"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.hero.name"
+    }
+  ]
+}
+{% endschema %}

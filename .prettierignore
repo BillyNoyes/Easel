@@ -1,0 +1,7 @@
+dist/
+.easel/
+node_modules/
+**/node_modules/
+**/assets/easel-*
+**/snippets/easel-assets.liquid
+site/public/llms.txt

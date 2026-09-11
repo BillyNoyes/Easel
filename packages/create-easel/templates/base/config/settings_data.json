@@ -1,0 +1,12 @@
+{
+  "current": {
+    "background": "#f5f2eb",
+    "foreground": "#171714"
+  },
+  "presets": {
+    "Default": {
+      "background": "#f5f2eb",
+      "foreground": "#171714"
+    }
+  }
+}

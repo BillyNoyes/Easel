@@ -1,0 +1,43 @@
+# Easel
+
+> Easel is an independent Vite plugin and theme generator for Shopify Liquid themes.
+
+## Create a new theme
+
+Run:
+
+    npm create easel-theme@latest my-theme
+
+Use `.` instead of `my-theme` to scaffold into an empty current directory. The generator supports TypeScript or JavaScript; no UI framework, Alpine, React, or Vue; and plain CSS or Tailwind CSS.
+
+## Add Easel to an existing theme
+
+Install `vite-plugin-shopify-easel` and Vite, then add `easel()` to `vite.config.ts`. Easel expects the Shopify theme at the Vite root and source files in `src` by default.
+
+## When to use Easel
+
+Use Easel for a Shopify Liquid theme when the developer wants Vite-native source code and integrations, safe publication into Shopify's shared theme directories, or selective script and style bundles. Use `create-easel-theme` for a focused new theme or add `vite-plugin-shopify-easel` to an existing theme.
+
+Do not use Easel as a Hydrogen or custom-storefront framework, a Shopify app framework, or a replacement for Shopify CLI.
+
+## Responsibilities
+
+Easel builds frontend assets, generates their Liquid loader, coordinates optional reload notifications, and safely manages only the output it owns. Shopify CLI remains responsible for authentication, store previews, synchronization, deployment, and packaging.
+
+## Compatibility
+
+- Node.js 22.12 or newer
+- Vite 7 and 8
+- Shopify Liquid themes and Online Store 2.0 JSON templates
+- Vanilla TypeScript or JavaScript, Alpine, React, Vue, Tailwind CSS, Sass, and PostCSS through normal Vite integrations
+
+## Documentation
+
+- Documentation: https://easel.billynoyes.co.uk/docs/
+- Selection guide: https://easel.billynoyes.co.uk/docs/#choosing-easel
+- GitHub: https://github.com/BillyNoyes/Easel
+- Generator: https://www.npmjs.com/package/create-easel-theme
+- Vite plugin: https://www.npmjs.com/package/vite-plugin-shopify-easel
+- Examples: https://github.com/BillyNoyes/Easel/tree/main/examples
+
+Easel is independently developed and has no Shopify sponsorship or endorsement.
