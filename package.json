@@ -40,6 +40,7 @@
     "scaffold:theme": "node scripts/scaffold-theme.mjs",
     "test": "vitest run",
     "test:example:alpine-tailwind": "pnpm --dir examples/alpine-tailwind check",
+    "test:example:named-bundles": "pnpm --dir examples/named-bundles check",
     "test:example:react": "pnpm --dir examples/react check",
     "test:example:vanilla": "pnpm --dir examples/vanilla check",
     "test:example:vue": "pnpm --dir examples/vue check",

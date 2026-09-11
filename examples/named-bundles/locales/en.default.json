@@ -1,0 +1,29 @@
+{
+  "accessibility": {"skip_to_content": "Skip to content"},
+  "general": {
+    "not_found": "Page not found",
+    "return_home": "Return home",
+    "example_name": "Easel Named Bundles",
+    "navigation": "Main navigation",
+    "browse_products": "Browse products",
+    "add_products": "Add products to your development store to try the product and collection pages.",
+    "home_bundle": "Entry: theme",
+    "shared_fallback": "Shared theme styles",
+    "shared_loaded": "Shared theme TypeScript and CSS loaded."
+  },
+  "product": {
+    "bundle": "Entries: theme + product",
+    "quantity": "Quantity",
+    "decrease": "Decrease quantity",
+    "increase": "Increase quantity",
+    "demo_notice": "These quantity controls demonstrate the product bundle. This example does not include a cart or checkout."
+  },
+  "collection": {
+    "bundle": "Entries: theme + collection",
+    "filter_label": "Filter products by title",
+    "filter_hint": "Filters only the products on this page. Clear the field to show them all.",
+    "count": "Products shown: {{ count }}",
+    "empty": "This collection has no products.",
+    "pagination": "Collection pages"
+  }
+}

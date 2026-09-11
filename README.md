@@ -145,6 +145,8 @@ Shopify CLI remains responsible for authentication, previews, synchronization, p
 
 • [`examples/vanilla`](examples/vanilla) for TypeScript and CSS
 
+• [`examples/named-bundles`](examples/named-bundles) for separate product and collection entries
+
 • [`examples/alpine-tailwind`](examples/alpine-tailwind) for Alpine.js and Tailwind CSS
 
 • [`examples/react`](examples/react) for React inside Liquid sections
