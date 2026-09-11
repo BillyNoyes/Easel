@@ -4,6 +4,7 @@ const typescriptFiles = [
   'src/**/*.ts',
   'test/**/*.ts',
   'site/src/**/*.ts',
+  'packages/create-shopify-easel/src/**/*.ts',
   'site/vite.config.ts',
 ];
 

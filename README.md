@@ -14,6 +14,19 @@ pnpm add -D vite-plugin-shopify-easel vite
 
 Easel requires Node.js 22.12 or newer and supports Vite 7 and 8.
 
+## Create a theme
+
+The [Clack-based scaffolder](packages/create-shopify-easel) creates a theme with TypeScript or JavaScript, optional Alpine, React or Vue, and plain CSS or Tailwind.
+
+It is not published to npm yet. From a checkout of this repository:
+
+```sh
+pnpm install
+pnpm create:theme ../my-theme
+```
+
+Use `--yes --no-install` for a non-interactive starter, or see the package README for all flags. Shopify CLI remains separate.
+
 ## Start
 
 Keep the Shopify theme at the project root and place source files in `src`.
@@ -153,7 +166,7 @@ Shopify CLI remains responsible for authentication, previews, synchronization, p
 
 • [`examples/vue`](examples/vue) for Vue single file components inside Liquid sections
 
-Each example includes Shopify Theme Editor lifecycle handling, passes CI, and has been tested against a real Shopify development store.
+Each example includes Shopify Theme Editor lifecycle handling and automated build checks.
 
 ## License
 

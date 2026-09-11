@@ -1,0 +1,9 @@
+{% doc %}
+  Disabled fallback buttons become interactive when Alpine initializes this section.
+{% enddoc %}
+
+<div class="counter" x-data="easelCounter">
+  <button type="button" aria-label="{{ 'general.counter.decrease' | t | escape }}" disabled :disabled="false" @click="count -= 1">−</button>
+  <output x-text="count">0</output>
+  <button type="button" aria-label="{{ 'general.counter.increase' | t | escape }}" disabled :disabled="false" @click="count += 1">+</button>
+</div>

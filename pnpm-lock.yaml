@@ -125,6 +125,28 @@ importers:
         specifier: 3.3.11
         version: 3.3.11(typescript@5.9.3)
 
+  packages/create-shopify-easel:
+    dependencies:
+      '@clack/prompts':
+        specifier: 1.8.0
+        version: 1.8.0
+      cross-spawn:
+        specifier: 7.0.6
+        version: 7.0.6
+    devDependencies:
+      '@types/cross-spawn':
+        specifier: 6.0.6
+        version: 6.0.6
+      '@types/node':
+        specifier: ^24.0.0
+        version: 24.13.3
+      tsup:
+        specifier: ^8.5.0
+        version: 8.5.1(jiti@2.7.0)(postcss@8.5.27)(typescript@5.9.3)
+      typescript:
+        specifier: ^5.9.0
+        version: 5.9.3
+
   site:
     dependencies:
       alpinejs:
@@ -176,6 +198,22 @@ packages:
         integrity: sha512-Vj1jF3cPfxg7OAfoI7QnVKLoILlm2JF9pnVHrX8qx7AHMiYWT+NDAA7jChlNgRS4WTLc/fD1lXLmPixluj+3Gg==,
       }
     engines: {node: '>=6.9.0'}
+
+  '@clack/core@1.5.0':
+    resolution:
+      {
+        integrity: sha512-zNikCcd8BbcEvzzG1sbXFrRHFk5kHPrpwZwksPvf9qyQO1Teb7JaXaOAxXZei9nZLDW0gaZawiuTCji88bTBhw==,
+        tarball: https://registry.npmjs.org/@clack/core/-/core-1.5.0.tgz,
+      }
+    engines: {node: '>= 20.12.0'}
+
+  '@clack/prompts@1.8.0':
+    resolution:
+      {
+        integrity: sha512-PXzLZ8N34rxmuo4dJg3xtOXhcBse94qGjDqsteoEYrFrrZ5FSjIGwMAuOcv64ln8rHVBBD06XeVGr+/JX+plcA==,
+        tarball: https://registry.npmjs.org/@clack/prompts/-/prompts-1.8.0.tgz,
+      }
+    engines: {node: '>= 20.12.0'}
 
   '@esbuild/aix-ppc64@0.27.7':
     resolution:
@@ -1037,6 +1075,13 @@ packages:
         integrity: sha512-Mw558oeA9fFbv65/y4mHtXDs9bPnFMZAL/jxdPFUpOHHIXX91mcgEHbS5Lahr+pwZFR8A7GQleRWeI6cGFC2UA==,
       }
 
+  '@types/cross-spawn@6.0.6':
+    resolution:
+      {
+        integrity: sha512-fXRhhUkG4H3TQk5dBhQ7m/JDdSNHKwR2BBia62lhwEIq9xGiQKLxd6LymNhn47SjXhsUEPmxi+PKw2OkW4LLjA==,
+        tarball: https://registry.npmjs.org/@types/cross-spawn/-/cross-spawn-6.0.6.tgz,
+      }
+
   '@types/deep-eql@4.0.2':
     resolution:
       {
@@ -1621,6 +1666,27 @@ packages:
     resolution:
       {
         integrity: sha512-DCXu6Ifhqcks7TZKY3Hxp3y6qphY5SJZmrWMDrKcERSOXWQdMhU9Ig/PYrzyw/ul9jOIyh0N4M0tbC5hodg8dw==,
+      }
+
+  fast-string-truncated-width@3.0.3:
+    resolution:
+      {
+        integrity: sha512-0jjjIEL6+0jag3l2XWWizO64/aZVtpiGE3t0Zgqxv0DPuxiMjvB3M24fCyhZUO4KomJQPj3LTSUnDP3GpdwC0g==,
+        tarball: https://registry.npmjs.org/fast-string-truncated-width/-/fast-string-truncated-width-3.0.3.tgz,
+      }
+
+  fast-string-width@3.0.2:
+    resolution:
+      {
+        integrity: sha512-gX8LrtNEI5hq8DVUfRQMbr5lpaS4nMIWV+7XEbXk2b8kiQIizgnlr12B4dA3ZEx3308ze0O4Q1R+cHts8kyUJg==,
+        tarball: https://registry.npmjs.org/fast-string-width/-/fast-string-width-3.0.2.tgz,
+      }
+
+  fast-wrap-ansi@0.2.2:
+    resolution:
+      {
+        integrity: sha512-7F2Fl+TjRSenLqlU3UjSH0iyqopqoZIu7eZVpEirP2g1GtWa2G/ecEmBdgz31+Mxr+ELclgg6sokpSFIQiZ02Q==,
+        tarball: https://registry.npmjs.org/fast-wrap-ansi/-/fast-wrap-ansi-0.2.2.tgz,
       }
 
   fdir@6.5.0:
@@ -2281,6 +2347,13 @@ packages:
         integrity: sha512-ybx0WO1/8bSBLEWXZvEd7gMW3Sn3JFlW3TvX1nREbDLRNQNaeNN8WK0meBwPdAaOI7TtRRRJn/Es1zhrrCHu7g==,
       }
 
+  sisteransi@1.0.5:
+    resolution:
+      {
+        integrity: sha512-bLGGlR1QxBcynn2d5YmDX4MGjlZvy2MRBDRNHLJ8VI6l6+9FUiyTFNJ0IveOSP0bcXgVDPRcfGqA0pjaqUpfVg==,
+        tarball: https://registry.npmjs.org/sisteransi/-/sisteransi-1.0.5.tgz,
+      }
+
   source-map-js@1.2.1:
     resolution:
       {
@@ -2620,6 +2693,18 @@ snapshots:
     dependencies:
       '@babel/helper-string-parser': 7.29.7
       '@babel/helper-validator-identifier': 7.29.7
+
+  '@clack/core@1.5.0':
+    dependencies:
+      fast-wrap-ansi: 0.2.2
+      sisteransi: 1.0.5
+
+  '@clack/prompts@1.8.0':
+    dependencies:
+      '@clack/core': 1.5.0
+      fast-string-width: 3.0.2
+      fast-wrap-ansi: 0.2.2
+      sisteransi: 1.0.5
 
   '@esbuild/aix-ppc64@0.27.7':
     optional: true
@@ -2967,6 +3052,10 @@ snapshots:
     dependencies:
       '@types/deep-eql': 4.0.2
       assertion-error: 2.0.1
+
+  '@types/cross-spawn@6.0.6':
+    dependencies:
+      '@types/node': 24.13.3
 
   '@types/deep-eql@4.0.2': {}
 
@@ -3393,6 +3482,16 @@ snapshots:
 
   fast-levenshtein@2.0.6: {}
 
+  fast-string-truncated-width@3.0.3: {}
+
+  fast-string-width@3.0.2:
+    dependencies:
+      fast-string-truncated-width: 3.0.3
+
+  fast-wrap-ansi@0.2.2:
+    dependencies:
+      fast-string-width: 3.0.2
+
   fdir@6.5.0(picomatch@4.0.7):
     optionalDependencies:
       picomatch: 4.0.7
@@ -3733,6 +3832,8 @@ snapshots:
   shebang-regex@3.0.0: {}
 
   siginfo@2.0.0: {}
+
+  sisteransi@1.0.5: {}
 
   source-map-js@1.2.1: {}
 

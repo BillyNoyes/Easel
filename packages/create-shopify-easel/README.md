@@ -1,0 +1,75 @@
+# create-shopify-easel
+
+Create a focused Shopify Liquid theme with Easel, Vite, and your choice of tools. The interactive UI uses [Clack](https://github.com/bombshell-dev/clack).
+
+**Not published to npm yet.** Run it from a checkout of the Easel repository:
+
+```sh
+pnpm install
+pnpm create:theme ../my-theme
+```
+
+Once this package is published, the equivalent commands will be `npm create shopify-easel@latest my-theme` or `npx create-shopify-easel@latest my-theme`. A prerelease published under `beta` will require `@beta` instead of `@latest`.
+
+## Choices
+
+- TypeScript (default) or JavaScript.
+- No UI framework (default), Alpine, React, or Vue.
+- Plain CSS (default) or Tailwind CSS.
+- Optional dependency installation using npm, pnpm, Yarn, or Bun. The manager is detected from the invoking package manager; use `--package-manager` to override it.
+
+The output is a standalone project using the published `vite-plugin-shopify-easel` package. It does not depend on this repository or on the scaffolder at runtime. The current templates target Easel `0.1.0-beta.1` and require Node.js 22.12.0 or newer.
+
+The starter includes a homepage counter, a 404 page, theme settings, and translations. It is deliberately not a complete commerce theme. Framework integrations use their official Vite plugins where applicable, and include Theme Editor initialization and cleanup. React includes its development preamble.
+
+## Non-interactive use
+
+```sh
+pnpm create:theme ../my-theme --yes --language ts --framework vue --tailwind --no-install
+```
+
+Flags:
+
+| Flag                                     | Behaviour                                                         |
+| ---------------------------------------- | ----------------------------------------------------------------- |
+| `--language ts\|js`                      | Select the source language.                                       |
+| `--framework none\|alpine\|react\|vue`   | Select UI tools.                                                  |
+| `--tailwind` / `--no-tailwind`           | Enable or disable Tailwind.                                       |
+| `--name "My Theme"`                      | Set the theme display name; otherwise derived from the directory. |
+| `--package-manager npm\|pnpm\|yarn\|bun` | Override package-manager detection.                               |
+| `--install` / `--no-install`             | Enable or disable dependency installation.                        |
+| `--yes`, `-y`                            | Skip prompts and use defaults for unspecified options.            |
+| `--no-interactive`                       | Disable prompts explicitly.                                       |
+| `--help`, `-h`                           | Show usage.                                                       |
+| `--version`, `-v`                        | Show the CLI version.                                             |
+
+Without an interactive terminal, or in CI, a directory is required, prompts are skipped, and dependencies are installed **only** when `--install` is supplied. `--yes` does not imply installation. Dependency installation can execute package lifecycle scripts; use `--no-install` to inspect the project first.
+
+## Safety and ownership
+
+- Existing directories are rejected, including empty directories and symlinks. There is no overwrite or force option.
+- All questions are answered before writing the theme. Cancelling a prompt exits with code 130 without creating it.
+- A generation error removes only the new target directory. Newly created parent directories can remain.
+- Installation failure or interruption keeps the theme and prints retry instructions. Failures return a nonzero exit code.
+- The CLI does not authenticate with Shopify, create stores, push themes, initialize Git, or change global package-manager configuration.
+- The CLI invokes the selected package manager directly, without interpolating the destination into a shell command. pnpm installation uses `--ignore-workspace` to avoid installing into an unrelated ancestor workspace.
+
+After generation, normal Vite commands and Shopify CLI take over. Easel does not wrap either tool. Stop development before building and deploy the generated Liquid loader alongside its matching assets.
+
+## Development
+
+From the repository root:
+
+```sh
+pnpm --dir packages/create-shopify-easel build
+pnpm --dir packages/create-shopify-easel check
+pnpm test
+pnpm build
+pnpm test:package
+```
+
+The CLI is TypeScript bundled with tsup. One base theme is composed with small framework overlays; Tailwind changes the generated config and CSS. JavaScript templates are derived from the TypeScript sources at build time rather than maintained as duplicate themes. The Vue component uses runtime props declarations so both script languages share its implementation.
+
+`test/create.test.js` covers generation, validation, filesystem safety, automation, and installation failure. The package smoke test installs the actual tarball, exercises the npm executable, and installs and checks all 16 language/framework/styling combinations outside the repository. `pnpm test:theme-check` also validates the generated Liquid variants.
+
+Publishing this package is separate from publishing the Vite plugin. No scaffolder release workflow or npm trusted publisher is configured yet; see the repository's `RELEASING.md` for the current release boundary.

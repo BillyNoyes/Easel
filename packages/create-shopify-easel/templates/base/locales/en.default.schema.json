@@ -1,0 +1,21 @@
+{
+  "general": {
+    "not_found_name": "404 page"
+  },
+  "sections": {
+    "hero": {
+      "name": "Hero",
+      "heading": "Heading",
+      "default_heading": "__THEME_NAME__",
+      "text": "Text",
+      "default_text": "<p>Build the storefront experience here.</p>"
+    }
+  },
+  "settings": {
+    "colors": {
+      "name": "Colors",
+      "background": "Background",
+      "foreground": "Foreground"
+    }
+  }
+}
