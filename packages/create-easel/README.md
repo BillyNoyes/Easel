@@ -1,6 +1,8 @@
-# create-shopify-easel
+# create-easel
 
 Create a focused Shopify Liquid theme with Easel, Vite, and your choice of tools. The interactive UI uses [Clack](https://github.com/bombshell-dev/clack).
+
+Easel is a personal project by Billy Noyes, a Shopify employee. It is not an official Shopify product.
 
 **Not published to npm yet.** Run it from a checkout of the Easel repository:
 
@@ -9,7 +11,7 @@ pnpm install
 pnpm create:theme ../my-theme
 ```
 
-Once this package is published, the equivalent commands will be `npm create shopify-easel@latest my-theme` or `npx create-shopify-easel@latest my-theme`. A prerelease published under `beta` will require `@beta` instead of `@latest`.
+Once a stable version is published, the equivalent commands will be `npm create easel@latest my-theme` or `npx create-easel@latest my-theme`. A prerelease published under `beta` will require `@beta` instead of `@latest`.
 
 ## Use the current directory
 
@@ -18,10 +20,10 @@ Pass `.` as the directory, or enter `.` at the directory prompt. The theme is cr
 Until npm publication, run the built CLI from your desired folder:
 
 ```sh
-node /path/to/Easel/packages/create-shopify-easel/bin/create-shopify-easel.mjs .
+node /path/to/Easel/packages/create-easel/bin/create-easel.mjs .
 ```
 
-Build it in the checkout first with `pnpm --dir /path/to/Easel/packages/create-shopify-easel build`. Invoke the executable directly so `.` refers to your folder rather than the Easel checkout. Once published, `npm create shopify-easel@latest .` will do the same.
+Build it in the checkout first with `pnpm --dir /path/to/Easel/packages/create-easel build`. Invoke the executable directly so `.` refers to your folder rather than the Easel checkout. Once a stable version is published, `npm create easel@latest .` will do the same.
 
 Existing folders must be empty apart from `.git` and `.DS_Store`, which are preserved. Existing project files, including a README or `.gitignore`, are not overwritten or merged.
 
@@ -75,8 +77,8 @@ After generation, normal Vite commands and Shopify CLI take over. Easel does not
 From the repository root:
 
 ```sh
-pnpm --dir packages/create-shopify-easel build
-pnpm --dir packages/create-shopify-easel check
+pnpm --dir packages/create-easel build
+pnpm --dir packages/create-easel check
 pnpm test
 pnpm build
 pnpm test:package

@@ -13,19 +13,19 @@ import {
 import {tmpdir} from 'node:os';
 import {join, resolve} from 'node:path';
 import {afterEach, describe, expect, it} from 'vitest';
-import {generateTheme} from '../packages/create-shopify-easel/src/generate.ts';
+import {generateTheme} from '../packages/create-easel/src/generate.ts';
 import {
   defaultName,
   detectPackageManager,
   parseArguments,
   packageNameFor,
-} from '../packages/create-shopify-easel/src/options.ts';
+} from '../packages/create-easel/src/options.ts';
 import {
   changeDirectoryCommand,
   installArguments,
-} from '../packages/create-shopify-easel/src/install.ts';
+} from '../packages/create-easel/src/install.ts';
 
-const cli = resolve('packages/create-shopify-easel/bin/create-shopify-easel.mjs');
+const cli = resolve('packages/create-easel/bin/create-easel.mjs');
 const temporary = [];
 function directory() {
   const path = mkdtempSync(join(tmpdir(), 'easel-create-test-'));
@@ -276,7 +276,10 @@ describe('CLI arguments and automation', () => {
   });
   it('prints help and version without generating files', () => {
     const cwd = directory();
-    expect(run(['--help'], {cwd}).stdout).toContain('--no-interactive');
+    const help = run(['--help'], {cwd});
+    expect(help.status).toBe(0);
+    expect(help.stdout).toContain('Usage: create-easel <directory> [options]');
+    expect(help.stdout).toContain('--no-interactive');
     expect(run(['--version'], {cwd}).stdout.trim()).toBe('0.1.0-beta.1');
     expect(readdirSync(cwd)).toEqual([]);
   });

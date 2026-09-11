@@ -125,7 +125,7 @@ importers:
         specifier: 3.3.11
         version: 3.3.11(typescript@5.9.3)
 
-  packages/create-shopify-easel:
+  packages/create-easel:
     dependencies:
       '@clack/prompts':
         specifier: 1.8.0

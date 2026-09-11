@@ -20,7 +20,7 @@ import {
   parseArguments,
 } from './options.js';
 
-const help = `Usage: create-shopify-easel <directory> [options]
+const help = `Usage: create-easel <directory> [options]
 
 Create a Shopify Liquid theme with Easel and Vite.
 

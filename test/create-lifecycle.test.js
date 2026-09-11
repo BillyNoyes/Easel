@@ -1,5 +1,5 @@
 import {expect, it, vi} from 'vitest';
-import {mountSections} from '../packages/create-shopify-easel/templates/base/src/sections.ts';
+import {mountSections} from '../packages/create-easel/templates/base/src/sections.ts';
 
 it('restores fallback HTML, avoids duplicate mounts, and disposes detached sections', () => {
   class ElementFixture extends EventTarget {

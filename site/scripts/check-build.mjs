@@ -40,6 +40,14 @@ for (const [route, html] of pages) {
   assert.match(html, /<meta\s+name="description"\s+content="[^"]+"/);
   assert.equal(tags(html, 'header').length, 1, `${route}: header landmark`);
   assert.equal(tags(html, 'footer').length, 1, `${route}: footer landmark`);
+  const footer = html.match(/<footer\b[^>]*>([\s\S]*?)<\/footer>/)?.[1];
+  const disclosure = footer?.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ');
+  assert(
+    disclosure?.includes(
+      'Easel is a personal project by Billy Noyes, a Shopify employee. It is not an official Shopify product.',
+    ),
+    `${route}: personal-project disclosure`,
+  );
   assert(
     tags(html, 'a').some(([tag]) => attribute(tag, 'href') === '#main'),
     `${route}: skip link`,
@@ -140,7 +148,7 @@ for (const [route, html] of pages) {
     );
     assert(terminal, 'Static terminal preview is present');
     assert.equal(attribute(terminal[0], 'aria-describedby'), 'cli-preview-note');
-    assert.match(html, /npm create shopify-easel@latest \./);
+    assert.match(html, /npm create easel@latest \./);
     assert.match(html, /CLI preview/);
     assert.match(html, /Not on npm yet\./);
     assert.match(html, /Try the local CLI/);

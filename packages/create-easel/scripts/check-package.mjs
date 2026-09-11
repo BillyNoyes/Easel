@@ -36,14 +36,14 @@ try {
   await run('pnpm', ['pack', '--pack-destination', temporary], repositoryRoot);
   await run('pnpm', ['pack', '--pack-destination', temporary], packageRoot);
   const archives = (await readdir(temporary)).filter((name) => name.endsWith('.tgz'));
-  const cliTarball = archives.find((name) => name.startsWith('create-shopify-easel-'));
+  const cliTarball = archives.find((name) => name.startsWith('create-easel-'));
   const pluginTarball = archives.find((name) =>
     name.startsWith('vite-plugin-shopify-easel-'),
   );
   assert(cliTarball && pluginTarball);
   const listing = await run('tar', ['-tzf', join(temporary, cliTarball)], temporary);
   for (const path of [
-    'bin/create-shopify-easel.mjs',
+    'bin/create-easel.mjs',
     'dist/cli.js',
     'dist/templates/ts/base/_gitignore',
     'dist/templates/js/base/src/main.js',
@@ -68,11 +68,17 @@ try {
     JSON.stringify({
       private: true,
       devDependencies: {
-        'create-shopify-easel': `file:../${cliTarball}`,
+        'create-easel': `file:../${cliTarball}`,
       },
     }),
   );
   await run('pnpm', ['install', '--ignore-scripts', '--ignore-workspace'], consumer);
+  const cliManifest = JSON.parse(
+    await readFile(join(consumer, 'node_modules/create-easel/package.json'), 'utf8'),
+  );
+  assert.equal(cliManifest.name, 'create-easel');
+  assert.deepEqual(cliManifest.bin, {'create-easel': 'bin/create-easel.mjs'});
+  assert.equal(cliManifest.repository.directory, 'packages/create-easel');
 
   const version = await run(
     'npm',
@@ -82,7 +88,7 @@ try {
       '--package',
       join(temporary, cliTarball),
       '--',
-      'create-shopify-easel',
+      'create-easel',
       '--version',
     ],
     consumer,
@@ -118,7 +124,7 @@ try {
               '--package',
               join(temporary, cliTarball),
               '--',
-              'create-shopify-easel',
+              'create-easel',
               '.',
               ...options,
             ],
@@ -129,14 +135,12 @@ try {
             'gitdir: existing-worktree',
           );
         } else {
-          await run(
-            'pnpm',
-            ['exec', 'create-shopify-easel', target, ...options],
-            consumer,
-          );
+          await run('pnpm', ['exec', 'create-easel', target, ...options], consumer);
         }
         const manifestPath = join(target, 'package.json');
         const manifest = JSON.parse(await readFile(manifestPath, 'utf8'));
+        assert.equal(manifest.dependencies?.['create-easel'], undefined);
+        assert.equal(manifest.devDependencies?.['create-easel'], undefined);
         assert.equal(
           manifest.devDependencies['vite-plugin-shopify-easel'],
           '0.1.0-beta.1',

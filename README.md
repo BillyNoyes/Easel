@@ -1,8 +1,10 @@
 # Easel
 
-Easel is a Vite plugin for Shopify Liquid themes.
+Easel is an independent Vite toolkit for Shopify Liquid themes.
 
 It builds JavaScript, TypeScript, and CSS into Shopify theme assets, generates the Liquid snippet that loads them, and safely replaces old build output. During development, it can coordinate Vite updates with Shopify CLI reloads. Shopify CLI still handles previews, syncing, and deployment.
+
+Easel is a personal project by Billy Noyes, a Shopify employee. It is not an official Shopify product.
 
 [Read the documentation](https://easel.billynoyes.co.uk/docs/)
 
@@ -16,7 +18,7 @@ Easel requires Node.js 22.12 or newer and supports Vite 7 and 8.
 
 ## Create a theme
 
-The [Clack-based scaffolder](packages/create-shopify-easel) creates a theme with TypeScript or JavaScript, optional Alpine, React or Vue, and plain CSS or Tailwind.
+The [Clack-based scaffolder, `create-easel`](packages/create-easel) creates a theme with TypeScript or JavaScript, optional Alpine, React or Vue, and plain CSS or Tailwind.
 
 It is not published to npm yet. From a checkout of this repository:
 
@@ -25,7 +27,7 @@ pnpm install
 pnpm create:theme ../my-theme
 ```
 
-Use `--yes --no-install` for a non-interactive starter. The CLI also accepts `.` to use the current folder; see [current-directory setup](packages/create-shopify-easel#use-the-current-directory) for running it from outside this checkout. Existing folders must be empty apart from Git or Finder metadata. Shopify CLI remains separate.
+Use `--yes --no-install` for a non-interactive starter. The CLI also accepts `.` to use the current folder; see [current-directory setup](packages/create-easel#use-the-current-directory) for running it from outside this checkout. Existing folders must be empty apart from Git or Finder metadata. Shopify CLI remains separate.
 
 ## Start
 

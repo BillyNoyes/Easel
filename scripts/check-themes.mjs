@@ -13,7 +13,7 @@ function check(theme) {
 }
 for (const theme of themes) check(theme);
 
-const packageRoot = resolve(repositoryRoot, 'packages/create-shopify-easel');
+const packageRoot = resolve(repositoryRoot, 'packages/create-easel');
 execFileSync(process.platform === 'win32' ? 'pnpm.cmd' : 'pnpm', ['build'], {
   cwd: packageRoot,
   stdio: 'inherit',
@@ -28,7 +28,7 @@ try {
       execFileSync(
         process.execPath,
         [
-          join(packageRoot, 'bin/create-shopify-easel.mjs'),
+          join(packageRoot, 'bin/create-easel.mjs'),
           theme,
           '--yes',
           '--no-install',
