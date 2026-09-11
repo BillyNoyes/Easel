@@ -103,6 +103,8 @@ describe('public theme generator', () => {
       expect(existsSync(join(target, 'snippets/counter.liquid'))).toBe(true);
       expect(existsSync(join(target, 'node_modules'))).toBe(false);
     },
+    // Allow for filesystem contention on shared CI runners.
+    15000,
   );
 
   it('refuses nonempty directories and preserves their contents', () => {
