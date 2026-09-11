@@ -127,6 +127,24 @@ for (const [route, html] of pages) {
     assert.doesNotMatch(html, /x-data|@click|data-code-block[^>]*x-data|<button/);
     assert.match(html, /<h1[^>]*>\s*Vite Plugin for Shopify Liquid Themes\.\s*<\/h1>/);
     assert.match(html, /href="\/docs\/"[^>]*>\s*Get started/);
+    const examples = tags(html, 'div').find(([tag]) =>
+      /\sdata-home-examples(?:\s|>)/.test(tag),
+    );
+    assert(examples, 'Landing pairs the CLI preview with the Vite config');
+    const columns = new Set(attribute(examples[0], 'class')?.split(/\s+/));
+    assert(columns.has('grid-cols-1'), 'Landing examples stack on small screens');
+    assert(columns.has('lg:grid-cols-2'), 'Landing examples sit side by side on desktop');
+    assert.equal(tags(html, 'pre').length, 2, 'Two static landing examples');
+    const terminal = tags(html, 'pre').find(([tag]) =>
+      /\sdata-terminal-preview(?:\s|>)/.test(tag),
+    );
+    assert(terminal, 'Static terminal preview is present');
+    assert.equal(attribute(terminal[0], 'aria-describedby'), 'cli-preview-note');
+    assert.match(html, /npm create shopify-easel@latest \./);
+    assert.match(html, /CLI preview/);
+    assert.match(html, /Not on npm yet\./);
+    assert.match(html, /Try the local CLI/);
+    assert.match(html, /plugins: \[easel\(\)\]/);
   } else {
     const documentClasses = new Set(
       attribute(tags(html, 'html')[0][0], 'class')?.split(/\s+/),

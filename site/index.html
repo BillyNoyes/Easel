@@ -87,36 +87,111 @@
       </header>
       <main
         id="main"
-        class="mx-auto my-auto flex w-full max-w-[52rem] flex-col items-stretch gap-8 py-12 md:py-16 focus-visible:outline-2 focus-visible:outline-offset-4"
+        class="mx-auto my-auto flex w-full max-w-6xl flex-col items-stretch gap-8 py-12 md:py-16 focus-visible:outline-2 focus-visible:outline-offset-4"
         tabindex="-1"
       >
-        <h1
-          class="mx-auto max-w-[28ch] text-center font-heading font-bold tracking-normal text-[2rem]/10 md:text-[2.5rem]/12"
-        >
-          Vite Plugin for Shopify Liquid Themes.
-        </h1>
-        <div
-          class="min-w-0 rounded-md border border-black/8 dark:border-white/14 bg-panel dark:bg-panel-inverse"
-          data-code-block
-        >
-          <div
-            class="flex flex-wrap items-center justify-between gap-3 px-5 pt-4 text-muted dark:text-muted-inverse wrap-anywhere"
+        <div class="flex flex-col items-center gap-3 text-center">
+          <h1
+            class="max-w-[28ch] font-heading font-bold tracking-normal text-[2rem]/10 md:text-[2.5rem]/12"
           >
-            <span id="code-label-1" class="font-mono" data-code-label
-              >vite.config.ts</span
+            Vite Plugin for Shopify Liquid Themes.
+          </h1>
+          <p class="max-w-[54ch] text-muted dark:text-muted-inverse">
+            Start a new theme, or bring the one you already have.
+          </p>
+        </div>
+        <div class="grid grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-8" data-home-examples>
+          <section class="flex min-w-0 flex-col gap-3" aria-labelledby="new-theme-title">
+            <h2
+              id="new-theme-title"
+              class="font-heading font-bold tracking-normal text-base/6"
             >
-          </div>
-          <pre
-            class="min-w-0 max-w-full overflow-x-auto p-5 font-mono text-sm/6 font-normal [tab-size:2] text-ink dark:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
-            tabindex="0"
-            role="region"
-            aria-labelledby="code-label-1"
-          ><code>import {defineConfig} from 'vite';
+              Start a new theme.
+            </h2>
+            <div
+              class="flex min-w-0 flex-1 flex-col rounded-lg border border-black/8 bg-panel dark:border-white/14 dark:bg-panel-inverse"
+            >
+              <div
+                class="flex flex-wrap items-center justify-between gap-3 border-b border-black/8 px-5 py-3 text-[13px]/5 text-muted dark:border-white/14 dark:text-muted-inverse"
+              >
+                <div class="flex items-center gap-3">
+                  <span class="flex gap-1.5" aria-hidden="true">
+                    <span class="size-2 rounded-full bg-black/20 dark:bg-white/25"></span>
+                    <span class="size-2 rounded-full bg-black/20 dark:bg-white/25"></span>
+                    <span class="size-2 rounded-full bg-black/20 dark:bg-white/25"></span>
+                  </span>
+                  <span id="terminal-label" class="font-mono">Terminal</span>
+                </div>
+                <span>CLI preview</span>
+              </div>
+              <pre
+                class="min-w-0 max-w-full flex-1 overflow-x-auto p-5 font-mono text-sm/6 font-normal [tab-size:2] text-ink dark:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
+                tabindex="0"
+                role="region"
+                aria-labelledby="terminal-label"
+                aria-describedby="cli-preview-note"
+                data-terminal-preview
+              ><code><span aria-hidden="true" class="text-muted dark:text-muted-inverse">$ </span>npm create shopify-easel@latest .
+
+<span aria-hidden="true" class="text-muted dark:text-muted-inverse">◇ </span><span class="text-muted dark:text-muted-inverse">Language              </span>TypeScript
+<span aria-hidden="true" class="text-muted dark:text-muted-inverse">◇ </span><span class="text-muted dark:text-muted-inverse">UI tools              </span>Alpine
+<span aria-hidden="true" class="text-muted dark:text-muted-inverse">◇ </span><span class="text-muted dark:text-muted-inverse">Tailwind CSS          </span>Yes
+<span aria-hidden="true" class="text-muted dark:text-muted-inverse">◇ </span><span class="text-muted dark:text-muted-inverse">Install dependencies  </span>Yes
+
+<span aria-hidden="true">✓ </span>Created in the current directory.
+<span aria-hidden="true" class="text-muted dark:text-muted-inverse">$ </span>npm run dev</code></pre>
+              <p
+                id="cli-preview-note"
+                class="border-t border-black/8 px-5 py-4 text-[13px]/5 text-muted dark:border-white/14 dark:text-muted-inverse"
+              >
+                Not on npm yet.
+                <a
+                  href="https://github.com/BillyNoyes/Easel/tree/main/packages/create-shopify-easel"
+                  class="underline underline-offset-4 hover:text-ink dark:hover:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
+                  >Try the local CLI <span aria-hidden="true">↗</span></a
+                >
+              </p>
+            </div>
+          </section>
+          <section
+            class="flex min-w-0 flex-col gap-3"
+            aria-labelledby="existing-theme-title"
+          >
+            <h2
+              id="existing-theme-title"
+              class="font-heading font-bold tracking-normal text-base/6"
+            >
+              Or add it to your theme.
+            </h2>
+            <div
+              class="flex min-w-0 flex-1 flex-col rounded-lg border border-black/8 bg-panel dark:border-white/14 dark:bg-panel-inverse"
+              data-code-block
+            >
+              <div
+                class="border-b border-black/8 px-5 py-3 text-[13px]/5 text-muted dark:border-white/14 dark:text-muted-inverse"
+              >
+                <span id="code-label-1" class="font-mono" data-code-label
+                  >vite.config.ts</span
+                >
+              </div>
+              <pre
+                class="min-w-0 max-w-full flex-1 overflow-x-auto p-5 font-mono text-sm/6 font-normal [tab-size:2] text-ink dark:text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-4"
+                tabindex="0"
+                role="region"
+                aria-labelledby="code-label-1"
+              ><code>import {defineConfig} from 'vite';
 import easel from 'vite-plugin-shopify-easel';
 
 export default defineConfig({
   plugins: [easel()],
 });</code></pre>
+              <p
+                class="border-t border-black/8 px-5 py-4 text-[13px]/5 text-muted dark:border-white/14 dark:text-muted-inverse"
+              >
+                Your config. Your tools. Just one plugin.
+              </p>
+            </div>
+          </section>
         </div>
         <div class="flex justify-center">
           <a
