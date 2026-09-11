@@ -2,8 +2,6 @@
 
 Create a focused Shopify Liquid theme with Easel, Vite, and your choice of tools. The interactive UI uses [Clack](https://github.com/bombshell-dev/clack).
 
-Easel is a personal project by Billy Noyes, a Shopify employee. It is not an official Shopify product.
-
 **Not published to npm yet.** Run it from a checkout of the Easel repository:
 
 ```sh

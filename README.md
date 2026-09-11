@@ -4,8 +4,6 @@ Easel is an independent Vite toolkit for Shopify Liquid themes.
 
 It builds JavaScript, TypeScript, and CSS into Shopify theme assets, generates the Liquid snippet that loads them, and safely replaces old build output. During development, it can coordinate Vite updates with Shopify CLI reloads. Shopify CLI still handles previews, syncing, and deployment.
 
-Easel is a personal project by Billy Noyes, a Shopify employee. It is not an official Shopify product.
-
 [Read the documentation](https://easel.billynoyes.co.uk/docs/)
 
 ## Install

@@ -40,14 +40,6 @@ for (const [route, html] of pages) {
   assert.match(html, /<meta\s+name="description"\s+content="[^"]+"/);
   assert.equal(tags(html, 'header').length, 1, `${route}: header landmark`);
   assert.equal(tags(html, 'footer').length, 1, `${route}: footer landmark`);
-  const footer = html.match(/<footer\b[^>]*>([\s\S]*?)<\/footer>/)?.[1];
-  const disclosure = footer?.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ');
-  assert(
-    disclosure?.includes(
-      'Easel is a personal project by Billy Noyes, a Shopify employee. It is not an official Shopify product.',
-    ),
-    `${route}: personal-project disclosure`,
-  );
   assert(
     tags(html, 'a').some(([tag]) => attribute(tag, 'href') === '#main'),
     `${route}: skip link`,
@@ -132,6 +124,15 @@ for (const [route, html] of pages) {
   );
   if (route === '/') {
     assert.equal(runtimeScripts.length, 0, 'Landing is CSS-only');
+    const bodyClasses = new Set(
+      attribute(tags(html, 'body')[0][0], 'class')?.split(/\s+/),
+    );
+    assert(bodyClasses.has('min-h-dvh'), 'Landing fills the visible viewport');
+    assert.doesNotMatch(
+      html,
+      /\b(?:overflow-hidden|overflow-y-hidden|overflow-clip)\b/,
+      'Landing can scroll rather than clip content on small or zoomed screens',
+    );
     assert.doesNotMatch(html, /x-data|@click|data-code-block[^>]*x-data|<button/);
     assert.match(html, /<h1[^>]*>\s*Vite Plugin for Shopify Liquid Themes\.\s*<\/h1>/);
     assert.match(html, /href="\/docs\/"[^>]*>\s*Get started/);
