@@ -25,7 +25,7 @@ import {
   installArguments,
 } from '../packages/create-easel/src/install.ts';
 
-const cli = resolve('packages/create-easel/bin/create-easel.mjs');
+const cli = resolve('packages/create-easel/bin/create-easel-theme.mjs');
 const temporary = [];
 function directory() {
   const path = mkdtempSync(join(tmpdir(), 'easel-create-test-'));
@@ -62,7 +62,7 @@ describe('public theme generator', () => {
       generateTheme({...options, target, name: 'My Theme'});
       const manifest = JSON.parse(readFileSync(join(target, 'package.json'), 'utf8'));
       expect(manifest.name).toBe('my-theme');
-      expect(manifest.devDependencies['vite-plugin-shopify-easel']).toBe('0.1.0-beta.1');
+      expect(manifest.devDependencies['vite-plugin-shopify-easel']).toBe('0.1.0');
       expect(manifest.scripts.dev).toBe('vite');
       expect(manifest.scripts.build).toBe('vite build');
       expect(Boolean(manifest.devDependencies.typescript)).toBe(
@@ -280,9 +280,9 @@ describe('CLI arguments and automation', () => {
     const cwd = directory();
     const help = run(['--help'], {cwd});
     expect(help.status).toBe(0);
-    expect(help.stdout).toContain('Usage: create-easel <directory> [options]');
+    expect(help.stdout).toContain('Usage: create-easel-theme <directory> [options]');
     expect(help.stdout).toContain('--no-interactive');
-    expect(run(['--version'], {cwd}).stdout.trim()).toBe('0.1.0-beta.1');
+    expect(run(['--version'], {cwd}).stdout.trim()).toBe('0.1.0');
     expect(readdirSync(cwd)).toEqual([]);
   });
   it('rejects forced interaction without a terminal', () => {

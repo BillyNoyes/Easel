@@ -28,7 +28,7 @@ try {
       execFileSync(
         process.execPath,
         [
-          join(packageRoot, 'bin/create-easel.mjs'),
+          join(packageRoot, 'bin/create-easel-theme.mjs'),
           theme,
           '--yes',
           '--no-install',

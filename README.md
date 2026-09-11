@@ -16,9 +16,13 @@ Easel requires Node.js 22.12 or newer and supports Vite 7 and 8.
 
 ## Create a theme
 
-The [Clack-based scaffolder, `create-easel`](packages/create-easel) creates a theme with TypeScript or JavaScript, optional Alpine, React or Vue, and plain CSS or Tailwind.
+The [Clack-based scaffolder, `create-easel-theme`](packages/create-easel) creates a theme with TypeScript or JavaScript, optional Alpine, React or Vue, and plain CSS or Tailwind.
 
-It is not published to npm yet. From a checkout of this repository:
+```sh
+npm create easel-theme@latest my-theme
+```
+
+From a checkout of this repository:
 
 ```sh
 pnpm install

@@ -1,27 +1,38 @@
-# create-easel
+# create-easel-theme
 
 Create a focused Shopify Liquid theme with Easel, Vite, and your choice of tools. The interactive UI uses [Clack](https://github.com/bombshell-dev/clack).
 
-**Not published to npm yet.** Run it from a checkout of the Easel repository:
+```sh
+npm create easel-theme@latest my-theme
+```
+
+Or with npx:
+
+```sh
+npx create-easel-theme@latest my-theme
+```
+
+From a checkout of the Easel repository:
 
 ```sh
 pnpm install
 pnpm create:theme ../my-theme
 ```
 
-Once a stable version is published, the equivalent commands will be `npm create easel@latest my-theme` or `npx create-easel@latest my-theme`. A prerelease published under `beta` will require `@beta` instead of `@latest`.
-
 ## Use the current directory
 
 Pass `.` as the directory, or enter `.` at the directory prompt. The theme is created directly in that folder, and its name is derived from the folder name.
 
-Until npm publication, run the built CLI from your desired folder:
-
 ```sh
-node /path/to/Easel/packages/create-easel/bin/create-easel.mjs .
+npm create easel-theme@latest .
 ```
 
-Build it in the checkout first with `pnpm --dir /path/to/Easel/packages/create-easel build`. Invoke the executable directly so `.` refers to your folder rather than the Easel checkout. Once a stable version is published, `npm create easel@latest .` will do the same.
+From a repository checkout, build first, then invoke the executable from your desired folder so `.` refers to that folder rather than the Easel checkout:
+
+```sh
+pnpm --dir /path/to/Easel/packages/create-easel build
+node /path/to/Easel/packages/create-easel/bin/create-easel-theme.mjs .
+```
 
 Existing folders must be empty apart from `.git` and `.DS_Store`, which are preserved. Existing project files, including a README or `.gitignore`, are not overwritten or merged.
 
@@ -32,7 +43,7 @@ Existing folders must be empty apart from `.git` and `.DS_Store`, which are pres
 - Plain CSS (default) or Tailwind CSS.
 - Optional dependency installation using npm, pnpm, Yarn, or Bun. The manager is detected from the invoking package manager; use `--package-manager` to override it.
 
-The output is a standalone project using the published `vite-plugin-shopify-easel` package. It does not depend on this repository or on the scaffolder at runtime. The current templates target Easel `0.1.0-beta.1` and require Node.js 22.12.0 or newer.
+The output is a standalone project using the published `vite-plugin-shopify-easel` package. It does not depend on this repository or on the scaffolder at runtime. The current templates target Easel `0.1.0` and require Node.js 22.12.0 or newer.
 
 The starter includes a homepage counter, a 404 page, theme settings, and translations. It is deliberately not a complete commerce theme. Framework integrations use their official Vite plugins where applicable, and include Theme Editor initialization and cleanup. React includes its development preamble.
 

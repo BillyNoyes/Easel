@@ -6,7 +6,7 @@ export function projectPackage(options: ThemeOptions) {
   const dependencies: Record<string, string> = {};
   const devDependencies: Record<string, string> = {
     vite: '8.2.2',
-    'vite-plugin-shopify-easel': '0.1.0-beta.1',
+    'vite-plugin-shopify-easel': '0.1.0',
   };
   if (typescript) devDependencies.typescript = '5.9.3';
   if (options.framework === 'alpine') {

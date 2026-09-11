@@ -1,6 +1,6 @@
 {
-  "name": "create-easel",
-  "version": "0.1.0-beta.1",
+  "name": "create-easel-theme",
+  "version": "0.1.0",
   "description": "Create a Shopify Liquid theme with Easel, Vite, and your choice of tools",
   "type": "module",
   "license": "MIT",
@@ -13,7 +13,7 @@
   "homepage": "https://easel.billynoyes.co.uk/",
   "bugs": "https://github.com/BillyNoyes/Easel/issues",
   "bin": {
-    "create-easel": "bin/create-easel.mjs"
+    "create-easel-theme": "bin/create-easel-theme.mjs"
   },
   "files": [
     "bin",

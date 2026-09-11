@@ -1,6 +1,6 @@
 {
   "name": "vite-plugin-shopify-easel",
-  "version": "0.1.0-beta.1",
+  "version": "0.1.0",
   "description": "A Vite build adapter for Shopify Liquid themes",
   "type": "module",
   "sideEffects": false,
@@ -33,7 +33,7 @@
   "scripts": {
     "build": "tsup src/index.ts --format esm --dts --sourcemap --clean",
     "check": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test && pnpm test:examples && pnpm test:site && pnpm build && pnpm test:package",
-    "create:theme": "pnpm --dir packages/create-easel build && node packages/create-easel/bin/create-easel.mjs",
+    "create:theme": "pnpm --dir packages/create-easel build && node packages/create-easel/bin/create-easel-theme.mjs",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "lint": "eslint .",

@@ -4,9 +4,9 @@ Releases of `vite-plugin-shopify-easel` use `.github/workflows/release.yml` and 
 
 ## Scaffolder release boundary
 
-`create-easel`, in `packages/create-easel`, is a separate, currently unpublished npm package. The plugin's `v*` tags and release workflow do not publish it. Its npm bootstrap, trusted publisher, and release workflow still need to be configured before its first public release.
+`create-easel-theme`, in `packages/create-easel`, is a separate npm package. The plugin's `v*` tags and release workflow do not publish it. After the package exists on npm, configure its trusted publisher and a dedicated release workflow for future CLI releases.
 
-Before publishing the scaffolder, run the full repository checks, including the packed CLI's 16 generated-project combinations. Review the pinned dependency versions in `packages/create-easel/src/project.ts`, particularly the published Easel version. Pack from the scaffolder directory, not the repository root. Publish prereleases under `beta`; do not advertise an `@latest` command until a stable CLI exists.
+Before publishing the scaffolder, run the full repository checks, including the packed CLI's 16 generated-project combinations. Review the pinned dependency versions in `packages/create-easel/src/project.ts`, particularly the published Easel version. Pack from the scaffolder directory, not the repository root. Publish the plugin first when both packages share a version bump so generated themes can resolve `vite-plugin-shopify-easel` from the registry.
 
 ## One-time setup
 

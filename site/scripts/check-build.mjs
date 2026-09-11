@@ -149,9 +149,9 @@ for (const [route, html] of pages) {
     );
     assert(terminal, 'Static terminal preview is present');
     assert.equal(attribute(terminal[0], 'aria-describedby'), 'cli-preview-note');
-    assert.match(html, /npm create easel@latest \./);
+    assert.match(html, /npm create easel-theme@latest \./);
     assert.match(html, /CLI preview/);
-    assert.match(html, /Preview only — npm release coming soon\./);
+    assert.match(html, /Preview only — try[\s\S]*npm create easel-theme@latest/);
     assert.doesNotMatch(html, /Try the local CLI/);
     assert.match(html, /plugins: \[easel\(\)\]/);
   } else {
