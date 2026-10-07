@@ -1020,6 +1020,44 @@ shopify theme push</code></pre>
                 >shopify theme package</code
               >. Shopify CLI remains responsible for deployment.
             </p>
+            <p class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere">
+              Render the loader inside
+              <code
+                class="font-mono rounded border border-black/10 bg-code px-[0.3em] py-[0.1em] text-[0.875em] dark:border-white/13 dark:bg-code-inverse"
+                >&lt;head&gt;</code
+              >. Shopify automatically preloads render-blocking stylesheets in
+              <code
+                class="font-mono rounded border border-black/10 bg-code px-[0.3em] py-[0.1em] text-[0.875em] dark:border-white/13 dark:bg-code-inverse"
+                >&lt;head&gt;</code
+              >
+              through
+              <code
+                class="font-mono rounded border border-black/10 bg-code px-[0.3em] py-[0.1em] text-[0.875em] dark:border-white/13 dark:bg-code-inverse"
+                >Link</code
+              >
+              headers, so the generated stylesheet tags don't need
+              <code
+                class="font-mono rounded border border-black/10 bg-code px-[0.3em] py-[0.1em] text-[0.875em] dark:border-white/13 dark:bg-code-inverse"
+                >preload: true</code
+              >.
+            </p>
+            <p class="max-w-[66ch] text-muted dark:text-muted-inverse wrap-anywhere">
+              Generated output is ignored by Git, so anything that deploys straight from
+              the repository, such as the Shopify GitHub integration, gets no loader or
+              assets. Build in CI and deploy with Shopify CLI, or commit the generated
+              output on the branch Shopify deploys. Run Theme Check after the build, since
+              layouts that render
+              <code
+                class="font-mono rounded border border-black/10 bg-code px-[0.3em] py-[0.1em] text-[0.875em] dark:border-white/13 dark:bg-code-inverse"
+                >easel-assets</code
+              >
+              report
+              <code
+                class="font-mono rounded border border-black/10 bg-code px-[0.3em] py-[0.1em] text-[0.875em] dark:border-white/13 dark:bg-code-inverse"
+                >MissingTemplate</code
+              >
+              until it exists.
+            </p>
           </section>
           <section
             id="bundles"

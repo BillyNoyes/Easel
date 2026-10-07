@@ -447,6 +447,37 @@ describe('Easel production build', () => {
     expect(branches.every((branch) => branch.includes('stylesheet_tag'))).toBe(true);
   });
 
+  it('names a shared chunk after its JavaScript when bundles share a stylesheet', async () => {
+    const root = themeProject();
+    writeFileSync(
+      join(root, 'src/theme.ts'),
+      "import {store} from './store'; store('theme');",
+    );
+    writeFileSync(
+      join(root, 'src/password.ts'),
+      "import {store} from './store'; store('password');",
+    );
+    writeFileSync(
+      join(root, 'src/store.ts'),
+      'export const store = (name: string) => console.log(name);',
+    );
+    writeFileSync(join(root, 'src/styles.css'), 'body { color: rebeccapurple; }');
+
+    await buildTheme(root, {
+      bundles: {
+        theme: {script: 'theme.ts', style: 'styles.css'},
+        password: {script: 'password.ts', style: 'styles.css'},
+      },
+    });
+
+    const assets = readdirSync(join(root, 'assets'));
+    expect(assets.filter((file) => /^easel-store-[\w-]+\.js$/.test(file))).toHaveLength(
+      1,
+    );
+    expect(assets.some((file) => /^easel-styles-[\w-]+\.js$/.test(file))).toBe(false);
+    expect(assets.some((file) => /^easel-styles-[\w-]+\.css$/.test(file))).toBe(true);
+  });
+
   it('migrates legacy ownership metadata when the namespace changes', async () => {
     const root = themeProject();
     writeFileSync(join(root, 'src/main.ts'), "console.log('Easel');");

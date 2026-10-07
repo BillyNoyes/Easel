@@ -62,7 +62,7 @@ export default defineConfig({
 });
 ```
 
-Render the generated loader in `layout/theme.liquid`.
+Render the generated loader inside `<head>` in `layout/theme.liquid`.
 
 ```liquid
 {% render 'easel-assets' %}
@@ -94,6 +94,10 @@ Build before pushing or packaging.
 npm run build
 shopify theme push
 ```
+
+Shopify automatically preloads render-blocking stylesheets in `<head>` through `Link` headers, so the generated stylesheet tags don't need `preload: true`.
+
+Because generated output is ignored by Git, anything that deploys straight from the repository, such as the Shopify GitHub integration, gets no loader or assets. Build in CI and deploy with Shopify CLI, or commit the generated output on the branch Shopify deploys. Run Theme Check after the build, since layouts that render `easel-assets` report `MissingTemplate` until it exists.
 
 ## Named bundles
 
