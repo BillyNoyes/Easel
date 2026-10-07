@@ -23,25 +23,33 @@ After verifying the first trusted publish, restrict traditional token publishing
 
 ## Prepare a release
 
-Start with a clean checkout of `main`:
+`main` is protected: changes land through a pull request whose CI checks pass, and the rule applies to administrators too. Start a release branch from a clean, current `main`:
 
 ```sh
 git switch main
 git pull --ff-only
+git switch -c release/0.2.1
 pnpm install --frozen-lockfile
 npm version 0.2.1 --no-git-tag-version
 npm --prefix packages/create-easel version 0.2.1 --no-git-tag-version
-# Match the generated vite-plugin-shopify-easel version in packages/create-easel/src/project.ts.
-pnpm check
-
-git add package.json packages/create-easel/package.json packages/create-easel/src/project.ts
-git commit -m "Release 0.2.1"
-git push origin main
 ```
 
-Use the intended version in place of `0.2.1`. Wait for CI to pass on that commit, then create and push its matching tag:
+Then update every remaining reference to the previous version. They pin the generated plugin version in `packages/create-easel/src/project.ts`, the scaffolded `theme_version`, the generator README, the site's structured data, and the tests and package checks that assert them. `git grep` lists them:
 
 ```sh
+git grep -n "<previous version>" -- . ':!pnpm-lock.yaml' ':!RELEASING.md'
+pnpm check
+
+git commit -am "Release 0.2.1"
+git push -u origin release/0.2.1
+gh pr create --base main --title "Release 0.2.1" --fill
+```
+
+Use the intended version in place of `0.2.1`. Merge the pull request once CI passes, then tag the merge commit on `main`:
+
+```sh
+git switch main
+git pull --ff-only
 git tag -a v0.2.1 -m "Easel v0.2.1"
 git push origin v0.2.1
 ```

@@ -43,7 +43,7 @@ Existing folders must be empty apart from `.git` and `.DS_Store`, which are pres
 - Plain CSS (default) or Tailwind CSS.
 - Optional dependency installation using npm, pnpm, Yarn, or Bun. The manager is detected from the invoking package manager; use `--package-manager` to override it.
 
-The output is a standalone project using the published `vite-plugin-shopify-easel` package. It does not depend on this repository or on the scaffolder at runtime. The current templates target Easel `0.2.1` and require Node.js 22.12.0 or newer.
+The output is a standalone project using the published `vite-plugin-shopify-easel` package. It does not depend on this repository or on the scaffolder at runtime. The current templates target Easel `0.2.2` and require Node.js 22.12.0 or newer.
 
 The starter includes a homepage counter, theme settings, translations, generic JSON templates and sections for the standard storefront page types, `theme.liquid` and `password.liquid` layouts, and a Liquid gift card template. Customer account templates are intentionally omitted because current customer accounts operate independently of themes. Shopify's default robots and agent-discovery templates are left unchanged. Metaobject templates are definition-specific and should be added when those definitions enable web pages. The generic sections are starting points rather than complete commerce features or a production design. Framework integrations use their official Vite plugins where applicable, and include Theme Editor initialization and cleanup. React includes its development preamble.
 
