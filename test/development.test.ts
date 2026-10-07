@@ -59,6 +59,21 @@ describe('restoreOnTermination', () => {
     expect(kill).toHaveBeenCalledWith(4242, 'SIGINT');
   });
 
+  it('re-raises once after every Easel instance in the process has restored', () => {
+    const {target, kill} = fakeProcess();
+    const first = vi.fn();
+    const second = vi.fn();
+    restoreOnTermination(first, target, () => 0);
+    restoreOnTermination(second, target, () => 0);
+
+    target.emit('SIGINT', 'SIGINT');
+
+    expect(first).toHaveBeenCalledOnce();
+    expect(second).toHaveBeenCalledOnce();
+    expect(kill).toHaveBeenCalledOnce();
+    expect(target.listenerCount('SIGINT')).toBe(0);
+  });
+
   it('restores once when the process exits', () => {
     const {target} = fakeProcess();
     const restore = vi.fn();
@@ -130,17 +145,23 @@ describe.skipIf(process.platform === 'win32')('Easel development server signals'
       child.once('exit', (_code, signal) => resolve(signal));
     });
 
-    await new Promise<void>((resolve, reject) => {
-      child.stdout.on('data', (chunk: Buffer) => {
-        if (chunk.toString().includes('listening')) resolve();
+    try {
+      await new Promise<void>((resolve, reject) => {
+        child.stdout.on('data', (chunk: Buffer) => {
+          if (chunk.toString().includes('listening')) resolve();
+        });
+        child.once('exit', (code) =>
+          reject(new Error(`dev server exited early: ${code}`)),
+        );
       });
-      child.once('exit', (code) => reject(new Error(`dev server exited early: ${code}`)));
-    });
-    expect(readFileSync(liquidPath, 'utf8')).toContain('/@vite/client');
+      expect(readFileSync(liquidPath, 'utf8')).toContain('/@vite/client');
 
-    child.kill('SIGINT');
+      child.kill('SIGINT');
 
-    expect(await exited).toBe('SIGINT');
-    expect(readFileSync(liquidPath, 'utf8')).toBe(production);
+      expect(await exited).toBe('SIGINT');
+      expect(readFileSync(liquidPath, 'utf8')).toBe(production);
+    } finally {
+      if (child.exitCode === null && child.signalCode === null) child.kill('SIGKILL');
+    }
   }, 30_000);
 });
