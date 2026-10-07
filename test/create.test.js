@@ -91,7 +91,7 @@ describe('public theme generator', () => {
       generateTheme({...options, target, name: 'My Theme'});
       const manifest = JSON.parse(readFileSync(join(target, 'package.json'), 'utf8'));
       expect(manifest.name).toBe('my-theme');
-      expect(manifest.devDependencies['vite-plugin-shopify-easel']).toBe('0.2.1');
+      expect(manifest.devDependencies['vite-plugin-shopify-easel']).toBe('0.2.2');
       expect(manifest.scripts.dev).toBe('vite');
       expect(manifest.scripts.build).toBe('vite build');
       expect(manifest.scripts['check:theme']).toBe('shopify theme check');
@@ -349,7 +349,7 @@ describe('CLI arguments and automation', () => {
     expect(help.status).toBe(0);
     expect(help.stdout).toContain('Usage: create-easel-theme <directory> [options]');
     expect(help.stdout).toContain('--no-interactive');
-    expect(run(['--version'], {cwd}).stdout.trim()).toBe('0.2.1');
+    expect(run(['--version'], {cwd}).stdout.trim()).toBe('0.2.2');
     expect(readdirSync(cwd)).toEqual([]);
   });
   it('rejects forced interaction without a terminal', () => {

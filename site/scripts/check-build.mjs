@@ -108,7 +108,7 @@ for (const [route, html] of pages) {
   if (route === '/') {
     assert.equal(data.about['@type'], 'SoftwareSourceCode');
     assert.equal(data.about.codeRepository, 'https://github.com/BillyNoyes/Easel');
-    assert.equal(data.about.version, '0.2.1');
+    assert.equal(data.about.version, '0.2.2');
   }
 
   for (const [, reference] of html.matchAll(/\s(?:src|href)="([^"]+)"/g)) {

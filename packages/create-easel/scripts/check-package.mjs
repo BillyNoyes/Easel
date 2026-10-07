@@ -116,7 +116,7 @@ try {
     ],
     consumer,
   );
-  assert(version.includes('0.2.1'));
+  assert(version.includes('0.2.2'));
 
   for (const language of ['ts', 'js'])
     for (const framework of ['none', 'alpine', 'react', 'vue'])
@@ -177,7 +177,7 @@ try {
           'password.liquid',
           'theme.liquid',
         ]);
-        assert.equal(manifest.devDependencies['vite-plugin-shopify-easel'], '0.2.1');
+        assert.equal(manifest.devDependencies['vite-plugin-shopify-easel'], '0.2.2');
         manifest.devDependencies['vite-plugin-shopify-easel'] =
           `file:../${pluginTarball}`;
         await writeFile(manifestPath, JSON.stringify(manifest));
