@@ -66,7 +66,8 @@ function createViteConfig(
         input,
         output: {
           entryFileNames: `${options.prefix}[name].js`,
-          chunkFileNames: `${options.prefix}[name]-[hash].js`,
+          chunkFileNames: (chunk) =>
+            `${options.prefix}${sharedChunkName(chunk)}-[hash].js`,
           assetFileNames(asset) {
             const original = asset.names[0] ?? asset.name ?? 'asset';
             if (!original.endsWith('.css')) {
@@ -86,6 +87,34 @@ function createViteConfig(
       },
     },
   };
+}
+
+const STYLESHEET_MODULE = /\.(?:css|less|sass|scss|styl|stylus|pcss|postcss|sss)(?:\?|$)/;
+
+/*
+ * A stylesheet shared by several bundles lands in a shared chunk, and the
+ * bundler can name that chunk after the stylesheet. The extracted CSS keeps
+ * that name; the JavaScript file is named after its last JavaScript module
+ * instead, which matches how Rollup names shared chunks without stylesheets.
+ */
+function sharedChunkName(chunk: {name: string; moduleIds: string[]}): string {
+  const namedAfterStylesheet = chunk.moduleIds.some(
+    (id) => STYLESHEET_MODULE.test(id) && moduleBasename(id) === chunk.name,
+  );
+  if (!namedAfterStylesheet) return '[name]';
+
+  const script = chunk.moduleIds
+    .filter((id) => !id.startsWith('\0') && !STYLESHEET_MODULE.test(id))
+    .at(-1);
+  const name = script === undefined ? '' : moduleBasename(script);
+  return /^[A-Za-z0-9][A-Za-z0-9_-]*$/.test(name) ? name : '[name]';
+}
+
+function moduleBasename(id: string): string {
+  const path = id.replaceAll('\\', '/').split('?')[0] ?? '';
+  const file = path.slice(path.lastIndexOf('/') + 1);
+  const extension = file.lastIndexOf('.');
+  return extension > 0 ? file.slice(0, extension) : file;
 }
 
 function isEntryStylesheet(
